@@ -1,0 +1,290 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+	  py:strip="True">
+	  
+<py:if test="controladmin_mask == 'comp' or controladmin_mask == 'grp'">
+ <div name="tabs" class="tabs">
+     <div class="navtabs">
+		<py:def function="recursivePrint(nav,lvl=0,parent='')">
+			<py:for each="comp in nav">
+				<py:if test="comp[2] == parent">
+					<py:choose test="activecomp.title == comp[0]">
+						<py:when test="True">
+	  						<li style="padding-left: 1.5em" class="priority-${comp[3]} active comp-${comp[4]}">
+								<span class="title">${comp[0]}</span>
+								<img src="${trac_chrome_path}/cl/images/down.png" class="arrow_down"/>
+								<img src="${trac_chrome_path}/cl/images/up.png" class="arrow_up"/>	
+								<ul>
+								${recursivePrint(nav,lvl+1,comp[0])}
+								</ul>
+							</li>  
+	  					</py:when>		  
+	  					<py:otherwise>
+							<li style="padding-left: 1.5em" class="priority-${comp[3]} comp-${comp[4]}">
+								<a href="${comp[1]}">${comp[0]}</a>
+								<ul>
+								${recursivePrint(nav,lvl+1,comp[0])}
+								</ul>
+							</li>
+						</py:otherwise>
+			  		</py:choose>
+				</py:if>
+			</py:for>
+		</py:def>
+		
+		<ul>
+		${recursivePrint(controladmin_navitems)}
+		</ul>
+
+		</div>
+    <div name="admintabs" id="admintabs">
+    <py:if test="hostAdmin==True">
+    <a href='$control_admin_page?operation=new&amp;attr=host'>HostAdmin</a><br/>
+    </py:if>
+    <a href='$control_active_page'>Steuerung</a>
+    </div>
+    </div>
+</py:if>
+
+
+ <div name="contents" class="tabcontents">
+   <py:for each="active in controladmin_attrs">
+
+        <py:choose test="controladmin_mask_new == 'true'">
+		  <py:when test="True">
+			<py:choose test="controladmin_mask=='comp'">
+				<py:when test="True">
+					<h2>New Component</h2>
+				</py:when>
+				<py:otherwise>
+					<h2>New Group</h2>
+				</py:otherwise>
+			</py:choose>
+		  </py:when>
+		  <py:otherwise>
+		    <h2>$active.title</h2>
+		  </py:otherwise>
+		</py:choose>
+                
+         
+        <fieldset>
+           <legend>Component-Settings</legend>   
+           <form class="mod" name="compadmin_form" method="post"> 
+           <input class='attr' type='hidden' name='attr' value="$controladmin_mask" />       
+             <table width='100%'><tbody>
+             
+             <py:choose test="controladmin_mask_new == 'true'">
+	     <py:when test="True">
+                 <tr>
+                   <th ><label>Title*:</label></th>
+                     <td align='left'>
+                         <a href="javascript:explain('title');">?</a>                           
+                         <input class='attr' type='text' name='title' id='title' value="Neu" />                       
+                     </td>
+                 </tr>
+             </py:when>
+		 	 <py:otherwise>
+                  <input class='attr' type='hidden' name='title' value="$active.title" />    
+             </py:otherwise>
+			</py:choose>
+			
+
+   	    <py:if test="controladmin_mask=='comp'">
+
+		     <tr>
+		       <th ><label>Grep-Search*:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('search_name');">?</a>
+		             <input class='attr' type='text' name='search_name' value="$active.search_name" />
+		         </td>
+		     </tr>
+		     <tr>
+		       <th ><label>Server:</label></th>
+		         <td align='left'>
+		         <a href="javascript:explain('host_ip');">?</a>                               
+		             <select name="host_id" size="1">                            
+		            
+		             <py:for each="host in controladmin_hosts">
+		                <py:choose test="host.id == active.host_id">
+							  <py:when test="True">
+								<option value="$host.id" selected="selected">$host.ip : $host.port</option>
+							  </py:when>
+							  <py:otherwise>
+							   	<option value="$host.id">$host.ip: $host.port</option>
+							  </py:otherwise>
+							</py:choose>
+						  </py:for>
+							
+		          	  </select>                  
+		         </td>
+		     </tr>
+		     
+		     <tr>
+		       <th><label>Start-Script*:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('start');">?</a>
+		             <input class='attr' type='text' name='start' value="$active.start " />                           
+		         </td>
+		     </tr>    
+		     <tr>
+		       <th ><label>Arguments:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('vars');">?</a>
+		             <input class='attr' type='text' name='vars' value="$active.vars" />                           
+		         </td>
+		     </tr>
+		     <tr>
+		       <th><label>Stopp-Script:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('stop');">?</a>
+		             <input class='attr' type='text' name='stop' value="$active.stop" />                           
+		         </td>
+		     </tr>
+		     <tr>
+		       <th><label>Status-Script*:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('status_cmd');">?</a>
+		             <input class='attr' type='text' name='status_cmd' value="$active.status_cmd " />                           
+		         </td>
+		     </tr>    
+		     <tr>
+		       <th><label>Privilege-Level:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('privilege');">?</a>
+		             <select name="privilege">
+				<py:choose test="active.privilege == 4">
+					<py:when test="True">
+				             	<option value="4" selected="selected">CONTROL_ADMIN</option>
+					</py:when>
+					<py:otherwise>
+				             	<option value="4">CONTROL_ADMIN</option>
+					</py:otherwise>
+				</py:choose>
+
+				<py:choose test="active.privilege == 3">
+					<py:when test="True">
+				             	<option value="3" selected="selected">CONTROL_OPERATOR</option>
+					</py:when>
+					<py:otherwise>
+				             	<option value="3">CONTROL_OPERATOR</option>
+					</py:otherwise>
+				</py:choose>
+
+				<py:choose test="active.privilege == 2">
+					<py:when test="True">
+				             	<option value="2" selected="selected">CONTROL_USER</option>
+					</py:when>
+					<py:otherwise>
+				             	<option value="2">CONTROL_USER</option>
+					</py:otherwise>
+				</py:choose>
+
+				<py:choose test="active.privilege == 1">
+					<py:when test="True">
+				             	<option value="1" selected="selected">CONTROL_VIEW</option>
+					</py:when>
+					<py:otherwise>
+				             	<option value="1">CONTROL_VIEW</option>
+					</py:otherwise>
+				</py:choose>
+		             </select>
+		         </td>
+		     </tr>
+		     <tr>
+		       <th ><label>Log-Path:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('log');">?</a>
+		             <input class='attr' type='text' name='log' value="$active.log" />                           
+		         </td>
+		     </tr>
+		     <tr>
+		       <th ><label>Log-Tail (Lines):</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('tail_length');">?</a>
+		             <input class='attr' type='text' name='tail_length' value="$active.tail_length" />                           
+		         </td>
+		     </tr>             
+		     <tr>
+		       <th ><label>Display:</label></th>
+		         <td align='left'>
+		             <a href="javascript:explain('display');">?</a>
+		             <select name="display" size="1">                            
+
+		          	
+		          	  <py:for each="id in controladmin_display_id_list">             
+		                 <py:choose test="id != 'None'">
+							 	<py:when test="True">
+								
+									<py:choose test="id == active.display">
+							 			<py:when test="True">
+											<option value="$id" selected="selected">${id} </option>
+		      						</py:when>
+		      						<py:otherwise>
+											<option value="$id">${id} </option>
+							  			</py:otherwise>
+		      					</py:choose>
+		      	
+							   	</py:when>
+							  	<py:otherwise>
+							   		<py:with vars="id = ''">
+		                     		<option value="">${id} </option>
+		                     	</py:with>
+							  	</py:otherwise>
+							  	
+							</py:choose>
+						  </py:for>
+
+		          	 
+		          </select>  
+		         </td>
+		     </tr>
+	     </py:if>
+
+             <tr>
+               <th ><label>Parent:</label></th>
+                 <td align='left'>
+                 <a href="javascript:explain('parent');">?</a>                               
+                     <select name="parent" id="parent" size="1">                            
+                     <option value=""> - </option>
+                     <py:for each="comp in controladmin_complist">
+		             <py:choose test="active.parent == comp">
+		                 <py:when test="True">
+		                     <option selected="selected" value="$comp">$comp</option>
+		                 </py:when>
+		                 <py:otherwise>
+		                     <option value="$comp">$comp</option>
+		                 </py:otherwise>
+		             </py:choose>
+		     </py:for>
+					        
+                     </select>                  
+                 </td>
+             </tr>
+
+
+
+            <tr>                    
+                 <td colspan='2' align='right'>
+             
+                    <py:choose test="controladmin_mask_new == 'true'">
+					  <py:when test="True">
+						<input class='desire_button' name='new' type='submit' value='create' onClick="javascript:return chkCompFormular();"/>
+					  </py:when>
+					  <py:otherwise>
+					   <input class='desire_button' name='update' type='submit' value='update' onClick="javascript:return chkCompFormular();"/>
+                      <input class='desire_button' name='delete' type='submit' value='delete' onClick="javascript:return confirm('Möchten Sie diese Komponente wirklich löschen? Alle untergeordneten Komponenten werden in der Hierarchie eine Ebne hochgesetzt.')"/>
+					  </py:otherwise>
+					</py:choose>
+
+                    
+                    <input class='desire_button' name='cancel' type='submit' value='cancel' />
+                 </td>
+             </tr>
+            </tbody> </table>
+	<input type="hidden" name="priority" value="$active.priority" id="form_priority" />
+   </form>        
+  </fieldset>
+ </py:for>
+</div>
+</html>        

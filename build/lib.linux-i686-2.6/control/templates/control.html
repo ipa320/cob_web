@@ -1,0 +1,84 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="layout.html" />
+
+	<head> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+
+		<title>RobotControl</title>
+		<py:if test="control_refresh">	
+			<script type='text/javascript'>
+// 			<![CDATA[
+				var aktiv = window.setInterval("refresh()", ${control_refresh} );
+				var i = 0;
+				function refresh() 
+				{
+	 	  			location.href='${control_active_page}?operation=refresh&attr=${control_active_attr}'
+		  			i = i + 1;
+		  			if (i >= 1)
+					window.clearInterval(aktiv);
+				}
+// 			]]>
+			</script>
+		</py:if>
+		<script type='text/javascript'>
+			startTreeOrder = ${str(startTreeOrder)}
+			uriRoot = "${uriRoot}"
+			chromePath = "${trac_chrome_path}"
+		</script>
+	</head>
+
+
+	<body>
+		<div id="ctxtnav"></div>
+		<div id="content" class="control">    
+			<h1>RobotControl</h1>
+
+	 	<xi:include href="control_nav.html"><xi:fallback/></xi:include>
+
+		<div id="mainContent">
+			<div class="messageBox warningBox" id="mainWarnings">
+				<p class="title">Es sind folgende Warnungen vorhanden:</p>
+				<div class="text"><p class="textHeader">Folgende Probleme können nicht behoben werden:</p>
+					<ul class="list"><li class="preStart">Java-Script ist deaktiviert, AJAX steht deshalb nicht zur Verfügung</li></ul>
+				</div>
+			</div>
+	
+			<div class="messageBox errorBox" id="mainErrors" style="display:none">
+				<p class="title">Es sind folgende Fehler aufgetreten:</p>
+				<div class="text"><p class="textHeader">Folgende Probleme können nicht behoben werden:</p>
+					<ul class="list"></ul>
+				</div>
+			</div>
+	
+			<div name="contents" class="tabcontents">			
+				<py:if test="control_active_attr == 'log'">
+					<xi:include href="control_log.html"><xi:fallback/></xi:include>
+				</py:if>
+
+				<py:if test="control_active_attr != 'log' and not booking_mask">
+					<xi:include href="control_status.html"><xi:fallback/></xi:include>
+				</py:if>
+
+				<py:if test="control_active_comp.err != ''">
+					<fieldset>
+				    <legend>Problem</legend>
+				    <table id='errortable' width='100%'><tbody>
+							<tr><td colspan='3'>$control_active_comp.err</td></tr>
+	<!--	Control_output existiert nicht	          <tr><td colspan='3'>$control_output</td></tr>-->
+				    </tbody></table>
+				</fieldset>
+				</py:if>
+
+			</div>
+		</div>
+	</div>	
+	</body>
+</html>
+

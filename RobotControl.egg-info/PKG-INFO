@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: RobotControl
+Version: 0.1
+Summary: Webinterface to start/stop robot components and view component logs. Autorin: Regina Klauser. Ueberarbeitete und portierte Version der Komponente auf Genshi von Oezguer Sen
+Home-page: UNKNOWN
+Author: Regina Klauser , Oezguer Sen
+Author-email: oezguer.sen@ipa.fhg.de
+License: GPL
+Description: UNKNOWN
+Platform: UNKNOWN

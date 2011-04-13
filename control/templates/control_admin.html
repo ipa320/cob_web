@@ -1,0 +1,36 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="layout.html" />
+
+	<head>  		
+		<title>RobotControl</title>
+	</head>
+
+	<body>
+		<div id="ctxtnav"></div>
+		<div id="content" class="control">
+			<h1>RobotControl</h1>
+		
+			<py:if test="controladmin_mask == 'host'">
+				<xi:include href="control_hostadmin.html"><xi:fallback/></xi:include>
+			</py:if>
+			
+			<py:if test="controladmin_mask == 'comp' or controladmin_mask == 'grp'">
+				<xi:include href="control_compadmin.html"><xi:fallback/></xi:include>
+			</py:if>
+			
+			<py:if test="controladmin_err != ''">
+				<fieldset>
+					<legend>Problem</legend>
+					<table id='errortable' width='100%'><tbody>
+						<tr><td colspan='3'>$controladmin_err</td></tr>
+					</tbody></table>
+				</fieldset>           
+			</py:if>
+		</div>	
+	</body>
+</html>

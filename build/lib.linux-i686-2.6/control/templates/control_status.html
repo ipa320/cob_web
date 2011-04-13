@@ -1,0 +1,105 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+	  py:strip="True">
+
+
+<h2 class="value_title">$control_active_comp.title</h2>		 
+
+<fieldset id='status'>
+    <legend>Status</legend>        
+    <table id='statustable' width='100%'><tbody>
+        <tr>
+            <py:choose test="control_active_comp.isGroup == False">
+		<py:when test="True">
+		    <th class="col1"><label for="status">Status:</label></th>
+		    <td id="status" class="value_status">$control_active_comp.status</td>
+		</py:when>
+		<py:otherwise>
+		    <th>Group</th><td>'$control_active_comp.title'</td>
+		</py:otherwise>
+            </py:choose>
+
+	        <td align='right' class="status_buttons">
+            	
+            	<py:if test="control_buttons.op != ''">
+                    <span class='desire_button'>
+                    <a  href='$control_active_comp.href?operation=$control_buttons.op&amp;attr=status'>
+                        $control_buttons.op
+                    </a>
+                    </span>
+                </py:if>
+                <py:if test="control_active_comp.hasChilds == True">
+			&nbsp;
+			<span class='desire_button'>
+		            <a  href='javascript:startTree()'>
+		                start_group
+		            </a>
+		        </span>
+		        &nbsp;
+			<span class='desire_button'>
+		            <a  href='javascript:stopTree()'>
+		                stop_group
+		            </a>
+		        </span>
+                </py:if>
+          </td>
+        </tr>
+        <py:if test="control_active_comp.isGroup == False">      
+		<tr>
+		    <th class="col2"><label for="host">Host:</label></th>
+		    <td id="host" colspan='2' align='left'><span class="value_host_ip">$control_active_comp.host_ip</span>:<span class="value_host_port">$control_active_comp.host_port</span> </td>
+		</tr> 
+		<tr>
+		    <th class="col2"><label for="start">Start-Script:</label></th>
+		    <td id="start" colspan='2' align='left' class="value_start">$control_active_comp.start </td>
+		</tr>
+		
+		<py:if test="control_active_comp.vars != ''">
+		    <tr>
+		        <th class="col3"><label for="vars">Arguments:</label></th>
+		        <td id="vars" colspan='2' align='left' class="value_vars">$control_active_comp.vars</td>
+		    </tr>         
+		</py:if>
+		
+		<py:if test="control_active_comp.display != ''">
+		    <tr class="status_vnc">
+		        <th class="col1"><label for="display">VNCview:</label></th>
+		        <td id="display" align='left'>
+				
+					<py:choose test="control_active_comp.vncview_href != '' ">
+						<py:when test="True">
+							<a href='$control_active_comp.vncview_href' target='_blank'>$control_active_comp.vncview_href</a>
+						</py:when>
+						<py:otherwise>
+							inactiv
+						</py:otherwise>
+					</py:choose>
+				
+				</td>    
+		        <td id="vnc_control" align='right'>
+		            
+		            <py:if test="control_buttons.vnc_op != ''">
+		                <span class='desire_button'>
+		                    <a  href='$control_active_comp.href?operation=$control_buttons.vnc_op&amp;attr=status'>
+		                        $control_buttons.vnc_op 
+		                    </a>                            
+		                </span>
+		             </py:if>
+		            
+		            <input type="hidden" name="control_active_comp.vnc_status" value="$control_active_comp.vnc_status" />
+		        </td>
+		    </tr>     
+		 </py:if>
+		 
+		<py:if test="control_active_comp.stop != ''">
+		    <tr>
+		        <th class="col3"><label for="stop">Stopp-Script:</label></th>
+		        <td id="stop" colspan='2' align='left' class="value_stop">$control_active_comp.stop</td>
+		    </tr>         
+		 </py:if>
+	</py:if>
+      
+    </tbody></table>
+</fieldset>
+</html>

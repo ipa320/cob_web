@@ -1,0 +1,46 @@
+li.active a.title {
+	color: black;
+	text-decoration: none;
+}
+
+
+span.log {
+	float: right;
+	padding-right: 22px;
+}
+span.log img {
+	padding-top:4px;
+	width: 13px; 
+}
+
+#StartStopTree {
+	padding-left: 22px;
+}
+#StartStopTree h1 {
+	font-size: 17px;
+	font-weight: bold;
+}
+
+#StartStopTable {
+	width: 100%;
+}
+td.compName {
+}
+td.compNo {
+	width:70px;
+	text-align: right;
+}
+td.compResult {
+	width:40px;
+	text-align: right;
+	font-weight: bold;
+}
+td.compResultFail {
+	color: red;
+}
+td.compResultOk {
+	color: green;
+}
+td.compResultIR {
+	color: orange;
+}

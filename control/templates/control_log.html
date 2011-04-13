@@ -1,0 +1,21 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+	  py:strip="False">
+
+<h2 class="value_title">$control_active_comp.title</h2>		 
+
+<fieldset id='log'>
+    <legend>Log <span class='info value_log'>( $control_active_comp.log )</span>:</legend>
+    
+	<py:choose test="(control_active_comp.log != '')"><!-- and (control_active_comp.tail_out != '')">-->
+		<py:when test="True">
+			<pre class="value_tail_out">${(control_active_comp.tail_out)}</pre>
+		</py:when>
+		<py:otherwise>
+			Log-Ausgabe ist nicht verf&uuml;gbar.
+		</py:otherwise>
+	</py:choose>
+</fieldset>
+
+</html>
