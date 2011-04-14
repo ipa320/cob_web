@@ -1,10 +1,9 @@
 #! /usr/bin/env python
 import sys, time, signal, logging, logging.handlers, getopt
 import socket
-from utils.modules.component import Component
-from utils.modules.group import Group
 from serverThread import ServerThread
-from webServer import WebServer
+from network.webServer import WebServer
+from utils.user import User
 
 
 class Main():
@@ -16,8 +15,8 @@ class Main():
 	   'critical': logging.CRITICAL
 	}
 
-	REQUIRED_ARGUMENTS = ['timeout=', 'trac=', 'log=', 'webPort=']
-	OPTIONAL_ARGUMENTS = ['logLevel=', 'console']
+	REQUIRED_ARGUMENTS = ['timeout=', 'trac=', 'log=', 'webPort=', 'mysqlDb=']
+	OPTIONAL_ARGUMENTS = ['logLevel=', 'console', 'mysqlHost=', 'mysqlUser=', 'mysqlPw=']
 
 	def __init__(self, argv):
 		# default-timeout: 300
@@ -40,17 +39,17 @@ class Main():
 		# Parse Arguments
 		try:
 			args = self.parseArgv(argv[1:])
-		except getopt.GetoptError,e:
-			print "An ArgumentError occured: %s" % str(e)
-			print "Required Arguments: %s" % str(self.REQUIRED_ARGUMENTS)
-			print "Optional Arguments: %s" % str(self.OPTIONAL_ARGUMENTS)
+		except getopt.GetoptError as e:
+			sys.stderr.write ('An ArgumentError occured: %s\n' % str(e))
+			sys.stderr.write ('Required Arguments: %s\n' % str(self.REQUIRED_ARGUMENTS))
+			sys.stderr.write ('Optional Arguments: %s\n' % str(self.OPTIONAL_ARGUMENTS))
 			sys.exit(1)
 
 
 		# Was a logLevel passed (optional) and is it valid?
 		if 'logLevel' in args:
 			if args['logLevel'] not in self.LOG_LEVELS:
-				print "Invalid LogLevel passed: %s" % args['logLevel']	
+				sys.stderr.write ('Invalid LogLevel passed: %s\n' % args['logLevel'])
 				sys.exit(1)
 			self.logLevel = self.LOG_LEVELS[args['logLevel']]
 
@@ -58,8 +57,8 @@ class Main():
 		# WebPort is numerical ?
 		try:
 			int(args['webPort'])
-		except ValueError, e:
-			print "The given WebPort '%s' is not numerical" % args['webPort']
+		except ValueError as e:
+			sys.stderr.write ('The given WebPort "%s" is not numerical\n' % args['webPort'])
 			sys.exit(1)
 
 
@@ -69,33 +68,32 @@ class Main():
 
 
 		# Create the Server
-		self.log.debug("Creating ServerThread")
+		self.log.debug('Creating ServerThread')
 		serverLog = self.getLogger('ServerThread', self.logLevel)
 		try:
-			self.server = ServerThread(serverLog, self.args)
-		except Exception,e:
-			self.log.critical("An unexpected error occured while creating the server:\n%s" % str(e))
-			print "Critical."
+			self.server = ServerThread(serverLog, args)
+		except Exception as e:
+			self.log.exception('An unexpected error occured while creating the server')
+			sys.stderr.write ('Critical.\n')
 			sys.exit(1)
 
 		
 		# Create the WebServer
-		self.log.debug("Creating WebServer")
+		self.log.debug('Creating WebServer')
 		webServerLog = self.getLogger('WebServer', self.logLevel)
 		try:
 			self.webServer = WebServer(self.server, webServerLog, int(args['webPort']))
-		except socket.error,e:
-			self.log.critical ("An unexpected socket error occured while creating the webServer:\n%s")
-			self.log.critical (e)
+		except socket.error as e:
+			self.log.exception ('An unexpected socket error occured while creating the webServer')
 			if e.errno==13:
-				self.log.critical ("Info: You need to be root to create a webServer on certain ports")
+				self.log.critical ('Info: You need to be root to create a webServer on privileged ports (ports < 1024)')
 			self.stop()
-			print "Critical."
+			sys.stderr.write ('Critical.\n')
 			sys.exit(1)
-		except Exception,e:
-			self.log.exception ("An unexpected error occured while creating the webServer:\n%s" % str(e))
+		except Exception as e:
+			self.log.exception ('An unexpected error occured while creating the webServer')
 			self.stop()
-			print "Critical."
+			sys.stderr.write ('Critical.\n')
 			sys.exit(1)
 
 
@@ -103,15 +101,21 @@ class Main():
 		try:
 			self.server.start()
 			self.webServer.start()
-		except Exception,e:
-			self.log.critical ("An unexpected error occured trying to start server/webServer:\n%s")
-			self.log.critical (e)
+		except Exception as e:
+			self.log.exception ('An unexpected error occured trying to start server/webServer')
 			self.stop()
-			print "Critical."
+			sys.stderr.write ('Critical.\n')
 			sys.exit(1)
 
 		signal.signal(signal.SIGINT, self.interruptHandler)
 		signal.signal(signal.SIGTERM, self.interruptHandler)
+
+
+		#TODO REMOVE TEST
+#		self.server.prepareServerForNewUser(User('simon'))
+#		time.sleep(10)
+#		self.server.prepareServerForNewUser(None)
+		#TODO REMOVE TEST
 
 		# run as long as the the server runs
 		while self.server.isAlive(): time.sleep(10)
@@ -120,7 +124,8 @@ class Main():
 	# make sure the server thread is stopped
 	def __del__(self):
 		if self.isAlive():
-			print "\n ! __del__ and Server Alive > Shutting down, this may take a moment"
+			print ('\n ! __del__ and Server Alive > Shutting down, this may take a moment')
+			self.log.error('__del__ called and server is alive')
 			self.stop()
 
 	def isAlive(self):
@@ -130,6 +135,8 @@ class Main():
 	def stop(self):
 		if self.server and self.server.isAlive():
 			self.server.stop()
+		if self.webServer and self.webServer.isAlive():
+			self.webServer.stop()
 			
 
 
@@ -137,7 +144,7 @@ class Main():
 		# create the optlist argument based on the requiredNames and optional Names
 		optlist, args = getopt.getopt(argv, '', list(i for i in self.REQUIRED_ARGUMENTS+self.OPTIONAL_ARGUMENTS))
 		if len(args) > 0:
-			raise getopt.GetoptError("Invalid argument(s) passed: %s" % str(args))
+			raise getopt.GetoptError('Invalid argument(s) passed: %s' % str(args))
 
 		# Check whether all required names are give
 		# take only the key and remove -- at the beginning [2:]
@@ -145,9 +152,9 @@ class Main():
 		for req in self.REQUIRED_ARGUMENTS:
 			# be careful to remove = at the end if given
 			if req[-1:] == '=' and req[0:-1] not in names:
-				raise getopt.GetoptError("Missing argument: %s" % req)
+				raise getopt.GetoptError('Missing argument: %s' % req)
 			if req[-1:] != '=' and req not in names:
-				raise getopt.GetoptError("Missing argument: %s" % req)
+				raise getopt.GetoptError('Missing argument: %s' % req)
 	
 		# Store values in self
 		args = {}
@@ -160,7 +167,7 @@ class Main():
 
 
 	def createLogHandler(self, logFile, logLevel, addStreamHandler=False):
-		logFormatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+		logFormatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 		self.fileHandler = logging.handlers.RotatingFileHandler(logFile)
 		self.fileHandler.setFormatter(logFormatter)
@@ -182,11 +189,16 @@ class Main():
 
 	def interruptHandler(self, *arg):
 		if self.isAlive():
-			print "\n * SIGNAL received > Shutting down, this may take a moment"
+			if self.log:
+				self.log.info ('SIGNAL received > Shutting down')
 			self.stop()
 	
 	
 
-if __name__=="__main__":
+if __name__=='__main__':
+	if (sys.version_info[0] != 2 or sys.version_info[1] < 6):
+		sys.stderr.write ('ERROR: At least Python Version 2.6 required!\n')
+		sys.exit(1)
+
 	Main(sys.argv)
 	
