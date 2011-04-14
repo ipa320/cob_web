@@ -1,0 +1,5 @@
+2011-04-13 17:08:40,339 - WebServer - INFO - Creating WebServer on port 81
+2011-04-13 17:08:40,343 - robotcontrold - CRITICAL - An unexpected socket error occured while creating the webServer:
+%s
+2011-04-13 17:08:40,344 - robotcontrold - CRITICAL - [Errno 13] Permission denied
+2011-04-13 17:08:40,344 - robotcontrold - CRITICAL - Info: You need to be root to create a webServer on certain ports

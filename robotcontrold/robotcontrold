@@ -1,0 +1,192 @@
+#! /usr/bin/env python
+import sys, time, signal, logging, logging.handlers, getopt
+import socket
+from utils.modules.component import Component
+from utils.modules.group import Group
+from serverThread import ServerThread
+from webServer import WebServer
+
+
+class Main():
+	LOG_LEVELS = {
+	   'debug': logging.DEBUG,
+	   'info': logging.INFO,
+	   'warning': logging.WARNING,
+	   'error': logging.ERROR,
+	   'critical': logging.CRITICAL
+	}
+
+	REQUIRED_ARGUMENTS = ['timeout=', 'trac=', 'log=', 'webPort=']
+	OPTIONAL_ARGUMENTS = ['logLevel=', 'console']
+
+	def __init__(self, argv):
+		# default-timeout: 300
+		self.timeout = 300
+		self.tracEnv = None
+		self.logPath = None
+		self.args = None
+
+		self.server = None
+		self.webServer = None
+
+		self.logLevel = self.LOG_LEVELS['info']
+		self.log = None
+		self.logHandler = None
+
+		self.fileHandler = None
+		self.streamHandler = None
+
+
+		# Parse Arguments
+		try:
+			args = self.parseArgv(argv[1:])
+		except getopt.GetoptError,e:
+			print "An ArgumentError occured: %s" % str(e)
+			print "Required Arguments: %s" % str(self.REQUIRED_ARGUMENTS)
+			print "Optional Arguments: %s" % str(self.OPTIONAL_ARGUMENTS)
+			sys.exit(1)
+
+
+		# Was a logLevel passed (optional) and is it valid?
+		if 'logLevel' in args:
+			if args['logLevel'] not in self.LOG_LEVELS:
+				print "Invalid LogLevel passed: %s" % args['logLevel']	
+				sys.exit(1)
+			self.logLevel = self.LOG_LEVELS[args['logLevel']]
+
+		
+		# WebPort is numerical ?
+		try:
+			int(args['webPort'])
+		except ValueError, e:
+			print "The given WebPort '%s' is not numerical" % args['webPort']
+			sys.exit(1)
+
+
+		# Create Log Instances
+		self.createLogHandler(args['log'], self.logLevel, 'console' in args)
+		self.log = self.getLogger('robotcontrold', self.logLevel)
+
+
+		# Create the Server
+		self.log.debug("Creating ServerThread")
+		serverLog = self.getLogger('ServerThread', self.logLevel)
+		try:
+			self.server = ServerThread(serverLog, self.args)
+		except Exception,e:
+			self.log.critical("An unexpected error occured while creating the server:\n%s" % str(e))
+			print "Critical."
+			sys.exit(1)
+
+		
+		# Create the WebServer
+		self.log.debug("Creating WebServer")
+		webServerLog = self.getLogger('WebServer', self.logLevel)
+		try:
+			self.webServer = WebServer(self.server, webServerLog, int(args['webPort']))
+		except socket.error,e:
+			self.log.critical ("An unexpected socket error occured while creating the webServer:\n%s")
+			self.log.critical (e)
+			if e.errno==13:
+				self.log.critical ("Info: You need to be root to create a webServer on certain ports")
+			self.stop()
+			print "Critical."
+			sys.exit(1)
+		except Exception,e:
+			self.log.exception ("An unexpected error occured while creating the webServer:\n%s" % str(e))
+			self.stop()
+			print "Critical."
+			sys.exit(1)
+
+
+		# Try to start server / webServer
+		try:
+			self.server.start()
+			self.webServer.start()
+		except Exception,e:
+			self.log.critical ("An unexpected error occured trying to start server/webServer:\n%s")
+			self.log.critical (e)
+			self.stop()
+			print "Critical."
+			sys.exit(1)
+
+		signal.signal(signal.SIGINT, self.interruptHandler)
+		signal.signal(signal.SIGTERM, self.interruptHandler)
+
+		# run as long as the the server runs
+		while self.server.isAlive(): time.sleep(10)
+
+
+	# make sure the server thread is stopped
+	def __del__(self):
+		if self.isAlive():
+			print "\n ! __del__ and Server Alive > Shutting down, this may take a moment"
+			self.stop()
+
+	def isAlive(self):
+		return self.server and self.server.isAlive()
+
+
+	def stop(self):
+		if self.server and self.server.isAlive():
+			self.server.stop()
+			
+
+
+	def parseArgv(self, argv):	
+		# create the optlist argument based on the requiredNames and optional Names
+		optlist, args = getopt.getopt(argv, '', list(i for i in self.REQUIRED_ARGUMENTS+self.OPTIONAL_ARGUMENTS))
+		if len(args) > 0:
+			raise getopt.GetoptError("Invalid argument(s) passed: %s" % str(args))
+
+		# Check whether all required names are give
+		# take only the key and remove -- at the beginning [2:]
+		names = (i[0][2:] for i in optlist)
+		for req in self.REQUIRED_ARGUMENTS:
+			# be careful to remove = at the end if given
+			if req[-1:] == '=' and req[0:-1] not in names:
+				raise getopt.GetoptError("Missing argument: %s" % req)
+			if req[-1:] != '=' and req not in names:
+				raise getopt.GetoptError("Missing argument: %s" % req)
+	
+		# Store values in self
+		args = {}
+		for key,value in optlist:
+			# remove -- at the beginning of key
+			args[key[2:]] = value
+
+		return args
+		
+
+
+	def createLogHandler(self, logFile, logLevel, addStreamHandler=False):
+		logFormatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+		self.fileHandler = logging.handlers.RotatingFileHandler(logFile)
+		self.fileHandler.setFormatter(logFormatter)
+
+		if addStreamHandler:
+			self.streamHandler = logging.StreamHandler()
+			self.streamHandler.setFormatter(logFormatter)
+
+
+	def getLogger(self, name, logLevel):
+		logger = logging.getLogger(name)
+		logger.setLevel(logLevel)
+
+		logger.addHandler(self.fileHandler)
+		if self.streamHandler:
+			logger.addHandler(self.streamHandler)
+		return logger
+
+
+	def interruptHandler(self, *arg):
+		if self.isAlive():
+			print "\n * SIGNAL received > Shutting down, this may take a moment"
+			self.stop()
+	
+	
+
+if __name__=="__main__":
+	Main(sys.argv)
+	
