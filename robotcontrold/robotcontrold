@@ -112,7 +112,7 @@ class Main():
 
 
 		#TODO REMOVE TEST
-#		self.server.prepareServerForNewUser(User('simon'))
+		self.server.prepareServerForNewUser(User('simon'))
 #		time.sleep(10)
 #		self.server.prepareServerForNewUser(None)
 		#TODO REMOVE TEST

@@ -11,7 +11,7 @@ class SSH():
 
 		self.host = host
 		self.connected = False
-		self.channel = None
+		self.channels = []
 
 	def isConnected(self):
 		return self.connected	
@@ -20,23 +20,22 @@ class SSH():
 	def connect(self):
 		if not self.connected:
 			self.client.connect(self.host.hostname, self.host.port, self.host.user, self.host.pw)
-			self.channel = self.client.invoke_shell()
 			self.connected = True
 
 	def disconnect(self):
 		if self.connected:
 			# exceptions may be raised, set connected to False as first command
 			self.connected = False
-			self.channel.close()
+
+			# channels may be already closed, so skip errors
+			for channel in self.channels:
+				try: channel.close()
+				except Exception as e: pass
+
 			self.client.close()
 
-	#@Override: Make sure the thread cannot be controlled from outside
-	def start(self):
-		pass
+	def invokeShell(self):
+		channel = self.client.invoke_shell()
+		self.channels.append(channel)
+		return channel
 
-
-	def send(self, string):
-		return self.channel.send(string)
-
-	def recv(self, nbytes):
-		return self.channel.recv(nbytes)

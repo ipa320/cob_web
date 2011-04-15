@@ -3,25 +3,23 @@ from threading import Thread
 from .module import Module
 from myExceptions.databaseExceptions import CorruptDatabaseError
 
-class Component(Module, Thread):
+class Component(Module):
 	
 	def __init__(self, rId, username, hostId, host, name, parentId, actions, log):
-		Thread.__init__(self)
 		Module.__init__(self, rId, username, name, parentId)	
 		self.hostId = hostId
+		self.host = host
 		self.actions = actions
-
-		self.alive = False
 
 		self.log = log
 
+		# better solution needed
+		for actionName, action in self.actions.iteritems():
+			action.setHost(self.host)
 
-		# actions must contain status / start / stop
-		if 'status' not in actions or 'start' not in actions or 'stop' not in actions:
-			raise CorruptDatabaseError('Component must have at least three actions: status/start/stop')
 
 	def __str__(self):
-		return "Component [%s]" % Module.__str__(self)
+		return "Component [Module=%s]" % Module.__str__(self)
 
 
 	# Component.stop should be called anyway, this function is just to make sure we 
@@ -34,19 +32,21 @@ class Component(Module, Thread):
 	def isAlive(self):
 		return self.isAlive
 
-	def start(self):
-		if not self.alive:
-			self.log.debug ('Starting Component %s' % str(self))
-			self.alive = True
-			Thread.start(self)
 
+	# stop stops all actions
 	def stop(self):
-		if self.alive:
-			self.log.debug ('Stopping Component %s' % str(self))
-			self.alive = False
+		for action in self.actions.values():
+			try:
+				action.stop()
+			except Exception as e:
+				self.log.exception('Exception occured stopping %s' % str(self))
 
 
-	def run(self):
-		while self.alive:
-			print self.name
-			time.sleep(1)
+
+	# get an action by name. Returns None if not found
+	def get(self, actionName):
+		if not actionName in self.actions:
+			return None
+
+		return self.actions[actionName]
+
