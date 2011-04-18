@@ -1,6 +1,4 @@
-from utils.modules.module import Module
-from utils.modules.component import Component
-from utils.modules.group import Group
+from utils.component import Component
 
 
 class User():
@@ -19,8 +17,8 @@ class User():
 		return self.name.__hash__()
 
 	def append(self, comp):
-		if not isinstance(comp, Module):
-			raise ValueError('Comp must be an instance of Module')
+		if not isinstance(comp, Component):
+			raise ValueError('Comp must be an instance of Component')
 
 		self._items[comp.id] = comp
 
@@ -69,24 +67,9 @@ class User():
 	def iteritems(self):
 		return self._items.iteritems()
 
-	# used to iterate components only
-	def itercomponents(self):
-		return ((compId, comp) for (compId, comp) in self._items.iteritems() if isinstance(comp, Component))
-
-	# used to iterate groups only
-	def itergroups(self):
-		return ((groupId, group) for (groupId, group) in self._items.iteritems() if isinstance(group, Group))
 
 	# get all items
-	def items(self):
-		return self._items.values()
-
-	# get all components
 	def components(self):
-		return list(comp for comp in self._items.values() if isinstance(comp, Component))
-
-	# get all groups
-	def groups(self):
-		return list(group for group in self._items.values() if isinstance(group, Group))
+		return self._items.values()
 
 

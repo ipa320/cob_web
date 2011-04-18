@@ -3,98 +3,155 @@ from network.screenReader import ScreenReader
 
 
 class Action():
-	def __init__(self, rId, name, ref_id, start_script, start_args, stop_script, stop_args, log):
+	def __init__(self, rId, name, startCommands, stopCommands, dependencyIds, log):
 		self.id = int(rId)
 		self.name = name
-		self.ref_id = int(ref_id)
 		self.log = log
+		self.startCommands = startCommands
+		self.stopCommands = stopCommands
+		self.dependencyIds = dependencyIds
 
-		# if args are None, set them to '' so we can easily create a string w/o checking args
-		self.start_script = start_script
-		self.start_args = start_args or ''
-
-		# same: set args '' if not defined
-		self.stop_script = stop_script
-		self.stop_args = stop_args or ''
-
-
-		self.host = None
-		self.screenReader = None
+		self.component = None
+		self.screenReaders = []
+		self.startChannels = []
+		self.dependencies = []
 
 
 
 	def __str__(self):
-		return 'Action [id=%d, ref_id=%d, name=%s, script=%s, args=%s]' % (self.id, self.ref_id, self.name, self.script, self.args)
+		return 'Action [id=%d, name=%s, comp=%s]' % (self.id, self.name, self.component if self.component else 'None')
 
 
-	def setHost(self, host):
-		self.host = host
+	def setComponent(self, component):
+		self.component = component
 
 	def isAlive(self):
-		return self.screenReader and self.screenReader.isAlive()
+		for reader in self.screenReaders:
+			if reader and reader.isAlive():
+				return True
+		return False
+
 
 	def start(self):
-		if not self.host:
-			raise AttributeError('Host is not set')
+		if not self.component or not self.component.host:
+			raise AttributeError('Host is not set for %s' % str(self))
+
 		if not self.isAlive():
-			self.log.info('Starting Action "%s"' % self.name)
+			self.log.info('Starting Action "%s". "%d" Commands found' % (self.name, len(self.startCommands)))
 
-			# empty the buffer
-			self.buffer = ''
+			if len(self.dependencies):
+				self.log.info('Action depends on: %s' % list('%s>%s' % (item.component.name, item.name) for item in self.dependencies))
+				for dep in self.dependencies:
+					dep.start()
 
-			self.log.debug('Opening channel for Action "%s"' % self.name)
-			self.channel = self.host.invokeShell()
-			self.screenReader = ScreenReader(self.name, self.channel, self.log)
-			self.screenReader.start()
+			for cmd in self.startCommands:
+				channel = self.component.host.invokeShell()
+				self.startChannels.append(channel)
 
-			cmd = self.startCmd()
-			self.log.debug('Running start command "%s" by Action "%s"' % (cmd.strip(), self.name))
-			self.channel.send(cmd)
+				screenReader = ScreenReader(self.name, channel, self.log)
+				self.screenReaders.append(screenReader)
+				screenReader.start()
+
+				command = self.createShellCmd(cmd)
+				self.log.debug('Running start command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
+				channel.send(command)
+
+				# if blocking is enabled for this command, wait for the screenreader to quit
+				if cmd.blocking and screenReader and screenReader.isAlive():
+					self.log.debug('Command requires blocking. Action "%s" joined the screenReader Thread. Waiting for it to finish' % self.name)
+					screenReader.join()
+
 
 		else:
 			self.log.debug('Could not start action "%s", Action still active' % self.name)
 
 
-	def stop(self):
-		if not self.host:
-			raise AttributeError('Host is not set')
-		if self.isAlive():
-			self.log.info('Stopping Action "%s"' % self.name)
+	def stop(self, force=False):
+		if not self.component or not self.component.host:
+			raise AttributeError('Host is not set for %s' % str(self))
 
-			channel = self.host.invokeShell()
-			cmd = self.stopCmd()
-			self.log.debug('Running stop command "%s" by Action "%s"' % (cmd.strip(), self.name))
+		if self.isAlive() or force:
+			self.log.info('Stopping Action "%s" (force=%s). "%d" Commands found' % (self.name, str(force), len(self.stopCommands)))
+
+			for cmd in self.stopCommands:
+				channel = self.component.host.invokeShell()
+				command = self.createShellCmd(cmd)
+				self.log.debug('Running stop command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
+
+				screenReader = ScreenReader(self.name, channel, self.log)
+				self.screenReaders.append(screenReader)
+				screenReader.start()
 			
-			channel.send(cmd)
+				channel.send(command)
+
+				# if blocking is enabled for this command, wait for the screenreader to quit
+				if cmd.blocking and screenReader and screenReader.isAlive():
+					self.log.debug('Command requires blocking. Action "%s" joined the screenReader Thread. Waiting for it to finish' % self.name)
+					screenReader.join()
+
+
+			# Wait for all readers (start and stop) to finish
+			for reader in self.screenReaders:
+				if reader and reader.isAlive():
+					self.log.debug('Action "%s"::stop joined the screenReader Thread. Waiting for it to finish' % self.name)
+					reader.join()
+
+
+
+	def forceStop(self):
+		return self.stop(force=True)
+
+
+	def kill(self, force=False):
+		if not self.component or not self.component.host:
+			raise AttributeError('Host is not set for %s' % str(self))
+
+		if self.isAlive() or force:
+			self.log.info('Killing Action "%s" (force=%s) "%d" Commands found ' % (self.name, str(force), len(self.startCommands)+len(self.stopCommands)))
+
+			# non blocking commands, so only one shell required
+			channel = self.component.host.invokeShell()
+			for cmd in self.startCommands+self.stopCommands:
+				cmd = self.createKillCmd(cmd)
+				self.log.debug('Running kill command "%s" by Action "%s"' % (cmd.strip().replace('\n','\\n'), self.name))
+				channel.send(cmd)
+			
+			# send an exit signal
+			self.log.debug('Sending exit to close channel.')
+			channel.send('exit\n')
 
 			# you cannot stop the screenReader. Wait for [screen is terminating] to be received
 			# wait for the screenReader to be finished
-			if self.screenReader.isAlive():
-				self.log.debug('Action "%s" joined the screenReader Thread. Waiting for it to finish' % self.name)
-				self.screenReader.join()
+			for reader in self.screenReaders:
+				if reader and reader.isAlive():
+					self.log.debug('Action "%s"::kill joined the screenReader Thread. Waiting for it to finish' % self.name)
+					reader.join()
 
+
+	def forceKill(self):
+		return self.kill(force=True)
+
+
+	def lostConnection(self):
+		self.screenReaders = []
 
 	
 	def status(self):
-		if not self.host:
-			raise AttributeError('Host is not set')
+		if not self.component or not self.component.host:
+			raise AttributeError('Host is not set for %s' % str(self))
 
-		if not self.screenReader:
-			return None
+		text = 'PRINTING ALL READERS\n------------------------------------\n\n'
+		for reader in self.screenReaders:
+			text += 'Name: %s\n=============================\n' % reader.name
+			text += reader.getBuffer()
+		
+		return text
+ 
 
-		return self.screenReader.getBuffer()
+	def createShellCmd(self, cmd):
+		return 'screen -S %s_%d_%d\n%s\nexit\n' % (self.name, self.id, cmd.id, cmd.command)
 
 
-	def startCmd(self):
-		return 'screen -L -S %s_%d %s %s\n' % (self.name, self.id, self.start_script, self.start_args)
-
-
-	def stopCmd(self):
-		cmd = ''
-		if self.stop_script:
-			cmd += 'timeout 10 %s %s && ' % (self.stop_script, self.stop_args)
-
-		cmd += 'screen -X -S %s_%d kill && exit\n' % (self.name, self.id)
-		return cmd
-
+	def createKillCmd(self, cmd):
+		return 'screen -X -S %s_%d_%d kill\n' % (self.name, self.id, cmd.id)
 

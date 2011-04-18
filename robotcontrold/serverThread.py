@@ -1,10 +1,11 @@
 import threading, time, MySQLdb
 from utils.host import Host
 from utils.actions.action import Action
+from utils.actions.shellCommand import ShellCommand
 from myExceptions.databaseExceptions import CorruptDatabaseError
-from utils.modules.component import Component
-from utils.modules.group import Group
+from utils.component import Component
 from utils.user import User
+
 
 
 
@@ -36,7 +37,6 @@ class ServerThread(threading.Thread):
 
 		# Connect to Hosts
 		self.startAllHosts()
-
 		
 
 
@@ -64,7 +64,7 @@ class ServerThread(threading.Thread):
 				except Exception as e: pass
 
 
-			self.stopAllComponents()
+			self.forceTerminateAllComponents()
 			self.stopAllHosts()
 
 			self.alive = False
@@ -117,20 +117,6 @@ class ServerThread(threading.Thread):
 	def readHosts(self):
 		self.log.info('Reading Hosts')
 
-		self.log.debug ('Loading HostActions from database')
-		actions = {}
-		sql = 'SELECT `id`, `name`, `host_id`, `start_script`, `start_arguments`, `stop_script`, `stop_arguments` FROM `hostActions`'
-		self.cursor.execute(sql)
-		while True:
-			row = self.cursor.fetchone()
-			if not row: break
-
-			name = row[1]
-			hostId = row[2]
-			if not hostId in actions:
-				actions[hostId] = {}
-			actions[hostId][name] = Action(*row, log=self.log)
-
 
 		self.log.debug ('Loading Hosts from database')
 		self.hosts = {}
@@ -142,34 +128,74 @@ class ServerThread(threading.Thread):
 			if not row: break
 
 			hostId = row[0]
-			if not hostId in actions:
-				raise CorruptDatabaseError('No Actions for the host defined. id: %d' % hostId)
-
-			self.hosts[hostId] = Host(*row, actions=actions[hostId], log=self.log)
+			self.hosts[hostId] = Host(*row, log=self.log)
 			
 
 
 	def readComponents(self):
 		self.log.info('Reading Components')
 
-		self.log.debug ('Loading ComponentActions from database')
-		actions = {}
-		sql = 'SELECT `id`, `name`, `comp_id`, `start_script`, `start_arguments`, `stop_script`, `stop_arguments` FROM `componentActions`'
+		self.log.debug ('Loading ShellCommands from database')
+		shellCommands = {}
+		sql = 'SELECT `id`, `action_id`, `type`, `command`, `blocking` FROM `shellCommands`'
 		rows = self.cursor.execute(sql)
 		self.log.debug ('%d rows fetched' % rows)
 		while True:
 			row = self.cursor.fetchone()
 			if not row: break
 
+			rId = int(row[0])
+			action_id = int(row[1])
+			rType = row[2] #type is either start or stop
+			cmd = row[3]
+			blocking = row[4] == 'Y'
+
+			if not action_id in shellCommands:
+				shellCommands[action_id] = {'start':[], 'stop': []}
+
+			shellCommands[action_id][rType].append(ShellCommand(rId, cmd, blocking))
+
+
+
+		self.log.debug ('Loading ComponentActions from database')
+		actionsByCompAndName = {}
+		actionsById = {}
+		sql = 'SELECT `id`, `name`, `comp_id`, `dependencies` FROM `componentActions`'
+		rows = self.cursor.execute(sql)
+		self.log.debug ('%d rows fetched' % rows)
+		while True:
+			row = self.cursor.fetchone()
+			if not row: break
+
+			rId = int(row[0])
 			name = row[1]
 			compId = row[2]
-			if not compId in actions:
-				actions[compId] = {}
-			actions[compId][name] = Action(*row, log=self.log)
+			dependencyIds = row[3].split(';') if row[3] else []
+
+			startCmds = shellCommands[rId]['start'] if rId in shellCommands else []
+			stopCmds =  shellCommands[rId]['stop']  if rId in shellCommands else []
+			
+			if not compId in actionsByCompAndName:
+				actionsByCompAndName[compId] = {}
+
+			action = Action(rId, name, startCmds, stopCmds, dependencyIds, self.log)
+			actionsByCompAndName[compId][name] = action
+			actionsById[rId] = action
+
 		
+		self.log.debug ('Sorting ComponentActions by dependencies')
+		for action in actionsById.values():
+			for depId in action.dependencyIds:
+				depId = int(depId)
+				if not depId in actionsById:
+					raise CorruptDatabaseError('Dependency "%d" for action ("%s", id:"%d") not found' % (depId, action.name, action.id))
+
+				action.dependencies.append(actionsById[depId])
+
+
 
 		self.log.debug ('Loading Components from database')
-		sql = 'SELECT `id`, `user_name`, `name`, `parent_id`, `host_id`, `is_group` FROM `components`'
+		sql = 'SELECT `id`, `user_name`, `name`, `parent_id`, `host_id` FROM `components`'
 		rows = self.cursor.execute(sql)
 		self.log.debug ('%d rows fetched' % rows)
 		while True:
@@ -177,33 +203,31 @@ class ServerThread(threading.Thread):
 			if not row: break
 
 			# pop the last element. isGroup == Y for groups
-			compId = row[0]
+			compId = int(row[0])
 			username = row[1]
 			name = row[2]
-			parentId = row[3]
+			parentId = row[3] # int or None
 			hostId = row[4]
-			isGroup = row[5] == 'Y'
 
+			# compActions may be none
+			compActions = actionsByCompAndName[compId] if compId in actionsByCompAndName else []
 
-			if isGroup:
-				if compId in actions: raise CorruptDatabaseError('Actions defined for group. id: %d' % compId)
-				group = Group(compId, username, name, parentId)
-				self.users[username].append(group)
-				self.log.debug('%s added to user %s' % (str(group), username))
+			# compHost may be None for groups
+			compHost = self.hosts[hostId] if hostId in self.hosts else None
 
-			else:
-				if not compId in actions: raise CorruptDatabaseError('No Actions for component defined. id: %d' % compId)
-				if not hostId in self.hosts: raise CorruptDatabaseError('No Host found for component. id: %d hostId: %d' % (compId, hostId))
-				comp = Component(compId, username, hostId, self.hosts[hostId], name, parentId, actions[compId], self.log)
-				self.users[username].append(comp)
-				self.log.debug('%s added to user %s' % (str(comp), username))
+			comp = Component(compId, username, compHost, name, parentId, compActions, self.log)
+			self.users[username].append(comp)
+			if compHost:
+				compHost.appendComp(comp)
+
+			self.log.debug('%s added to user %s' % (str(comp), username))
 
 
 
 		self.log.debug ('Sorting components (parents)')
 		for user in self.users.values():
 
-			for currentComp in user.items():
+			for currentComp in user.components():
 				if currentComp.parentId:
 					if not user.get(currentComp.parentId):
 						raise CorruptDatabaseError('Parent for Component %s not found' % str(currentComp))
@@ -218,7 +242,8 @@ class ServerThread(threading.Thread):
 	def startAllHosts(self):
 		self.log.debug('Start all Hosts')
 		for host in self.hosts.values():
-			host.start()
+			# start in blocking mode
+			host.start(blocking=True)
 		
 
 	def stopAllHosts(self):
@@ -253,7 +278,7 @@ class ServerThread(threading.Thread):
 		if user:
 			self.log.info('Preparing the Server for new user: %s' % username)
 
-		self.stopAllComponents()
+		self.forceTerminateAllComponents()
 		self.activeUser = self.users[username]
 
 
@@ -269,7 +294,49 @@ class ServerThread(threading.Thread):
 
 		for user in self.users.values():
 			for comp in user.components():
-				comp.stop()
+				if comp.host and comp.host.isConnected():
+					comp.stop()
+				else:
+					self.log.debug('Skipping component "%s", Host is down' % comp.name)
+
+
+	def forceStopAllComponents(self):
+		self.log.info('Force Stopping all components')
+
+		for user in self.users.values():
+			for comp in user.components():
+				if comp.host:
+					if comp.host.isConnected():
+						comp.forceStop()
+					else:
+						self.log.debug('Skipping component "%s", Host is down' % comp.name)
+
+
+	# Terminate: stop first and kill afterwards
+	def terminateAllComponents(self):
+		self.log.info('Terminating all components')
+
+		for user in self.users.values():
+			for comp in user.components():
+				if comp.host:
+					if comp.host.isConnected():
+						comp.terminate()
+					else:
+						self.log.debug('Skipping component "%s", Host is down' % comp.name)
+		
+
+	# Terminate: stop first and kill afterwards
+	def forceTerminateAllComponents(self):
+		self.log.info('Force Terminating all components')
+
+		for user in self.users.values():
+			for comp in user.components():
+				if comp.host:
+					if comp.host.isConnected():
+						comp.forceTerminate()
+					else:
+						self.log.debug('Skipping component "%s", Host is down' % comp.name)
+
 
 
 

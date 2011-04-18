@@ -72,18 +72,37 @@ class MyHandler(BaseHTTPRequestHandler):
 
 		try:
 			responseCode = 200
+			args = {}
+			options = {}
 
 			try:
 				# if no user is logged in, send a 401 Unauthorized
 				if not user:
 					raise UnauthorizedRequestError('Unauthorized access.', self.path)
 
+				# split the path by the first ?
+				argsString, optionsString = self.path.split('?', 1) if self.path.find('?') > 0 else (self.path, '')
+
 				# parse the request (remove the leading and trailing / , then split by /)
-				args = self.path.strip('/').split("/")
+				args = argsString.strip('/').split("/")
+
+				# parse the options string
+				temp = optionsString.split('&')
+				for t in temp:
+					key, value = t.split('=',1) if t.find('=') > 0 else (t, '')
+					options[key] = value
+					
+				
 				action = args[0]
 				
 				if action == 'info':
-					output =  '[User]<br>name:%s<br>' % user.name
+					output  = '[Args]<br>%s<br>' % str(args)
+					output += '<br>'
+					
+					output += '[Options]<br>%s<br>' % str(options)
+					output += '<br>'
+
+					output += '[User]<br>name:%s<br>' % user.name
 					output += '<br>'
 
 					output += '[Components]<br>'
@@ -91,10 +110,6 @@ class MyHandler(BaseHTTPRequestHandler):
 						output += '%s<br>' % str(comp)
 					output += '<br>'
 
-					output += '[Groups]<br>'
-					for group in user.groups():
-						output += '%s<br>' % str(group)
-					output += '<br>'
 
 					output += '[Hosts]<br>'
 					for host in serverThread.hosts.values():
@@ -126,6 +141,8 @@ class MyHandler(BaseHTTPRequestHandler):
 						result = action.start()
 					elif command == 'stop':
 						result = action.stop()
+					elif command == 'kill':
+						result = action.kill()
 					elif command == 'isAlive':
 						result = action.isAlive()
 					elif command == 'status':
@@ -166,7 +183,12 @@ class MyHandler(BaseHTTPRequestHandler):
 			self.send_header('Content-Type', 'text/html')
 			self.end_headers()
 			self.server.log.debug(output)
-			self.wfile.write(output.encode('ascii','ignore'))
+#			self.wfile.write(output)#.encode('ascii'))
+
+			if not 'repr' in options:
+				self.wfile.write(output.encode('ascii','ignore'))
+			else:
+				self.wfile.write(repr(output).encode('ascii','ignore'))
 
 		except Exception as e:
 			self.server.log.exception('An error occured sending the request')
