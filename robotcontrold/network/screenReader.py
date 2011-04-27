@@ -3,7 +3,7 @@ from threading import Thread
 
 class ScreenReader(Thread):
 	
-	def __init__(self, name, channel, log):
+	def __init__(self, name, channel, log, echo=False):
 		Thread.__init__(self)
 		self.name = name
 		self.channel = channel
@@ -12,6 +12,8 @@ class ScreenReader(Thread):
 		self._buffer = 'Idle.'
 
 		self._alive = False
+
+		self.echo = echo
 
 
 	def isAlive(self):
@@ -45,6 +47,8 @@ class ScreenReader(Thread):
 					if not line: break
 
 					self._buffer += line
+					if self.echo:
+						print line
 
 					if self._buffer.find('[screen is terminating]') > 0:
 						self._alive = False

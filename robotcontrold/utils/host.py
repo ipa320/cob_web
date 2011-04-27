@@ -1,7 +1,8 @@
-import time
+import time, socket
 from threading import Thread
 from network.ssh import SSH
 from network.screenReader import ScreenReader
+from network import ping
 from myExceptions.databaseExceptions import CorruptDatabaseError
 from myExceptions.networkExceptions import NoConnectionToHostException
 
@@ -19,7 +20,7 @@ class Host(Thread):
 
 		self.log = log
 
-		self.ssh = None
+		self.ssh = SSH(self)
 		self.ctrlChannel = None
 		self.screenReader = None
 
@@ -83,32 +84,44 @@ class Host(Thread):
 	def connect(self):
 		if not self.isConnected():
 			try:
-				self.ssh = SSH(self)
 				self.ssh.connect()
-				self.ctrlChannel = self.invokeShell()
+			except socket.timeout as e:
+				self.log.debug('Connection to %s timed out' % str(self))
+				return
+			except Exception as e:
+				self.log.debug('Could not connect to %s' % str(self))
+				return
+
+			try:
+#				self.ctrlChannel = self.invokeShell()
 
 				# kill possible old controlScreens
-				self.ctrlChannel.send('screen -X -S controlScreen kill\n')
-				self.ctrlChannel.send('screen -S controlScreen\n')
-				self.screenReader = ScreenReader('Host #%d' % self.id, self.ctrlChannel, self.log)
-				self.screenReader.start()
+#				self.ctrlChannel.send('screen -X -S controlScreen kill\n')
+#				self.ctrlChannel.send('screen -L -S controlScreen\n')
+#				self.screenReader = ScreenReader('Host #%d' % self.id, self.ctrlChannel, self.log, echo=False)
+#				self.screenReader.start()
 				self.log.info('Connected to %s' % str(self))
+
 			except Exception as e:
-				self.log.exception('Could not connect to %s' % str(self))
+				self.log.exception('Could open control. Clossing %s' % str(self))
+				self.screenReader = None
+				self.disconnect()
+
+
 
 
 	def disconnect(self):
 		if self.isConnected():
 			try:
 				self.log.debug('Closing ControlChannel')
-				try: self.ctrlChannel.send('exit\n')
-				except Exception as e:
-					self.log.exception('Could not close ControlChannel')
+#				try: self.ctrlChannel.send('exit\n')
+#				except Exception as e:
+#					self.log.exception('Could not close ControlChannel')
 
-				# wait for screen reader to be closed
-				if self.screenReader and self.screenReader.isAlive():
-					self.log.debug('Joining ScreenReader for "Host #%d"' % self.id)
-					self.screenReader.join()
+#				# wait for screen reader to be closed
+#				if self.screenReader and self.screenReader.isAlive():
+#					self.log.debug('Joining ScreenReader for "Host #%d"' % self.id)
+#					self.screenReader.join()
 
 				self.ssh.disconnect()
 				self.log.info('Disconnected from %s' % str(self))
@@ -118,29 +131,27 @@ class Host(Thread):
 
 
 	def run(self):
-		conn = False
 		while self.alive:
-			print "self.isConnected: %s\tconn: %s" % (str(self.isConnected()), str(conn))
-			if (self.ctrlChannel):
-				print 'status: %s\t%s' % (self.ctrlChannel.exit_status_ready(), str(self.ctrlChannel))
+			if not self.isConnected():
+				self.connect()
 			else:
-				print "nope"
-			self.connect()
-#			print "postconnection"
-			if conn:
-				if not self.ctrlChannel or self.ctrlChannel.exit_status_ready():
+				try:
+					delay = ping.do_one(self.hostname, 2)
+					if delay is None:
+						self.log.debug('Ping timed out, we probably lost the connection')
+						self.lostConnection()
+					#i,o,e = self.ssh.exec_command('uptime')
+					#print 'O: %s\tE: %s' % (o.read().strip(), e.read().strip())
+				except Exception as e:
+					print "* EXCEPTION :"
 					self.lostConnection()
-				else:
-					self.ctrlChannel.send('uptime\n')
-			
 
-			conn = self.isConnected()
 			time.sleep(1)
 
 
 	def lostConnection(self):
 		self.log.warning('Lost connection to %s' % str(self))
-		self.log.info ('Stopping all components assigned to this host')
+		self.log.info ('Informing all components assigned to this host')
 
 		for comp in self._components:
 			comp.lostConnection()
@@ -148,3 +159,4 @@ class Host(Thread):
 		self.ctrlChannel = None
 		self.screenReader = None
 		self.ssh.disconnect()
+

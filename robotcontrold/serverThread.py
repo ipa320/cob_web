@@ -250,6 +250,7 @@ class ServerThread(threading.Thread):
 		self.log.info('Disconnecting all Hosts')
 		for host in self.hosts.values():
 			host.stop()
+			host.join()
 
 
 

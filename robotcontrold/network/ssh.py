@@ -1,5 +1,4 @@
-import time, inspect
-from paramiko import *
+import time, inspect, paramiko
 from threading import Thread
 from myExceptions.networkExceptions import NoConnectionToHostException
 
@@ -15,9 +14,9 @@ class SSHConnectThread(Thread):
 
 class SSH():
 	def __init__(self, host):
-		self.client = SSHClient()
+		self.client = paramiko.SSHClient()
 		self.client.load_system_host_keys()
-		self.client.set_missing_host_key_policy(AutoAddPolicy())
+		self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 		self.host = host
 		self.connected = False
@@ -29,14 +28,8 @@ class SSH():
 
 	def connect(self):
 		if not self.connected:
-			thread = SSHConnectThread(self.client, self.host)
-			thread.start()
-			thread.join(5)
-			print "IS ALIVE?" + str(thread.isAlive())
-			if thread.isAlive():
-				thread.stop()
-			else:
-				self.connected = True
+			self.client.connect(self.host.hostname, self.host.port, self.host.user, self.host.pw, timeout=2)
+			self.connected = True
 
 	def disconnect(self):
 		if self.connected:
@@ -49,6 +42,12 @@ class SSH():
 				except Exception as e: pass
 
 			self.client.close()
+
+	def exec_command(self, cmd):
+		if not self.isConnected():
+			raise NoConnectionToHostException('SSH is not connected!')
+
+		return self.client.exec_command(cmd)
 
 	def invokeShell(self):
 		if not self.isConnected():
