@@ -19,6 +19,27 @@
 	} 
 	.tabs-bottom .ui-tabs-nav li { margin-top: -2px !important; margin-bottom: 1px !important; border-top: none; border-bottom-width: 1px; }
 
+	.buttons {
+		position: absolute !important;
+		left: 0;
+		top: 0;
+		right: 0;
+		background-color: white;
+		padding: 5px 0px 7px 10px; 
+	}
+	.start-buttons, .stop-buttons {
+		padding-right: 10px;
+	}
+	.stop-buttons {
+		display: none;
+	}
+
+	.buttons div {	float: left; }
+
+	.text {
+		padding: 50px 0 0 0 ;
+	}
+
 	.tabs-bottom .ui-tabs-panel {
 		padding-top: 40px;
 	}
@@ -38,9 +59,20 @@
 				// Accordion
 				$("#accordion").accordion({ header: "h3" });
 
-				$(".start-button").button({
-					icons: {primary: "ui-icon-play"}
-				})
+				$(".start-buttons").buttonset();
+				$(".stop-buttons").buttonset();
+				$(".log-buttons").buttonset();
+
+				$(".start-button").button({ icons: {primary: "ui-icon-play"} });
+				$(".stop-button").button({ icons: {primary: "ui-icon-stop" } });
+				$(".kill-button").button({ icons: {primary: "ui-icon-notice"} });
+				$(".showLog-button").button({ icons: {primary: "ui-icon-document-b" } });
+				$(".refreshLog-button").button({ icons: {primary: "ui-icon-refresh" } });
+
+/*
+				$(".buttons").button({
+					icons: { primary: "ui-icon-play", secondary: "ui-icon-notice" }
+				});*/
 	
 				// Tabs
 				$('#tabs').tabs();
@@ -97,9 +129,19 @@
 
 			$(document).ready(function() {
 				$(".start-button").click(function() {
-					$(this).button({
-						icons: {primary: "ui-icon-refresh"}
-					})
+					var parent = $(this).parent("div");
+					if (parent.size() != 1) 
+						throw new Error("Parent Div has an invalid size")
+
+					parent.hide();
+					parent.siblings(".stop-buttons").show();
+
+					$( "#dialog-modal" ).dialog({
+						height: 140,
+						modal: true,
+						buttons: []//,
+						//beforeclose: function(){ return false }
+					});
 
 				})
 			})
@@ -119,6 +161,11 @@
 	<h1>Welcome to jQuery UI!</h1>
 		
 
+		<div id="dialog-modal" title="Basic modal dialog" style="display:none">
+			<p>Adding the modal overlay screen makes the dialog look more prominent because it dims out the page content.</p>
+		</div>
+
+
 <!-- Accordion -->
 		<h2 class="demoHeaders">Accordion</h2>
 		<div id="accordion">
@@ -126,12 +173,22 @@
 
 				<h3><a href="#">First</a></h3>
 				<div>
-					<input type="checkbox" class="start-button" id="start-button-1" /><label for="start-button-1">Run</label>
+					<div class="buttons">
+						<div class="start-buttons">
+							<input type="checkbox" class="start-button" id="start-button-1" /><label for="start-button-1">Run</label>
+						</div>
+						<div class="stop-buttons">
+							<input type="radio" class="stop-button" id="stop-button-1" name="stop-button-1" /><label for="stop-button-1">Stop</label>
+							<input type="radio" class="kill-button" id="kill-button-1" name="stop-button-1" /><label for="kill-button-1">Kill</label>
+						</div>
+						<div class="log-buttons">
+							<input type="checkbox" class="showLog-button" id="showLog-button-1" /><label for="showLog-button-1">Show Log</label>
+							<input type="checkbox" class="refreshLog-button" id="refreshLog-button-1" /><label for="refreshLog-button-1">&nbsp;</label>
+						</div>
+					</div>
 
-
-					<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+					<div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
 				</div>
-
 			</div>
 			<div>
 				<h3><a href="#">Second</a></h3>

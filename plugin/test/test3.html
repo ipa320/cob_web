@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>jQuery UI Example Page</title>
+		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.12.custom.css" rel="stylesheet" />
+		<link type="text/css" href="css/actionView.css" rel="stylesheet" />
+		<link type="text/css" href="css/componentView.css" rel="stylesheet" />
+		<link type="text/css" href="css/style.css" rel="stylesheet" />
+
+		<script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.12.custom.min.js"></script>
+		<script type="text/javascript" src="js/action.js"></script>
+		<script type="text/javascript" src="js/actionView.js"></script>
+		<script type="text/javascript" src="js/component.js"></script>
+		<script type="text/javascript" src="js/componentView.js"></script>
+		<script type="text/javascript" src="js/styleDataManager.js"></script>
+		<script type="text/javascript" src="js/screenManager.js"></script>
+
+		<style>
+			/*demo page css*/
+			body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 50px;}
+			.demoHeaders { margin-top: 2em; }
+			#dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
+			#dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
+			ul#icons {margin: 0; padding: 0;}
+			ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+			ul#icons span.ui-icon {float: left; margin: 0 4px;}
+		</style>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+//				screenManager.init();
+				screenManager.lock();
+
+				$("#nav-1").button({ icons: {primary: "ui-icon-close" } });
+				$("#nav-2").button({ icons: {primary: "ui-icon-check" } });
+				$("#nav-3").button({ icons: {primary: "ui-icon-close" } });
+				$("#nav-4").button({ icons: {primary: "ui-icon-close" } });
+				$("#nav-5").button({ icons: {primary: "ui-icon-close" } });
+
+				comp = new Component(1, "My Comp", null)
+				action1 = new Action(1, "#1");
+				action2 = new Action(2, "#2");
+				comp.addAction(action1);
+				comp.addAction(action2);
+
+
+				var i=0;
+//				$("#newAction").click(function() {
+					$('div#actions').append('<div></div>');
+					$('div#actions div:first').componentView(comp);
+//				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div id="dialog-loading" title="Please wait while loading ...">
+			<img src="images/ajax-loader-trans.gif" style="float:left"/><p style="padding: 4px 45px; margin-top: 0;">Please wait while the remote data is being loaded from the service.</p>
+			<ul><li class="success"><span class="ui-icon ui-icon-circle-check"></span>first</li><li><span class="ui-icon ui-icon-circle-check"></span>second</li></ul>
+		</div>
+
+		<!--<a id="newAction" href="javascript:void(0)">Test</a>-->
+		<div>
+			<div id="menu">
+				<div id="nav-buttons">
+					<div><input type="checkbox" name="nav" id="nav-1" /><label for="nav-1" class="btn-top">Blabla</label></div>
+					<div class="level-2"><input type="checkbox" name="nav" id="nav-2" /><label for="nav-2" class="btn-middle">Blabla</label></div>
+					<div class="level-3"><input type="checkbox" name="nav" id="nav-3" /><label for="nav-3" class="btn-middle">Blabla</label></div>
+					<div><input type="checkbox" name="nav" id="nav-4" /><label for="nav-4" class="btn-middle">Blabla</label></div>
+					<div><input type="checkbox" name="nav" id="nav-5" /><label for="nav-5" class="btn-bottom">Blabla2</label></div>
+				</div>
+			</div>
+			<div id="actions"></div>
+
+		</div>
+	</body>
+</html>

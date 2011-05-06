@@ -1,0 +1,52 @@
+.actionView {
+	margin-bottom: 15px;
+}
+
+.buttons {
+	position: absolute !important;
+	left: 0;
+	top: 0;
+	right: 0;
+	background-color: white;
+	padding: 5px 0px 7px 10px; 
+}
+.start-buttons, .stop-buttons {
+	padding-right: 10px;
+}
+.stop-buttons {
+	display: none;
+}
+
+.buttons div {	float: left; }
+
+.text {
+	padding: 40px 0 0 0 ;
+}
+table {
+}
+tr th, tr td {
+	vertical-align: top;
+}
+tr th {
+	padding: 4px 10px;
+	text-align: left;
+}
+tr td {
+	padding: 4px 100px 4px 15px;
+}
+tr.odd td, tr.odd th {
+	background-color: #cccccc;
+}
+tr.even td, tr.even th {
+/*	background-color: #cdcdcd;*/
+}
+td.ph_action-dep a {
+	font-weight: bold;
+	text-decoration: none;
+}
+td.ph_action-dep a.running {
+	color: green;
+}
+td.ph_action-dep a.notRunning {
+	color: red;
+}
