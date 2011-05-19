@@ -151,10 +151,9 @@ class Main():
 		names = (i[0][2:] for i in optlist)
 		for req in self.REQUIRED_ARGUMENTS:
 			# be careful to remove = at the end if given
-			if req[-1:] == '=' and req[0:-1] not in names:
+			if req.strip('=') not in names:
 				raise getopt.GetoptError('Missing argument: %s' % req)
-			if req[-1:] != '=' and req not in names:
-				raise getopt.GetoptError('Missing argument: %s' % req)
+
 	
 		# Store values in self
 		args = {}

@@ -15,6 +15,7 @@ class Component():
 
 		# actions may be None (e.g. for "groups")
 		# but be careful, actions must be empty in that case as well
+		# actions are sorted by id
 		self.actions = actions or {}
 
 		self.log = log
@@ -104,9 +105,9 @@ class Component():
 
 
 	# get an action by name. Returns None if not found
-	def get(self, actionName):
-		if not actionName in self.actions:
+	def getAction(self, actionId):
+		if not actionId in self.actions:
 			return None
 
-		return self.actions[actionName]
+		return self.actions[actionId]
 

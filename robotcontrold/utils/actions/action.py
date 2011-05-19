@@ -1,15 +1,17 @@
 import time
+from utils.eventHistory import EventHistory
 from network.screenReader import ScreenReader
 
 
 class Action():
-	def __init__(self, rId, name, startCommands, stopCommands, dependencyIds, log):
+	def __init__(self, rId, name, startCommands, stopCommands, dependencyIds, description, log):
 		self.id = int(rId)
 		self.name = name
 		self.log = log
 		self.startCommands = startCommands
 		self.stopCommands = stopCommands
 		self.dependencyIds = dependencyIds
+		self.description = description;
 
 		self.component = None
 		self.screenReaders = []
@@ -31,6 +33,14 @@ class Action():
 				return True
 		return False
 
+	def screenReaderStopped(self, reader):
+		if not self.component:
+			raise AttributeError('Component is not set')
+			
+		if not self.isAlive():
+			EventHistory.actionStopped(self, self.component)
+		else:
+			print "BUT STILL ACTIVE"
 
 	def start(self):
 		if not self.component or not self.component.host:
@@ -48,11 +58,11 @@ class Action():
 				channel = self.component.host.invokeShell()
 				self.startChannels.append(channel)
 
-				screenReader = ScreenReader(self.name, channel, self.log)
+				screenReader = ScreenReader(self.name, channel, self.log, notifyStop=self.screenReaderStopped)
 				self.screenReaders.append(screenReader)
 				screenReader.start()
 
-				command = self.createShellCmd(cmd)
+				command = self.createScreenCmd(cmd)
 				self.log.debug('Running start command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
 				channel.send(command)
 
@@ -61,6 +71,10 @@ class Action():
 					self.log.debug('Command requires blocking. Action "%s" joined the screenReader Thread. Waiting for it to finish' % self.name)
 					screenReader.join()
 
+
+			# notify EventHandler after all cmds run
+			if self.isAlive():
+				EventHistory.actionRun(self, self.component)
 
 		else:
 			self.log.debug('Could not start action "%s", Action still active' % self.name)
@@ -75,10 +89,10 @@ class Action():
 
 			for cmd in self.stopCommands:
 				channel = self.component.host.invokeShell()
-				command = self.createShellCmd(cmd)
+				command = self.createScreenCmd(cmd)
 				self.log.debug('Running stop command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
 
-				screenReader = ScreenReader(self.name, channel, self.log)
+				screenReader = ScreenReader(self.name, channel, self.log, notifyStop=self.screenReaderStopped)
 				self.screenReaders.append(screenReader)
 				screenReader.start()
 			
@@ -148,7 +162,7 @@ class Action():
 		return text
  
 
-	def createShellCmd(self, cmd):
+	def createScreenCmd(self, cmd):
 		return 'screen -S %s_%d_%d\n%s\nexit\n' % (self.name, self.id, cmd.id, cmd.command)
 
 

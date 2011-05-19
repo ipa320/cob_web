@@ -29,7 +29,7 @@ div#nav-buttons label.btn-bottom {
 }
 
 
-div#actions {
+div#component {
 	width: 720px;
 	margin-left: 150px;
 	padding: 0 40px;
@@ -44,3 +44,8 @@ div#nav-buttons div.level-2 .ui-button-text { padding-left: 40px; }
 div#nav-buttons div.level-3 .ui-button-text { padding-left: 60px; }
 div#nav-buttons div.level-4 .ui-button-text { padding-left: 80px; }
 div#nav-buttons div.level-5 .ui-button-text { padding-left: 100px; }
+
+
+.ui-buttonset {
+	opacity: 0.7;
+}

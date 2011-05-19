@@ -10,7 +10,7 @@ var styleDataManager = new (function() {
 		this.actionTabsClosed[id] = true;
 	};
 	this.toggleActionTab = function(id) {
-		if (this.isActionTabClosed)
+		if (this.isActionTabClosed(id))
 			this.actionTabOpened(id);
 		else
 			this.actionTabClosed(id);

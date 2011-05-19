@@ -1,0 +1,19 @@
+div.loadingDialogView img.loader {
+	float: left;
+}
+div.loadingDialogView p.msg {
+	padding: 4px 45px;
+	margin-top: 0;
+}
+div.loadingDialogView ul {
+	list-style-type: none;
+	padding-left: 20px;
+}
+div.loadingDialogView ul li span.ui-icon {
+	float: left;
+	padding-right: 5px;
+}
+div.loadingDialogView ul li {
+	font-weight: bold;
+	padding-bottom: 5px;
+}

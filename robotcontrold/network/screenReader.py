@@ -3,11 +3,12 @@ from threading import Thread
 
 class ScreenReader(Thread):
 	
-	def __init__(self, name, channel, log, echo=False):
+	def __init__(self, name, channel, log, notifyStop=None, echo=False):
 		Thread.__init__(self)
 		self.name = name
 		self.channel = channel
 		self.log = log
+		self.notifyStop = notifyStop
 
 		self._buffer = 'Idle.'
 
@@ -69,3 +70,5 @@ class ScreenReader(Thread):
 		finally:
 			self.log.debug('ScreenReader "%s" finished' % self.name)
 			self._alive = False
+			if self.notifyStop:
+				self.notifyStop(self)

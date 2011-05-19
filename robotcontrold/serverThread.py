@@ -160,7 +160,7 @@ class ServerThread(threading.Thread):
 		self.log.debug ('Loading ComponentActions from database')
 		actionsByCompAndName = {}
 		actionsById = {}
-		sql = 'SELECT `id`, `name`, `comp_id`, `dependencies` FROM `componentActions`'
+		sql = 'SELECT `id`, `name`, `comp_id`, `dependencies`, `description` FROM `componentActions`'
 		rows = self.cursor.execute(sql)
 		self.log.debug ('%d rows fetched' % rows)
 		while True:
@@ -171,15 +171,21 @@ class ServerThread(threading.Thread):
 			name = row[1]
 			compId = row[2]
 			dependencyIds = row[3].split(';') if row[3] else []
+			description = row[4];
 
+			# actions can have several start/stop commands assigned (start / stop). But they don't have to.
 			startCmds = shellCommands[rId]['start'] if rId in shellCommands else []
 			stopCmds =  shellCommands[rId]['stop']  if rId in shellCommands else []
 			
+			# create an associative array to store all actions sorted by compId -> rId
+			# two actions of one component must not have the same name
 			if not compId in actionsByCompAndName:
 				actionsByCompAndName[compId] = {}
 
-			action = Action(rId, name, startCmds, stopCmds, dependencyIds, self.log)
-			actionsByCompAndName[compId][name] = action
+			# create a new action and assign it to the two arrays.
+			# The first one is sorted by compId -> id, the second by id only (used for searching dependencies)
+			action = Action(rId, name, startCmds, stopCmds, dependencyIds, description, self.log)
+			actionsByCompAndName[compId][rId] = action
 			actionsById[rId] = action
 
 		

@@ -34,29 +34,6 @@ class User():
 
 		return self._items[key]
 
-	# key must be the component's id
-	# returns the component or None if not found
-	def getComponent(self, key):
-		if not isinstance(key, int):
-			raise ValueError('key must be an integer')
-
-		if not key in self._items or not isinstance(self._items[key], Component):
-			return None
-
-		return self._items[key]
-
-
-	# key must be the component's id
-	# returns the group or None if not found
-	def getGroup(self, key):
-		if not isinstance(key, int):
-			raise ValueError('key must be an integer')
-
-		if not key in self._items or not isinstance(self._items[key], Group):
-			return None
-
-		return self._items[key]
-
 
 	# return all ids i.e. keys() of components
 	def getIDs(self):

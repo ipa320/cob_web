@@ -1,30 +1,31 @@
-var actionViewCode = '<h3 class="actionView-title"><a href="#" class="ph_action-title">PH_TITLE({id}) <span class="active">Active</span></a></h3>\
+var actionViewCode = '<h3 class="actionView-name"><a href="#" class="ph_action-name">PH_name <span class="active">Active</span></a></h3>\
 				<div>\
 					<div class="buttons">\
-						<div class="start-buttons">\
-							<input type="checkbox" class="start-button" id="start-button-{id}" /><label for="start-button-{id}">Run</label>\
+						<div class="start-buttons"> \
+							<a href="#" class="start-button">Run</a>\
 						</div>\
 						<div class="stop-buttons">\
-							<input type="radio" class="stop-button" id="stop-button-{id}" name="stop-button-{id}" /><label for="stop-button-{id}">Stop</label>\
-							<input type="radio" class="kill-button" id="kill-button-{id}" name="stop-button-{id}" /><label for="kill-button-{id}">Kill</label>\
+							<a href="#" class="stop-button">Stop</a>\
+							<a href="#" class="kill-button">Kill</a>\
 						</div>\
 						<div class="log-buttons">\
-							<input type="checkbox" class="showLog-button" id="showLog-button-{id}" /><label for="showLog-button-{id}">Show Log</label>\
-							<input type="checkbox" class="refreshLog-button" id="refreshLog-button-{id}" /><label for="refreshLog-button-{id}">&nbsp;</label>\
+							<a href="#" class="showLog-button">ShowLog</a>\
+							<a href="#" class="refreshLog-button">Refresh</a>\
 						</div>\
 					</div>\
 					<div class="text"><table>\
-						<tr class="even"><th>Title:</td><td class="ph_action-title">PH_TITLE</td></tr>\
-						<tr class="even"><th>Description:</td><td class="ph_action-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>\</td></tr>\
+						<tr class="even"><th>name:</td><td class="ph_action-name">PH_name</td></tr>\
+						<tr class="even"><th>Description:</td><td class="ph_action-desc"><i>Keine Beschreibung angegeben</i></div>\</td></tr>\
 						<tr class="even"><th>Dependencies:</th><td class="ph_action-dep"><a href="#" class="running">Meine Komponente » Aktive Komponente</a><br /><a href="#" class="notRunning">Meine Komponente » Inaktive Komponente</a></td></tr> \
 						</table>\
 					</div>\
 				</div>';
 
 
-$.fn.actionView = function(action, options) {
-	if (! action instanceof Action)
-		return;
+$.fn.renderActionView = function(action, options) {
+	if (! (action instanceof Action))
+		throw new Error("Argument must be an instance of Action");
+
 
 	// it's a new object
 	if (!this.hasClass('actionView')) {
@@ -34,7 +35,8 @@ $.fn.actionView = function(action, options) {
 		this.append(data);
 
 		// Accordion
-		this.accordion({ header: "h3", collapsible: true });
+		active = styleDataManager.isActionTabClosed(action.id) ? false : null;
+		this.accordion({ header: "h3", collapsible: true, active: active });
 		this.bind('accordionchange', function(event, ui) {
 			styleDataManager.toggleActionTab(action.id);
 		});
@@ -50,20 +52,51 @@ $.fn.actionView = function(action, options) {
 		this.find(".kill-button").button({ icons: {primary: "ui-icon-notice"} });
 		this.find(".showLog-button").button({ icons: {primary: "ui-icon-document-b" } });
 		this.find(".refreshLog-button").button({ icons: {primary: "ui-icon-refresh" } });
+			
+		// Set name and description. These values don't change
+		this.find(".ph_action-name").text(action.name);
+
+		if (action.description)
+			this.find(".ph_action-desc").html(action.description);
+			
+		this.find('.start-button').click(function() { application.startAction(action.id, action.compId); return false; });
+		this.find('.stop-button').click(function() { application.stopAction(action.id, action.compId); return false; });
+		this.find('.kill-button').click(function() { application.killAction(action.id, action.compId); return false; });
 	}
 
-	this.updateActionView(action, options);
+	this.updateActionView(action, options, true);
 }
 
 $.fn.updateActionView = function(action, options, force) {
+	if (! (action instanceof Action))
+		throw new Error("Argument must be an instance of Action");	
+	
 	// check whether it's necessary to update the object
-	if (force === true || !this.data("lastRefresh") || this.data("lastRefresh") < action.lastChange) {
-
-		this.find(".ph_action-title").text(action.title);
+	if (force === true || !this.data("lastRefresh") || this.data("lastRefresh") < action.getLastChange()) {
+		startButtons = this.find(".start-buttons");
+		stopButtons  = this.find(".stop-buttons");
+		
+		if (action.isActive()) {
+			// need to show start / hide stop buttons ?
+			if (startButtons.is(':visible')) {
+				startButtons.hide();
+				stopButtons.show();
+				stopButtons.find('.stop-button', '.kill-button').removeClass('ui-state-hover');
+			}
+		}
+		else {
+			if (stopButtons.is(':visible')) {
+				startButtons.show();
+				startButtons.find('.start-button').removeClass('ui-state-hover');
+				stopButtons.hide()
+			}
+		}
 		this.data("lastRefresh", new Date().getTime());
+		
+	
+		// have to disable the buttons seperatrely, won't work otherwise
+		this.find(".start-buttons").buttonset({'disabled': screenManager.isLockedLocation()});
+		this.find(".stop-buttons").buttonset({'disabled': screenManager.isLockedLocation()});
+		this.find(".log-buttons").buttonset({'disabled': screenManager.isLockedLocation()});
 	}
 };
-
-
-
-

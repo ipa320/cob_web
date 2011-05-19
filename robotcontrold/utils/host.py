@@ -3,6 +3,7 @@ from threading import Thread
 from network.ssh import SSH
 from network.screenReader import ScreenReader
 from network import ping
+from utils.eventHistory import EventHistory
 from myExceptions.databaseExceptions import CorruptDatabaseError
 from myExceptions.networkExceptions import NoConnectionToHostException
 
@@ -101,6 +102,7 @@ class Host(Thread):
 #				self.screenReader = ScreenReader('Host #%d' % self.id, self.ctrlChannel, self.log, echo=False)
 #				self.screenReader.start()
 				self.log.info('Connected to %s' % str(self))
+				EventHistory.hostOnline(self)
 
 			except Exception as e:
 				self.log.exception('Could open control. Clossing %s' % str(self))
@@ -152,6 +154,7 @@ class Host(Thread):
 	def lostConnection(self):
 		self.log.warning('Lost connection to %s' % str(self))
 		self.log.info ('Informing all components assigned to this host')
+		EventHistory.hostOffline(self)
 
 		for comp in self._components:
 			comp.lostConnection()

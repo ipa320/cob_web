@@ -1,5 +1,6 @@
-import threading
+import threading, time
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from utils.eventHistory import EventHistory
 from myExceptions.webServerExceptions import *
 
 
@@ -74,11 +75,12 @@ class MyHandler(BaseHTTPRequestHandler):
 			responseCode = 200
 			args = {}
 			options = {}
+			output = None
 
 			try:
 				# if no user is logged in, send a 401 Unauthorized
 				if not user:
-					raise UnauthorizedRequestError('Unauthorized access.', self.path)
+					raise UnauthorizedRequestError('No User logged in.', self.path)
 
 				# split the path by the first ?
 				argsString, optionsString = self.path.split('?', 1) if self.path.find('?') > 0 else (self.path, '')
@@ -114,27 +116,93 @@ class MyHandler(BaseHTTPRequestHandler):
 					output += '[Hosts]<br>'
 					for host in serverThread.hosts.values():
 						output += '%s<br>' % str(host)
+						
+						
+				# Status Command
+				elif action == 'status':
+					output = 'OK'
+							
+					
+				# Request host / component data
+				elif action == 'data':
+					# data/(host|comp)
+					if len(args) < 2:
+						raise ArgumentRequestError('Wrong argument count for "data". %s found, at least 2 Required.' % str(args), self.path)
 
+					if args[1] != 'host' and args[1] != 'comp' and args[1] != 'eventHistory' :
+						raise ArgumentRequestError('Argument one must be either "host" or "comp". "%s" found' % str(args[1]), self.path)
+					
+					
+					if args[1] == 'host':
+						hosts = serverThread.hosts
+						output = '{'
+						for host in hosts.values():
+							output += '"%d": {"hostname": "%s", "user": "%s", "port": "%s"},' % (host.id, host.hostname, host.user, host.port)
+						# remove the trailing comma
+						output = output.strip(',') + '}'
+					
+					
+					elif args[1] == 'comp':
+						output = '{'
+						for comp in user.components():
+							# first create the actions string for this comp
+							actions = '{'
+							for action in comp.actions.values():
+								description = '"' + action.description + '"' if action.description else 'null';
+								actions += '\n\t\t"%d": {\n\t\t\t"name": "%s", \n\t\t\t"desc": %s, \n\t\t\t"start": ["%s"], \n\t\t\t"stop": ["%s"]\n\t\t},' % (action.id, action.name, description, 'start', 'stop')
+							actions = actions.strip(',') + '\n\t}';
+							
+							
+							# hostId and parentId might be None
+							hostId   = '"' + str(comp.host.id)  + '"' if comp.host else 'null'
+							parentId = '"' + str(comp.parentId) + '"' if comp.parentId else 'null'
+							output += '\n"%d": {\n\t"host": %s, \n\t"name": "%s", \n\t"parentId": %s, \n\t"actions": %s\n},' % (comp.id, hostId, comp.name, parentId, actions)
+						# remove the trailing comma
+						output = output.strip(',') + '}'
+						
+	
+					# Events					
+					elif args[1] == 'eventHistory':
+						if len(args) != 3:
+							raise ArgumentRequestError('Wrong argument count for "data/eventHistory". %s found, 3 Required.' % str(args), self.path)
+						
+						if not args[2].isdigit():
+							raise ArgumentRequestError('Invalid argument for timestamp "%s". timestamp must be numerical.' % args[2], self.path)
+							
+						timestamp = int(args[2])
+						data = EventHistory.getEventData(timestamp)
+						
+						output = '{"timestamp": "%d", "events": [' % int(time.time())
+						for item in data:
+							if item['type'] == EventHistory.ACTION_STATUS_EVENT:
+								output += '\n\t{"type": "%d", "id": "%d", "comp": "%d", "status": "%d", "ts": "%d"},' % (item['type'], item['id'], item['comp'], item['status'], item['stamp'])
+							if item['type'] == EventHistory.HOST_EVENT:
+								output += '\n\t{"type": "%d", "id": "%d", "status": "%d", "ts": "%d"},' % (item['type'], item['id'], item['status'], item['stamp'])
+						output = output.strip(',') + '\n]}'
+				
 
+				# Start/Stop/Kill/Request status of an action
 				elif action == 'exec':
 					if len(args) != 4:
 						raise ArgumentRequestError('Wrong argument count for "exec". %s found, 4 Required.' % str(args), self.path)
 
 					if not args[1].isdigit():
 						raise ArgumentRequestError('Invalid argument for compId "%s". compId must be numerical.' % args[1], self.path)
+					if not args[2].isdigit():
+						raise ArgumentRequestError('Invalid argument for actionId "%s". actionId must be numerical.' % args[2], self.path)
 
 					compId = int(args[1])
-					actionName = args[2]
+					actionId = int(args[2])
 					command = args[3]
 
-					comp = user.getComponent(compId)
-					action = comp.get(actionName)
+					comp = user.get(compId)
+					action = comp.getAction(actionId)
 
 					if not comp:
 						raise ArgumentRequestError('Component with id "%d" not found' % compId, self.path)
 
 					if not action:
-						raise ArgumentRequestError('Action "%s" for component "%d, %s" not found.' % (actionName, compId, comp.name), self.path)
+						raise ArgumentRequestError('Action "%d" for component "%d, %s" not found.' % (actionId, compId, comp.name), self.path)
 
 
 					if command == 'start':
@@ -155,26 +223,30 @@ class MyHandler(BaseHTTPRequestHandler):
 
 				else:
 					raise UnknownRequestError('Unknown request. Args: %s.' % str(args), self.path)
+					
+				# if output was not set, raise an error	
+				if not output:
+					raise UnknownRequestError('The request did not produce any output. Args: %s' % str(args), self.path)
 
 
 			except ArgumentRequestError as e:
 				# statusCode 400 Bad Request
-				statusCode = 400
+				responseCode = 400
 				output = '400 %s' % str(e)
 
 			except UnauthorizedRequestError as e:
 				# statusCode 401 Unauthorized
-				statusCode = 401
+				responseCode = 401
 				output = '401 %s' % str(e)
 
 			except UnknownRequestError as e:	
 				# statusCode 404 Not Found
-				statusCode = 404
+				responseCode = 404
 				output = '404 %s' % str(e)
 
 			except Exception as e:
 				# statusCode 500 Internal Server Error
-				statusCode = 500
+				responseCode = 500
 				output = '500 Internal Server Error'
 				self.server.log.exception('An error occured parsing the request')
 
@@ -182,7 +254,7 @@ class MyHandler(BaseHTTPRequestHandler):
 			self.send_response(responseCode)
 			self.send_header('Content-Type', 'text/html')
 			self.end_headers()
-			self.server.log.debug(output)
+#			self.server.log.debug(output)
 #			self.wfile.write(output)#.encode('ascii'))
 
 			if not 'repr' in options:
