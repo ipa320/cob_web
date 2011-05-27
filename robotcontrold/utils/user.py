@@ -3,7 +3,8 @@ from utils.component import Component
 
 class User():
 	def __init__(self, name):
-		self.name = name
+		# important: always process the name in lowercase
+		self.name = name.lower()
 		self._items = {}
 
 	def __str__(self):

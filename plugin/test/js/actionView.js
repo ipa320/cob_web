@@ -16,16 +16,16 @@ var actionViewCode = '<h3 class="actionView-name"><a href="#" class="ph_action-n
 					<div class="text"><table>\
 						<tr class="even"><th>name:</td><td class="ph_action-name">PH_name</td></tr>\
 						<tr class="even"><th>Description:</td><td class="ph_action-desc"><i>Keine Beschreibung angegeben</i></div>\</td></tr>\
-						<tr class="even"><th>Dependencies:</th><td class="ph_action-dep"><a href="#" class="running">Meine Komponente » Aktive Komponente</a><br /><a href="#" class="notRunning">Meine Komponente » Inaktive Komponente</a></td></tr> \
+						<tr class="even"><th>Dependencies:</th><td class="ph_action-dep"></td></tr> \
 						</table>\
 					</div>\
 				</div>';
 
 
-$.fn.renderActionView = function(action, options) {
+$.fn.renderActionView = function(action, components, options) {
 	if (! (action instanceof Action))
 		throw new Error("Argument must be an instance of Action");
-
+		
 
 	// it's a new object
 	if (!this.hasClass('actionView')) {
@@ -55,7 +55,7 @@ $.fn.renderActionView = function(action, options) {
 			
 		// Set name and description. These values don't change
 		this.find(".ph_action-name").text(action.name);
-
+		
 		if (action.description)
 			this.find(".ph_action-desc").html(action.description);
 			
@@ -64,17 +64,41 @@ $.fn.renderActionView = function(action, options) {
 		this.find('.kill-button').click(function() { application.killAction(action.id, action.compId); return false; });
 	}
 
-	this.updateActionView(action, options, true);
+	this.updateActionView(action, components, options, true);
 }
 
-$.fn.updateActionView = function(action, options, force) {
+$.fn.updateActionView = function(action, components, options, force) {
 	if (! (action instanceof Action))
 		throw new Error("Argument must be an instance of Action");	
+		
+		
+	var defaultOptions = {'disabled': screenManager.isLockedLocation()};
+	options = $.extend(defaultOptions, options);
+	
 	
 	// check whether it's necessary to update the object
 	if (force === true || !this.data("lastRefresh") || this.data("lastRefresh") < action.getLastChange()) {
 		startButtons = this.find(".start-buttons");
 		stopButtons  = this.find(".stop-buttons");
+		
+		// render dependencies
+		dep = this.find(".ph_action-dep");
+		for (i in action.dependencies) {
+			dependency = action.dependencies[i];
+			if (components[dependency.compId] === undefined)
+				throw new Error('Component "' + dependency.compId + '" not found')
+			component = components[dependency.compId];
+			
+			if (!component.hasAction(dependency.actionId))
+				throw new Error('Action "' + dependency.actionId + '" not found');
+			a = component.getAction(dependency.actionId);
+			
+			if(a.isActive()) 
+				dep.html('<span class="ui-icon ui-icon-check"></span><a href="#" class="running">' + component.name + " &raquo; " + action.name + '</a>');
+			else
+				dep.html('<span class="ui-icon ui-icon-power"></span><a href="#" class="notRunning">' + component.name + " &raquo; " + action.name + '</a>');
+		}
+		
 		
 		if (action.isActive()) {
 			// need to show start / hide stop buttons ?
@@ -93,10 +117,10 @@ $.fn.updateActionView = function(action, options, force) {
 		}
 		this.data("lastRefresh", new Date().getTime());
 		
-	
+		
 		// have to disable the buttons seperatrely, won't work otherwise
-		this.find(".start-buttons").buttonset({'disabled': screenManager.isLockedLocation()});
-		this.find(".stop-buttons").buttonset({'disabled': screenManager.isLockedLocation()});
-		this.find(".log-buttons").buttonset({'disabled': screenManager.isLockedLocation()});
+		this.find(".start-buttons a").button({'disabled': options['disabled']});
+		this.find(".stop-buttons a").button({'disabled': options['disabled']});
+		this.find(".log-buttons a").button({'disabled': options['disabled']});
 	}
 };

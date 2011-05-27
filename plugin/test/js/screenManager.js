@@ -19,7 +19,7 @@ var screenManager = new (function() {
 			$('body').prepend(this._lockDialog.getContainer());
 			$(this._lockDialog.getContainer()).dialog({
 				beforeClose: function() { return false; },
-				height: 230,
+				height: 245,
 				modal: true
 			});
 		}

@@ -39,8 +39,6 @@ class Action():
 			
 		if not self.isAlive():
 			EventHistory.actionStopped(self, self.component)
-		else:
-			print "BUT STILL ACTIVE"
 
 	def start(self):
 		if not self.component or not self.component.host:
@@ -123,7 +121,12 @@ class Action():
 		if self.isAlive() or force:
 			self.log.info('Killing Action "%s" (force=%s) "%d" Commands found ' % (self.name, str(force), len(self.startCommands)+len(self.stopCommands)))
 
+			# send a break (^C == chr(3)) to every channel
+			for channel in self.startChannels:
+				channel.send(chr(3))
+
 			# non blocking commands, so only one shell required
+			# kill both, start and stop commands
 			channel = self.component.host.invokeShell()
 			for cmd in self.startCommands+self.stopCommands:
 				cmd = self.createKillCmd(cmd)

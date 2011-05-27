@@ -1,4 +1,8 @@
 var application = new (function() {
+	this.SERVER_AVAILABLE = 1;
+	this.SERVER_IN_CHARGE = 2;
+	this.SERVER_NOT_AVAILABLE = -1;
+	
 	this.hosts = null;
 	this.components = null;
 	this.selectedComponent = null;
@@ -19,7 +23,7 @@ var application = new (function() {
 	
 	
 
-	this.init = function(urlPrefix, views, handler) {
+	this.init = function(urlPrefix, username, views, handler) {
 		// urlPrefix without trailing /
 		this.urlPrefix = urlPrefix;
 
@@ -33,13 +37,25 @@ var application = new (function() {
 		if (!handler['error'] || !(handler['error'] instanceof Function))
 			handler.error = function(data) { alert('DEFAULT AJAX ERROR HANDLER:\n\n' + data); };
 
-		// views must contain both menuView and componentViwe
-		if (!(views instanceof Object) || !(views.menuView instanceof jQuery) || views.menuView.size() == 0 || !(views.componentView) instanceof jQuery || views.componentView.size() == 0) {
-			handler.error('No valid views passed');
+		// views must contain both menuView and componentView
+		if (!(views instanceof Object)) { // || !(views.menuView instanceof jQuery) || views.menuView.size() == 0 || !(views.componentView) instanceof jQuery || views.componentView.size() == 0) {
+			handler.error('View Argument is not an object');
 			return;
 		}
+		requiredViews = ['menuView', 'componentView', 'infoBoxView'];
+		for (i in requiredViews) {
+			view = requiredViews[i];
+			if (!views[view] instanceof jQuery || views[view].size() == 0) {
+				handler.error('View "' + view + '" is not an valid jQuery-Object');
+				return;
+			}
+		}
+		
 		this.menuView = views.menuView;
 		this.componentView = views.componentView;
+		this.infoBoxView = views.infoBoxView;
+		
+		this.username = username;
 
 		// set some basic ajax settings
 		$.ajaxSetup({
@@ -69,18 +85,26 @@ var application = new (function() {
 	 * Check whether the server is online and a user logged in
 	 */
 	this.checkServerStatus = function(handler) {
-		var obj = this;
 		$.ajax({
 			url: this.urlPrefix + '/status',
-			dataType: 'text',
-			success: function(data) { obj.statusDataSuccess(data, handler); },
-			error:   function(data) { obj.statusDataError(data, handler);   }
+			success: function(data) { application.statusDataSuccess(data, handler); },
+			error:   function(data) { application.statusDataError(data, handler);   }
 		});
 	}
 	this.statusDataSuccess = function(data, handler) {
 		try {
-			handler.success('Server online, User authenticated');
-
+			this.status = parseInt(data['status'])
+			if (this.status != this.SERVER_AVAILABLE && this.status != this.SERVER_IN_CHARGE && this.status != this.SERVER_NOT_AVAILABLE)
+				throw new Error('The status code is invalid "' + data['status'] + '"')
+			
+			
+			if (this.status == this.SERVER_AVAILABLE) 
+				handler.success('Server online, User authenticated, Server available');
+			if (this.status == this.SERVER_IN_CHARGE)
+				handler.success('Server online, User authenticated, you\'re in charge');
+			if (this.status == this.SERVER_NOT_AVAILABLE)
+				handler.success('Server online, User authenticated, Server is not available');
+				
 			// load host data next
 			this.loadHostData(handler);
 		}
@@ -163,10 +187,10 @@ var application = new (function() {
 				for (actionId in comp.actions) {
 					action = comp.actions[actionId];
 					// check whether all required fields are set. description might be null
-					if (!actionId || !action || !action.name || !action.start || !(action.start instanceof Object) || !action.stop || !(action.stop instanceof Object))
+					if (!actionId || !action || !action.name || !action.dependencies || !(action.dependencies instanceof Object))
 						throw new Error('Invalid Action-Object received')
 					
-					actions[actionId] = new Action(actionId, action.name, id, action.desc, action.start, action.stop);
+					actions[actionId] = new Action(actionId, action.name, id, action.desc, action.dependencies)
 				}
 
 				this.components[id] = new Component(id, comp.host, comp.name, comp.parentId, actions);
@@ -197,15 +221,21 @@ var application = new (function() {
 	
 	
 	/*
-	 * Load / parse Event History Data from Remote Server
+	 * Load / parse Event History Data from Remote Server+
+	 * only load data if we're in charge. Otherwise skip this step
 	 */
 	this.loadEventHistoryData = function(handler) {
-		var obj = this;
-		$.ajax({
-			url: this.urlPrefix + '/data/eventHistory/0',
-			success: function(data) { obj.eventHistoryDataSuccess(data, handler); },
-			error:   function(data) { obj.eventHistoryDataError(data, handler);   }
-		});
+		if (this.status == this.SERVER_IN_CHARGE) {
+			$.ajax({
+				url: this.urlPrefix + '/data/eventHistory/0',
+				success: function(data) { application.eventHistoryDataSuccess(data, handler); },
+				error:   function(data) { application.eventHistoryDataError(data, handler);   }
+			});
+		}
+		else {
+			handler.success('Skipping History Data');
+			this.finalApplicationInitialization(handler);
+		}
 	}
 	this.eventHistoryDataSuccess = function(data, handler) {
 		try {
@@ -227,7 +257,9 @@ var application = new (function() {
 	this.finalApplicationInitialization = function(handler)
 	{
 		try {
-			this.updateTimeoutId = setTimeout("application.updateEventHistory()", 2000);
+			// set the timout only if we're in charge
+			if (this.status == this.SERVER_IN_CHARGE)
+				this.updateTimeoutId = setTimeout("application.updateEventHistory()", 2000);
 			handler.success('Application initialized');
 		}
 		catch (err) {
@@ -254,24 +286,40 @@ var application = new (function() {
 		if (screenManager.isLockedLocation())
 			return;
 		
-		targetId = null;
-		for (id in this.components) {
-			if (id === selectId || (!selectId && this.components[id].parentId === null)) {
-				targetId = id;
-				break;
+		
+		// check whether components-object is empty. its a associative array, so 
+		// we cannot use length
+		var hasComponents=false;
+		for (i in this.components) {
+			hasComponents=true;
+			break;
+		}
+		
+		// components may be empty 
+		if (hasComponents) {
+			targetId = null;
+			for (id in this.components) {
+				if (id === selectId || (!selectId && this.components[id].parentId === null)) {
+					targetId = id;
+					break;
+				}
 			}
+
+			if (targetId === null)
+				throw new Error('Passed id was not found "' + selectId + '"');
+
+			if (this.selectedComponent === this.components[targetId])
+				return;
+
+			this.selectedComponent = this.components[targetId];
+			this.componentView.renderComponentView(this.selectedComponent, this.components, {'disabled': this.status==this.SERVER_NOT_AVAILABLE});
+		}
+		else {
+			this.selectedComponent = null;
 		}
 
-		if (targetId === null)
-			throw new Error('Passed id was not found "' + selectId + '"');
-
-		if (this.selectedComponent === this.components[targetId])
-			return;
-
-		this.selectedComponent = this.components[targetId];
-
 		this.menuView.renderMenuView(this.components, {selected: this.selectedComponent});
-		this.componentView.renderComponentView(this.selectedComponent);
+		this.infoBoxView.renderInfoBox(this.username, this.statusToString());
 	}
 	
 	
@@ -344,7 +392,7 @@ var application = new (function() {
 			
 			changes = this.processEventHistoryData(data);
 			if (changes) {
-				this.componentView.updateComponentView(this.selectedComponent, null, options.forceComponentUpdate);
+				this.componentView.updateComponentView(this.selectedComponent, this.components, null, options.forceComponentUpdate);
 				this.menuView.renderMenuView(this.components);
 			}
 			
@@ -371,7 +419,7 @@ var application = new (function() {
 			action = component.getAction(actionId);
 			
 			screenManager.lockLocation();
-			this.componentView.updateComponentView(this.selectedComponent, null, true);
+			this.componentView.updateComponentView(this.selectedComponent, this.components, null, true);
 			this.menuView.renderMenuView(this.components);
 			
 			$.ajax({
@@ -381,7 +429,7 @@ var application = new (function() {
 			});
 		}
 		catch (err) {
-			alert("Error occured trying to stop an Action:\n" + err);
+			alert("Error occured trying to start an Action:\n" + err);
 		}
 	}
 	this.startActionSuccess = function(data)
@@ -397,7 +445,7 @@ var application = new (function() {
 			action = component.getAction(actionId);
 			
 			screenManager.lockLocation();
-			this.componentView.updateComponentView(this.selectedComponent, null, true);
+			this.componentView.updateComponentView(this.selectedComponent, this.components, null, true);
 			this.menuView.renderMenuView(this.components);
 			
 			$.ajax({
@@ -414,8 +462,40 @@ var application = new (function() {
 	}
 	this.stopActionSuccess = function(data)
 	{
-		this.preRefreshFunctions.push(screenManager.unlockLocation);
 	}
 	
-
+	this.killAction = function(actionId, compId) {
+		try {
+			component = this.getComponent(compId);
+			action = component.getAction(actionId);
+			
+			screenManager.lockLocation();
+			this.componentView.updateComponentView(this.selectedComponent, this.components, null, true);
+			this.menuView.renderMenuView(this.components);
+			
+			$.ajax({
+				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/kill',
+				success: function(data) { application.startActionSuccess(data); },
+//				success: function(data) { application.stopActionSuccess(data); },
+				error:   function(data) { application.startActionSuccess(data); }
+//				error:   function(data) { application.stopActionSuccess(data); }
+			});
+		}
+		catch (err) {
+			alert("Error occured trying to stop an Action:\n" + err);
+		}
+	}
+	this.stopActionSuccess = function(data)
+	{
+	}
+	
+	this.statusToString = function() {
+		if (this.status == this.SERVER_AVAILABLE)
+			return 'Server available';
+		if (this.status == this.SERVER_IN_CHARGE)
+			return 'In charge';
+		if (this.status == this.SERVER_NOT_AVAILABLE)
+			return 'Server not available';
+		return 'ERROR';
+	}
 })();

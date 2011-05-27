@@ -1,8 +1,9 @@
-var Action = function(id, name, compId, description, start, stop) {
+var Action = function(id, name, compId, description, dependencies) {
 	this.id = id;
 	this.name = name;
 	this.compId = compId;
 	this.description = description;
+	this.dependencies = dependencies;
 	this._active = false;
 	this._lastChange = 0;
 

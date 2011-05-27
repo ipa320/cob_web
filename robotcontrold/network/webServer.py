@@ -1,10 +1,14 @@
-import threading, time
+import threading, time, base64
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from utils.eventHistory import EventHistory
 from myExceptions.webServerExceptions import *
 
 
 class WebServer(threading.Thread):
+	SERVER_AVAILABLE = 1
+	SERVER_IN_CHARGE = 2
+	SERVER_NOT_AVAILABLE = -1
+	
 	def __init__(self, serverThread, log, port=8000):
 		threading.Thread.__init__(self)
 
@@ -32,6 +36,9 @@ class WebServer(threading.Thread):
 			self.log.debug('Starting WebServer')
 			self.alive = True
 			threading.Thread.start(self)
+			
+	def checkAccess(self):
+		pass;
 
 
 	def stop(self):
@@ -63,13 +70,14 @@ class MyHTTPServer(HTTPServer):
 		
 
 class MyHandler(BaseHTTPRequestHandler):
+	
 	def __init__(self, *args):
 		BaseHTTPRequestHandler.__init__(self, *args)	
 
 
 	def do_GET(self):
 		serverThread = self.server.serverThread
-		user = serverThread.activeUser
+		activeUser = serverThread.activeUser
 
 		try:
 			responseCode = 200
@@ -78,9 +86,35 @@ class MyHandler(BaseHTTPRequestHandler):
 			output = None
 
 			try:
-				# if no user is logged in, send a 401 Unauthorized
-				if not user:
-					raise UnauthorizedRequestError('No User logged in.', self.path)
+				auth = None
+				if self.headers.has_key('Authorization'):
+					auth = {'token': str(self.headers['Authorization'])}
+					# remove the leading "Basic " before splitting into user/pass
+					userPass = base64.b64decode(auth['token'][6:]).split(':')
+					if len(userPass) != 2:
+						auth = None
+						self.server.log.warn('Invalid Authorization Header: %s', str(self.headers['Authorization']))
+					else:
+						# important: always process names in lowercase
+						auth['user'] = userPass[0].lower()
+						auth['pass'] = userPass[1]
+						if not activeUser:
+							auth['status'] = WebServer.SERVER_AVAILABLE
+						elif activeUser and activeUser.name == auth['user']:
+							auth['status'] = WebServer.SERVER_IN_CHARGE
+						else:
+							auth['status'] = WebServer.SERVER_NOT_AVAILABLE
+				
+				# if no auth was sent, return an 401 Unauthorized
+				if not auth:
+					raise UnauthorizedRequestError('No Auth-Token received', self.path)
+					
+					
+				# get the request user
+				requestUser = serverThread.getUserCreateIfNotExistent(auth['user'])
+				if not requestUser:
+					raise UnauthorizedRequestError('Invalid Auth-Token. No user found.', self.path)
+				
 
 				# split the path by the first ?
 				argsString, optionsString = self.path.split('?', 1) if self.path.find('?') > 0 else (self.path, '')
@@ -94,21 +128,38 @@ class MyHandler(BaseHTTPRequestHandler):
 					key, value = t.split('=',1) if t.find('=') > 0 else (t, '')
 					options[key] = value
 					
-				
 				action = args[0]
 				
-				if action == 'info':
+				
+				# Status Command must be available even if no user is logged in
+				if action == 'status':
+					output = '{"status": %d}' % auth['status']
+					
+					
+				
+				# if the action is 'status', just pass, output was created already
+				if action == 'status':
+					pass
+				
+				elif action == 'info':
 					output  = '[Args]<br>%s<br>' % str(args)
 					output += '<br>'
 					
 					output += '[Options]<br>%s<br>' % str(options)
 					output += '<br>'
 
-					output += '[User]<br>name:%s<br>' % user.name
+					output += '[ActiveUser]<br>'
+					if activeUser:
+						output += 'name:%s<br>' % activeUser.name
+					else:
+						output += 'None<br>'
+					output += '<br>'
+					
+					output += '[RequestUser]<br>name:%s<br>' % requestUser.name
 					output += '<br>'
 
 					output += '[Components]<br>'
-					for comp in user.components():
+					for comp in requestUser.components():
 						output += '%s<br>' % str(comp)
 					output += '<br>'
 
@@ -116,15 +167,21 @@ class MyHandler(BaseHTTPRequestHandler):
 					output += '[Hosts]<br>'
 					for host in serverThread.hosts.values():
 						output += '%s<br>' % str(host)
+					output += '<br>'	
+					
+					output += '[Auth]<br>'
+					if not auth:
+						output += 'None'
+					else:
+						output += 'token: %s<br>' % auth['token']
+						output += 'user: %s<br>' % auth['user']
+						output += 'pass: %s<br>' % auth['pass']
+					output += '<br>'
 						
-						
-				# Status Command
-				elif action == 'status':
-					output = 'OK'
 							
 					
 				# Request host / component data
-				elif action == 'data':
+				elif action == 'data':					
 					# data/(host|comp)
 					if len(args) < 2:
 						raise ArgumentRequestError('Wrong argument count for "data". %s found, at least 2 Required.' % str(args), self.path)
@@ -142,14 +199,20 @@ class MyHandler(BaseHTTPRequestHandler):
 						output = output.strip(',') + '}'
 					
 					
-					elif args[1] == 'comp':
+					elif args[1] == 'comp':						
 						output = '{'
-						for comp in user.components():
+						for comp in requestUser.components():
 							# first create the actions string for this comp
 							actions = '{'
 							for action in comp.actions.values():
+								# list dependencies
+								deps = '['
+								for dep in action.dependencies:
+									deps += '{"compId": %d, "actionId": %d},' % (dep.component.id, dep.id)
+								deps = deps.strip(',') + ']'
+									
 								description = '"' + action.description + '"' if action.description else 'null';
-								actions += '\n\t\t"%d": {\n\t\t\t"name": "%s", \n\t\t\t"desc": %s, \n\t\t\t"start": ["%s"], \n\t\t\t"stop": ["%s"]\n\t\t},' % (action.id, action.name, description, 'start', 'stop')
+								actions += '\n\t\t"%d": {\n\t\t\t"name": "%s", \n\t\t\t"desc": %s, \n\t\t\t"dependencies":%s\n\t\t},' % (action.id, action.name, description, deps)
 							actions = actions.strip(',') + '\n\t}';
 							
 							
@@ -163,6 +226,10 @@ class MyHandler(BaseHTTPRequestHandler):
 	
 					# Events					
 					elif args[1] == 'eventHistory':
+						# you must be in charge
+						if not auth['status'] == WebServer.SERVER_IN_CHARGE:
+							raise UnauthorizedRequestError('You are not in charge.', self.path)
+						
 						if len(args) != 3:
 							raise ArgumentRequestError('Wrong argument count for "data/eventHistory". %s found, 3 Required.' % str(args), self.path)
 						
@@ -183,6 +250,10 @@ class MyHandler(BaseHTTPRequestHandler):
 
 				# Start/Stop/Kill/Request status of an action
 				elif action == 'exec':
+					# you must be in charge
+					if not auth['status'] == WebServer.SERVER_IN_CHARGE:
+						raise UnauthorizedRequestError('You are not in charge.', self.path)
+					
 					if len(args) != 4:
 						raise ArgumentRequestError('Wrong argument count for "exec". %s found, 4 Required.' % str(args), self.path)
 
@@ -195,7 +266,7 @@ class MyHandler(BaseHTTPRequestHandler):
 					actionId = int(args[2])
 					command = args[3]
 
-					comp = user.get(compId)
+					comp = activeUser.get(compId)
 					action = comp.getAction(actionId)
 
 					if not comp:

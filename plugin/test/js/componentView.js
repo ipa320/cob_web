@@ -1,6 +1,6 @@
 var componentViewCode = '<h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView"></div>';
 
-$.fn.renderComponentView = function(component, options) {
+$.fn.renderComponentView = function(component, components, options) {
 	if (!(component instanceof Component))
 		throw new Error("Argument must be an instance of Component");
 
@@ -15,16 +15,16 @@ $.fn.renderComponentView = function(component, options) {
 		div = $(document.createElement("div"))
 		actionsView.append(div);
 		div.attr("id", "action-" + component.actions[i].id);
-		div.renderActionView(component.actions[i]);
+		div.renderActionView(component.actions[i], components);
 	}
 
 	// set the values that stay forever
 	this.find(".ph_comp-name").text(component.name);
 
-	this.updateComponentView(component, options, true);
+	this.updateComponentView(component, components, options, true);
 };
 
-$.fn.updateComponentView = function(component, options, force) {
+$.fn.updateComponentView = function(component, components, options, force) {
 
 	if (!(component instanceof Component))
 		throw new Error("Argument must be an instance of Component");
@@ -35,6 +35,6 @@ $.fn.updateComponentView = function(component, options, force) {
 		if (actionView.size() != 1)
 			throw new Error("Inconsistent Component-HTML");
 
-		actionView.updateActionView(component.actions[i], null, force);
+		actionView.updateActionView(component.actions[i], components, options, force);
 	}
 };

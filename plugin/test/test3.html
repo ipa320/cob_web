@@ -11,6 +11,8 @@
 		<link type="text/css" href="css/componentView.css" rel="stylesheet" />
 		<link type="text/css" href="css/style.css" rel="stylesheet" />
 		<link type="text/css" href="css/dialogView.css" rel="stylesheet" />
+		<link type="text/css" href="css/infoBoxView.css" rel="stylesheet" />
+		<link type="text/css" href="css/menuView.css" rel="stylesheet" />
 
 		<script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
@@ -24,6 +26,7 @@
 		<script type="text/javascript" src="js/dialogView.js"></script>
 		<script type="text/javascript" src="js/menuView.js"></script>
 		<script type="text/javascript" src="js/host.js"></script>
+		<script type="text/javascript" src="js/infoBoxView.js"></script>
 
 		<style>
 			/*demo page css*/
@@ -38,6 +41,7 @@
 
 		<script type="text/javascript">
 			$(document).ready(function() {
+				var username="Simon";
 //				screenManager.init();
 /*
 				comp = new Component(1, "My Comp", null)
@@ -54,17 +58,31 @@
 //				});
 */
 				try {
-					view = new LoadingDialogView('Please Wait...', 'Please wait while remote data is fetched from the server')
+					var view = new LoadingDialogView('Please Wait...', 'Please wait while remote data is fetched from the server')
 					screenManager.lockDisplay(view);
-					application.init('/.bs',
-						{ 'menuView': $('#menu'), 'componentView': $('#component') },
-						{
-							'success':  function(dataStr) { view.addBullet(dataStr); },
-							'error':    function(dataStr) { view.addBullet("ERROR: " + dataStr); },
-							'finished': runApplication 
+					try {
+						// check for username token
+						if (username === undefined)
+							view.addBullet("ERROR: Username is not defined");
+						else {
+							application.init('/.bs', username,
+								{
+									'menuView': $('#menu'),
+									'componentView': $('#component'),
+									'infoBoxView': $('#infoBox')
+								},
+								{
+									'success':  function(dataStr) { view.addBullet(dataStr); },
+									'error':    function(dataStr) { view.addBullet("ERROR: " + dataStr); },
+									'finished': runApplication 
+								}
+							);
 						}
-					);
-				} 
+					} 
+					catch(err) {
+						view.addBullet("An error occured while initializing:\n" + err);
+					}
+				}
 				catch(err) {
 					alert("An error occured while initializing:\n" + err);
 				}
@@ -91,7 +109,10 @@
 
 		<!--<a id="newAction" href="javascript:void(0)">Test</a>-->
 		<div>
-			<div id="menu"></div>
+			<div style="float:left" id="leftColumn">
+				<div id="menu"></div>
+				<div id="infoBox"></div>
+			</div>
 			<div id="component"></div>
 
 		</div>

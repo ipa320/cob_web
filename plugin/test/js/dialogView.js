@@ -4,6 +4,7 @@ var LoadingDialogView = function(title, msg) {
 	this.msg = msg;
 	this.container = $(document.createElement('div'));
 	this.ul = null;
+	
 
 	this.create = function(id) {
 		this.id = id;

@@ -5,6 +5,7 @@ from utils.actions.shellCommand import ShellCommand
 from myExceptions.databaseExceptions import CorruptDatabaseError
 from utils.component import Component
 from utils.user import User
+from utils.eventHistory import EventHistory
 
 
 
@@ -108,7 +109,8 @@ class ServerThread(threading.Thread):
 			row = self.cursor.fetchone()
 			if not row: break
 
-			self.users[row[0]] = User(row[0])
+			# usernames always in lowercase!
+			self.users[row[0].lower()] = User(row[0])
 
 
 		self.log.debug ('%d users found' % len(self.users))
@@ -259,6 +261,20 @@ class ServerThread(threading.Thread):
 			host.join()
 
 
+	# get the user object that belongs to a name
+	# create a new user if it does not exist
+	def getUserCreateIfNotExistent(self, name):
+		if not isinstance(name, basestring):
+			raise ValueError('Name must be a string')
+		
+		# username must be in the users array
+		if not name in self.users:
+			user = User(name)
+			self.users[name] = user
+		else:
+			user = self.users[name]
+		return user
+		
 
 
 	# The server can only be user if registered for a certain user.
@@ -274,10 +290,7 @@ class ServerThread(threading.Thread):
 		else:
 			raise ValueError('User must be either a User Class or a string')
 
-		# username must be in the users array
-		if not username in self.users:
-			raise ValueError('Unknown user passed')
-
+		
 
 		if self.activeUser:
 			self.log.info('Logging current user out: %s' % self.activeUser.name)
@@ -286,7 +299,11 @@ class ServerThread(threading.Thread):
 			self.log.info('Preparing the Server for new user: %s' % username)
 
 		self.forceTerminateAllComponents()
-		self.activeUser = self.users[username]
+		
+		# Clear the eventHistory
+		EventHistory.clear()
+		
+		self.activeUser = self.getUserCreateIfNotExistent(username)
 
 
 	# Same as prepareServerForNewUser(None)
@@ -308,7 +325,7 @@ class ServerThread(threading.Thread):
 
 
 	def forceStopAllComponents(self):
-		self.log.info('Force Stopping all components')
+		self.log.info('Force Stopping all components of every users')
 
 		for user in self.users.values():
 			for comp in user.components():
@@ -321,7 +338,7 @@ class ServerThread(threading.Thread):
 
 	# Terminate: stop first and kill afterwards
 	def terminateAllComponents(self):
-		self.log.info('Terminating all components')
+		self.log.info('Terminating all components of every user')
 
 		for user in self.users.values():
 			for comp in user.components():
@@ -334,7 +351,7 @@ class ServerThread(threading.Thread):
 
 	# Terminate: stop first and kill afterwards
 	def forceTerminateAllComponents(self):
-		self.log.info('Force Terminating all components')
+		self.log.info('Force Terminating all components of every users')
 
 		for user in self.users.values():
 			for comp in user.components():

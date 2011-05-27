@@ -1,51 +1,6 @@
-div#menu {
-	float: left;
-}
-div#nav-buttons {
-	margin-top: 38px;
-	width: 150px;
-}
-div#nav-buttons label {
-	width: 100%;
-/*	border-right: 0;*/
-	text-align: left;
-	background-image: none;
-	background-color: white;
-}
-div#nav-buttons label.btn-top {
-	-moz-border-radius-bottomleft: 0;
-	-moz-border-radius-bottomright: 0;
-	border-bottom: 0;
-}
-div#nav-buttons label.btn-middle {
-	-moz-border-radius: 0;
-	border-bottom: 0;
-	border-top: 0;
-}
-div#nav-buttons label.btn-bottom {
-	-moz-border-radius-topleft: 0;
-	-moz-border-radius-topright: 0;
-	border-top: 0;
-}
-
-
 div#component {
 	width: 720px;
 	margin-left: 150px;
 	padding: 0 40px;
 	
-}
-
-div#nav-buttons div.level-2 .ui-button-icon-primary { left: 20px; }
-div#nav-buttons div.level-3 .ui-button-icon-primary { left: 40px; }
-div#nav-buttons div.level-4 .ui-button-icon-primary { left: 60px; }
-div#nav-buttons div.level-5 .ui-button-icon-primary { left: 80px; }
-div#nav-buttons div.level-2 .ui-button-text { padding-left: 40px; }
-div#nav-buttons div.level-3 .ui-button-text { padding-left: 60px; }
-div#nav-buttons div.level-4 .ui-button-text { padding-left: 80px; }
-div#nav-buttons div.level-5 .ui-button-text { padding-left: 100px; }
-
-
-.ui-buttonset {
-	opacity: 0.7;
 }

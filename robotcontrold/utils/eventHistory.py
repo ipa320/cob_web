@@ -34,3 +34,7 @@ class EventHistory:
 			data.append(item)
 		return data
 	getEventData=Callable(getEventData)
+
+	def clear():
+		EventHistory._eventData=[]
+	clear=Callable(clear)
