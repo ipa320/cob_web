@@ -13,6 +13,8 @@
 		<link type="text/css" href="css/dialogView.css" rel="stylesheet" />
 		<link type="text/css" href="css/infoBoxView.css" rel="stylesheet" />
 		<link type="text/css" href="css/menuView.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+		<link rel='stylesheet' type='text/css' href='./fullcalendar/fullcalendar.css' />
 
 		<script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
@@ -27,6 +29,11 @@
 		<script type="text/javascript" src="js/menuView.js"></script>
 		<script type="text/javascript" src="js/host.js"></script>
 		<script type="text/javascript" src="js/infoBoxView.js"></script>
+		<script type="text/javascript" src="js/calendarView.js"></script>
+		<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+		<script type='text/javascript' src='./fullcalendar/fullcalendar.min.js'></script>
+
+
 
 		<style>
 			/*demo page css*/
@@ -69,7 +76,8 @@
 								{
 									'menuView': $('#menu'),
 									'componentView': $('#component'),
-									'infoBoxView': $('#infoBox')
+									'infoBoxView': $('#infoBox'),
+									'serverReservationView': $('#serverReservation')
 								},
 								{
 									'success':  function(dataStr) { view.addBullet(dataStr); },
@@ -80,7 +88,7 @@
 						}
 					} 
 					catch(err) {
-						view.addBullet("An error occured while initializing:\n" + err);
+						alert("An error occured while initializing:\n" + err);
 					}
 				}
 				catch(err) {
@@ -102,6 +110,7 @@
 	</head>
 
 	<body>
+		<div style="display:none"><div id="serverReservation" style="width: 100%; height: 100%"></div></div></div>
 		<div id="dialog-loading" title="Please wait while loading ...">
 			<img src="images/ajax-loader-trans.gif" style="float:left"/><p style="padding: 4px 45px; margin-top: 0;">Please wait while the remote data is being loaded from the service.</p>
 			<ul><li class="success"><span class="ui-icon ui-icon-circle-check"></span>first</li><li><span class="ui-icon ui-icon-circle-check"></span>second</li></ul>

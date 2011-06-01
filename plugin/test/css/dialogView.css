@@ -1,5 +1,6 @@
 div.loadingDialogView img.loader {
 	float: left;
+	padding-top: 3px;
 }
 div.loadingDialogView p.msg {
 	padding: 4px 45px;
@@ -16,4 +17,8 @@ div.loadingDialogView ul li span.ui-icon {
 div.loadingDialogView ul li {
 	font-weight: bold;
 	padding-bottom: 5px;
+}
+div.loadingDialogView span.bullet-item {
+	display: block;
+	padding-left: 20px;
 }

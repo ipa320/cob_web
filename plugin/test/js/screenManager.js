@@ -19,8 +19,10 @@ var screenManager = new (function() {
 			$('body').prepend(this._lockDialog.getContainer());
 			$(this._lockDialog.getContainer()).dialog({
 				beforeClose: function() { return false; },
-				height: 245,
-				modal: true
+				width: this._lockDialog.getPrefferedWidth instanceof Function ? this._lockDialog.getPrefferedWidth() : 300,
+				height: this._lockDialog.getPrefferedHeight instanceof Function ? this._lockDialog.getPrefferedHeight() : 300,
+				modal: true,
+				zIndex: 1102	//1101 is fullCalendar
 			});
 		}
 

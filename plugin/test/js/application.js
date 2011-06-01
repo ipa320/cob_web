@@ -7,6 +7,8 @@ var application = new (function() {
 	this.components = null;
 	this.selectedComponent = null;
 	
+	this.reservations = null;
+	
 	// timeout for frequent updates
 	this.updateTimeoutId = -1;
 	
@@ -18,7 +20,7 @@ var application = new (function() {
 	this.HOST_EVENT = 2;
 	
 	// options defined for the next redraw
-	this.refreshOptions = {}
+	this.refreshOptions = []
 	
 	
 	
@@ -42,18 +44,36 @@ var application = new (function() {
 			handler.error('View Argument is not an object');
 			return;
 		}
-		requiredViews = ['menuView', 'componentView', 'infoBoxView'];
+		requiredViews = ['menuView', 'componentView', 'infoBoxView', 'serverReservationView'];
 		for (i in requiredViews) {
-			view = requiredViews[i];
-			if (!views[view] instanceof jQuery || views[view].size() == 0) {
-				handler.error('View "' + view + '" is not an valid jQuery-Object');
+			viewName = requiredViews[i];
+			if (!views[viewName] instanceof jQuery || views[viewName].size() == 0) {
+				handler.error('View "' + viewName + '" is not an valid jQuery-Object');
 				return;
 			}
+			this[viewName] = views[viewName];
 		}
 		
-		this.menuView = views.menuView;
-		this.componentView = views.componentView;
-		this.infoBoxView = views.infoBoxView;
+		// Todo: remove this workaround
+		resId = this.serverReservationView.attr('id');
+		if (!resId instanceof String || resId.length == 0) {
+			handler.error('Server Reservation View must have an unique id');
+			return;
+		}
+
+		// create a trigger to show the fancybox
+		this.calendarTrigger = $(document.createElement('a'));
+		this.calendarTrigger.fancybox({
+			'autoDimensions'	: false,
+			'autoScale'			: false,
+			'width'				: '95%',
+			'height'			: '95%',
+			'type'				: 'inline',
+			'href'				: '#' + this.serverReservationView.attr('id'),
+			'transitionIn'		: 'none',
+			'transitionOut'		: 'none'
+		});		
+		
 		
 		this.username = username;
 
@@ -157,7 +177,7 @@ var application = new (function() {
 
 	}
 	this.hostDataError = function(data, handler) {
-		handler.error('Host Data could not be loaded [' + data.status + ']');
+		handler.error('Host Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 
 
@@ -165,11 +185,10 @@ var application = new (function() {
 	 * Load / parse Component Data from Remote Server
 	 */
 	this.loadCompData = function(handler)  {
-		var obj = this;
 		$.ajax({
 			url: this.urlPrefix + '/data/comp',
-			success: function(data) { obj.compDataSuccess(data, handler); },
-			error:   function(data) { obj.compDataError(data, handler);   }
+			success: function(data) { application.compDataSuccess(data, handler); },
+			error:   function(data) { application.compDataError(data, handler);   }
 		});
 	}
 	this.compDataSuccess = function(compData, handler) {
@@ -207,18 +226,55 @@ var application = new (function() {
 	
 			handler.success('Component Data Received');
 			
+			// load the reservations
+			this.loadReservations(handler);
+		}
+		catch (err) {
+			handler.error('Error occured while parsing component data:\n' + err);
+		}
+	}
+	this.compDataError = function(data, handler) {
+		handler.error('Comp Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
+	}
+	
+	/*
+	 * Load Reservations
+	 */
+	this.loadReservations = function(handler)  {
+		$.ajax({
+			url: this.urlPrefix + '/reservations/get',
+			success: function(data) { application.reservationDataSuccess(data, handler); },
+			error:   function(data) { application.reservationDataError(data, handler);   }
+		});
+	}
+	this.reservationDataSuccess = function(data, handler) {
+		try {
+			this.reservations = []
+			for (id in data) {
+				item = data[id]
+				start = this.urlDecodeDate(item.start);
+				end = this.urlDecodeDate(item.end);
+				// check whether start / end is invalid				
+				if (start === null || end === null)
+					throw new Error('Invalid start or end date ["' + item.start + '", "' + item.end + '"]')
+
+				
+				this.reservations.push({'id': id, 'title': item.title, 'owner': item.owner, 'start': start, 'end': end});
+			}
+			handler.success('Reservation Data Received');
+			
 			// load event history data next
 			this.loadEventHistoryData(handler);
 		}
 		catch (err) {
 			handler.error('Error occured while parsing component data:\n' + err);
 		}
-
 	}
-	this.compDataError = function(data, handler) {
-		handler.error('Comp Data could not be loaded [' + data.status + ']');
+	this.reservationDataError = function(data, handler) {
+		handler.error('Reservation data could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 	
+
 	
 	/*
 	 * Load / parse Event History Data from Remote Server+
@@ -248,7 +304,7 @@ var application = new (function() {
 		}
 	}
 	this.eventHistoryDataError = function(data, handler) {
-		handler.error('Event History Data could not be loaded [' + data.status + ']');
+		handler.error('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 	
 	/*
@@ -312,7 +368,7 @@ var application = new (function() {
 				return;
 
 			this.selectedComponent = this.components[targetId];
-			this.componentView.renderComponentView(this.selectedComponent, this.components, {'disabled': this.status==this.SERVER_NOT_AVAILABLE});
+			this.componentView.renderComponentView(this.selectedComponent, this.components, {'disabled': this.status!=this.SERVER_IN_CHARGE});
 		}
 		else {
 			this.selectedComponent = null;
@@ -406,7 +462,7 @@ var application = new (function() {
 		}
 	}
 	this.updateEventHistoryError = function(data, handler) {
-		alert('Event History Data could not be loaded [' + data.status + ']');
+		alert('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 	
 	
@@ -497,5 +553,124 @@ var application = new (function() {
 		if (this.status == this.SERVER_NOT_AVAILABLE)
 			return 'Server not available';
 		return 'ERROR';
+	}
+	
+	this.showServerReservation = function() 
+	{
+		this.calendarTrigger.trigger('click');
+		this.serverReservationView.renderCalendarView();
+		return false;
+	}
+	
+	this.addReservation = function(start, end)
+	{
+		
+		escapedStart = this.urlEncodeDate(start);
+		escapedEnd = this.urlEncodeDate(end);
+		
+		if (start === null || end === null)
+			throw new Error('Invalid Start or End-Date')
+			
+		$.ajax({
+			url: this.urlPrefix + '/reservations/add/' + escapedStart + '/' + escapedEnd,
+			dataType: 'text',
+			success: function(data) { application.addReservationSuccess(data, start, end) },
+			error:   function(data) { application.addReservationError(data) }
+		});
+	}
+	this.addReservationSuccess = function(data, start, end) 
+	{
+		id = parseInt(data);
+		if (isNaN(id))
+			return this.addReservationError({'status': 200, 'responseText': 'The returned id is not a valid number: "' + data + '"'});
+			
+		title = this.username + ' ' + start.getHours() + ':' + start.getMinutes() + ' - ' + end.getHours() + ':' + end.getMinutes();
+		this.reservations.push({'title': title, 'id': id, 'start': start, 'end': end, 'owner': true});
+		this.serverReservationView.renderCalendarView();
+	}
+	this.addReservationError = function(data)
+	{
+		alert('ERROR: ' + data.responseText);
+	}
+	this.killReservation = function(id)
+	{
+		$.ajax({
+			url: this.urlPrefix + '/reservations/kill/' + id,
+			dataType: 'text',
+			success: function(data) { application.killReservationSuccess(data, id) },
+			error:   function(data) { application.killReservationError(data) }
+		});
+	}
+	this.killReservationSuccess = function(data, id) 
+	{
+		for (i in this.reservations)
+			if (this.reservations[i].id == id) {
+				this.reservations.splice(i, 1);
+				break;
+			}
+		this.serverReservationView.renderCalendarView();
+	}
+	this.killReservationError = function(data)
+	{
+		alert('ERROR: ' + data.responseText);
+	}
+	
+	this.extendReservation = function(id, end)
+	{
+		
+		escapedEnd = this.urlEncodeDate(end);
+		
+		if (end === null)
+			throw new Error('End-Date')
+			
+		$.ajax({
+			url: this.urlPrefix + '/reservations/extend/' + id + '/' + escapedEnd,
+			dataType: 'text',
+			success: function(data) { application.extendReservationSuccess(data, id, end) },
+			error:   function(data) { application.extendReservationError(data) }
+		});
+	}
+	this.extendReservationSuccess = function(data, id, end) 
+	{
+		for (i in this.reservations)
+			if (this.reservations[i].id == id) {
+				start = this.reservations[i].start;
+				title = this.username + ' ' + start.getHours() + ':' + start.getMinutes() + ' - ' + end.getHours() + ':' + end.getMinutes();
+				this.reservations[i].title = title;
+				this.reservations[i].end = end;
+				
+				this.serverReservationView.renderCalendarView();
+				break;
+			}
+	}
+	this.extendReservationError = function(data)
+	{
+		alert('ERROR: ' + data.responseText);
+	}
+	
+	this.urlEncodeDate = function(date)
+	{
+		if (!(date instanceof Date))
+			return null;
+			
+		return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + "-" + date.getHours() + "-" + date.getMinutes()
+	}
+	
+	this.urlDecodeDate = function(dateStr)
+	{
+		if (typeof(dateStr) != "string" || !(dateStr.match instanceof Function))
+			return null;
+		
+		result = dateStr.match(/(\d+)\-(\d+)\-(\d+)\-(\d+)\-(\d+)/);
+		if (result === null)
+			return null;
+			
+		
+		// months in javascript -1
+		date = new Date(result[1], result[2]-1, result[3], result[4], result[5]);
+		if (isNaN(date.valueOf()))
+			return null;
+			
+		return date;
 	}
 })();

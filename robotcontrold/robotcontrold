@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 import sys, time, signal, logging, logging.handlers, getopt
 import socket
-from serverThread import ServerThread
-from network.webServer import WebServer
+#from serverThread import ServerThread		import those two at the bottom, so we can check for
+#from network.webServer import WebServer	MySQLdb support first
 from utils.user import User
 
 
@@ -112,7 +112,7 @@ class Main():
 
 
 		#TODO REMOVE TEST
-		self.server.prepareServerForNewUser(User('simon'))
+#		self.server.prepareServerForNewUser(User('simon'))
 #		time.sleep(10)
 #		self.server.prepareServerForNewUser(None)
 		#TODO REMOVE TEST
@@ -198,6 +198,16 @@ if __name__=='__main__':
 	if (sys.version_info[0] != 2 or sys.version_info[1] < 6):
 		sys.stderr.write ('ERROR: At least Python Version 2.6 required!\n')
 		sys.exit(1)
+	
+	try:
+		import MySQLdb
+	except :
+		sys.stderr.write ('ERROR: MySQLdb Driver not found. Try installing python-mysqldb\n')
+		#print ('ERROR: MySQLdb Driver not found. Try installing python-mysqldb')
+		sys.exit(1)
 
+	# import those two after checking for MySQLdb
+	from serverThread import ServerThread
+	from network.webServer import WebServer
 	Main(sys.argv)
 	

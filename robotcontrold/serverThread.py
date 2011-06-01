@@ -22,6 +22,7 @@ class ServerThread(threading.Thread):
 		self.cursor = None
 
 		self.activeUser = None
+		self.reservations = {}#None
 
 
 		# Establish connection to the database
@@ -364,6 +365,26 @@ class ServerThread(threading.Thread):
 
 
 
+	def addReservation(self, user, start_date, end_date):
+		id = len(self.reservations)
+		self.reservations[id] = {'user': user, 'start': start_date, 'end':end_date}
+		return id
+		
+	def killReservation(self, id, user):
+		if not id in self.reservations or not self.reservations[id]:
+			raise ValueError('Invalid id passed "%s"' % str(id))
+		if not self.reservations[id]['user'] == user:
+			raise ValueError('Unauthorized')
+			
+		self.reservations[id] = None
+		
+	def extendReservation(self, id, end, user):
+		if not id in self.reservations or not self.reservations[id]:
+			raise ValueError('Invalid id passed "%s"' % str(id))
+		if not self.reservations[id]['user'] == user:
+			raise ValueError('Unauthorized')
+		
+		self.reservations[id]['end'] = end
 		
 	def run(self):
 		while self.alive:

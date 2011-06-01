@@ -94,9 +94,9 @@ $.fn.updateActionView = function(action, components, options, force) {
 			a = component.getAction(dependency.actionId);
 			
 			if(a.isActive()) 
-				dep.html('<span class="ui-icon ui-icon-check"></span><a href="#" class="running">' + component.name + " &raquo; " + action.name + '</a>');
+				dep.html('<span class="ui-icon ui-icon-check"></span><a href="#" class="running">' + component.name + " &raquo; " + a.name + '</a>');
 			else
-				dep.html('<span class="ui-icon ui-icon-power"></span><a href="#" class="notRunning">' + component.name + " &raquo; " + action.name + '</a>');
+				dep.html('<span class="ui-icon ui-icon-power"></span><a href="#" class="notRunning">' + component.name + " &raquo; " + a.name + '</a>');
 		}
 		
 		

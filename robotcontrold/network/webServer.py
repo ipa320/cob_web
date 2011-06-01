@@ -1,4 +1,4 @@
-import threading, time, base64
+import threading, time, base64, datetime
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from utils.eventHistory import EventHistory
 from myExceptions.webServerExceptions import *
@@ -186,9 +186,6 @@ class MyHandler(BaseHTTPRequestHandler):
 					if len(args) < 2:
 						raise ArgumentRequestError('Wrong argument count for "data". %s found, at least 2 Required.' % str(args), self.path)
 
-					if args[1] != 'host' and args[1] != 'comp' and args[1] != 'eventHistory' :
-						raise ArgumentRequestError('Argument one must be either "host" or "comp". "%s" found' % str(args[1]), self.path)
-					
 					
 					if args[1] == 'host':
 						hosts = serverThread.hosts
@@ -223,6 +220,7 @@ class MyHandler(BaseHTTPRequestHandler):
 						# remove the trailing comma
 						output = output.strip(',') + '}'
 						
+					
 	
 					# Events					
 					elif args[1] == 'eventHistory':
@@ -246,6 +244,10 @@ class MyHandler(BaseHTTPRequestHandler):
 							if item['type'] == EventHistory.HOST_EVENT:
 								output += '\n\t{"type": "%d", "id": "%d", "status": "%d", "ts": "%d"},' % (item['type'], item['id'], item['status'], item['stamp'])
 						output = output.strip(',') + '\n]}'
+						
+						
+					else:
+						raise ArgumentRequestError('Invalid Argument for data "%s". ' % str(args[1]), self.path)
 				
 
 				# Start/Stop/Kill/Request status of an action
@@ -291,6 +293,87 @@ class MyHandler(BaseHTTPRequestHandler):
 
 					output = 'OK. Result: %s' % str(result)
 			
+			
+				# Reservations
+				elif action == 'reservations':
+					if len(args) < 2:
+						raise ArgumentRequestError('At least 2 Parameters expected. Received: %s' % str(args), self.path)
+						
+					if args[1] == 'get':
+						output = '{'
+						data = serverThread.reservations
+						for id in data.keys():
+							reservation = data[id]
+							if reservation:
+								title = '%s %s - %s' % (reservation['user'].name, reservation['start'].strftime('%H:%M'), reservation['end'].strftime('%H:%M'))
+								owner = 'true' if reservation['user'] == requestUser else 'false'
+								start = reservation['start'].strftime('%Y-%m-%d-%H-%M')
+								end = reservation['end'].strftime('%Y-%m-%d-%H-%M')
+								output += '"%d": {"title": "%s", "owner": %s, "start": "%s", "end": "%s"},' % (id, title, owner, start, end)
+						output = output.strip(',') + '}'
+						
+						
+					elif args[1] == 'add':
+						if len(args) != 4:
+							raise ArgumentRequestError('4 Parameters expected. Received: %s' % str(args), self.path)
+						
+					
+						# decode start / end date
+						try:
+							start_date = datetime.datetime.strptime(args[2], "%Y-%m-%d-%H-%M")
+							end_date = datetime.datetime.strptime(args[3], "%Y-%m-%d-%H-%M")
+						except Exception, e:
+							raise ArgumentRequestError('Start-Date or End-Date invalid ["%s", "%s"]' % (args[2], args[3]), self.path)
+
+						#serverThread.addReservation
+						output = str(serverThread.addReservation(requestUser, start_date, end_date))
+						
+						
+					elif args[1] == 'extend':
+						if len(args) != 4:
+							raise ArgumentRequestError('4 Parameters expected. Received: %s' % str(args), self.path)
+						
+					
+						# decode start date
+						try:
+							end_date = datetime.datetime.strptime(args[3], "%Y-%m-%d-%H-%M")
+						except Exception, e:
+							raise ArgumentRequestError('End-Date invalid ["%s"]' % args[3], self.path)
+
+						try:
+							id = int(args[2])
+						except ValueError, e:
+							raise ArgumentRequestError('Invalid Reservation id passed', self.path)
+							
+						try:
+							serverThread.extendReservation(id, end_date, requestUser)
+						except ValueError,e:
+							raise ArgumentRequestError(str(e), self.path)
+							
+						output = "OK"
+						
+						
+						
+					elif args[1] == 'kill':
+						if len(args) != 3:
+							raise ArgumentRequestError('3 Parameters expected. Received: %s' % str(args), self.path)
+						
+						try:
+							id = int(args[2])
+						except ValueError, e:
+							raise ArgumentRequestError('Invalid Reservation id passed', self.path)
+							
+						try:
+							serverThread.killReservation(id, requestUser)
+						except ValueError,e:
+							raise ArgumentRequestError(str(e), self.path)
+
+						output = "OK"
+						
+						
+					else:
+						raise ArgumentRequestError('Unexpected reservations argument "%s"' % args[2], self.path)
+					
 
 				else:
 					raise UnknownRequestError('Unknown request. Args: %s.' % str(args), self.path)

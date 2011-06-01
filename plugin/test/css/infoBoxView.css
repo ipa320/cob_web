@@ -15,3 +15,11 @@
 #infoBox tr td {
 	padding: 4px 0 0 0;
 }
+
+#infoBox tr a {
+	text-decoration: none;
+	color: #4F4F4F;
+}
+#infoBox tr a:hover {
+	color: #000000;
+}
