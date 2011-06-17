@@ -1,9 +1,13 @@
-var Action = function(id, name, compId, description, dependencies) {
+var Action = function(id, name, compId, description, dependencies, startCmds, stopCmds) {
 	this.id = id;
 	this.name = name;
 	this.compId = compId;
 	this.description = description;
 	this.dependencies = dependencies;
+	this.startCommands = startCmds;
+	this.stopCommands = stopCmds;
+	
+	
 	this._active = false;
 	this._lastChange = 0;
 
@@ -26,6 +30,13 @@ var Action = function(id, name, compId, description, dependencies) {
 			return true;
 		}
 		return false;
+	}
+	
+	this.canStart = function() {
+		return this.startCommands.length > 0;
+	}
+	this.canStop = function() {
+		return this.stopCommands.length > 0;
 	}
 	
 	// update last Change

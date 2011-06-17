@@ -57,3 +57,30 @@ var WaitDialogView = function() {
 		return 180;
 	}
 }
+
+var OwnerChangedDialogView = function() {
+	this.container = $(document.createElement('div'))
+	
+	this.create = function(id) {
+		this.id = id;
+		this.container.attr('id', id);
+		this.container.attr('title', 'Server owner changed');
+		this.container.addClass('dialogView');
+		this.container.addClass('loadingDialogView');
+		this.container.html('Your server session expired. Please refresh the page or click <a href="javascript:location.reload(true)">here to reload</a>');
+		this.ul = this.container.find('ul'); 
+	}
+	this.destroy = function() {
+		this.container.remove();
+	}
+	this.getContainer = function() {
+		return this.container;
+	}
+	
+	this.getPrefferedHeight = function() {
+		return 100;
+	}
+	this.getPrefferedWidth = function() {
+		return 300;
+	}
+}

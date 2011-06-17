@@ -32,6 +32,12 @@ class Action():
 			if reader and reader.isAlive():
 				return True
 		return False
+		
+	def canStart(self):
+		return len(self.startCommands)>0
+		
+	def canStop(self):
+		return len(self.stopCommands)>0
 
 	def screenReaderStopped(self, reader):
 		if not self.component:
@@ -45,6 +51,10 @@ class Action():
 			raise AttributeError('Host is not set for %s' % str(self))
 
 		if not self.isAlive():
+			if not self.canStart():
+				self.log.info('Cannot start Action "%s", no commands found' % (self.name))
+				return
+			
 			self.log.info('Starting Action "%s". "%d" Commands found' % (self.name, len(self.startCommands)))
 
 			if len(self.dependencies):
@@ -83,6 +93,10 @@ class Action():
 			raise AttributeError('Host is not set for %s' % str(self))
 
 		if self.isAlive() or force:
+			if not self.canStop():
+				self.log.info('Cannot stop Action "%s" (force=%s), no commands found' % (self.name, str(force)))
+				return
+			
 			self.log.info('Stopping Action "%s" (force=%s). "%d" Commands found' % (self.name, str(force), len(self.stopCommands)))
 
 			for cmd in self.stopCommands:

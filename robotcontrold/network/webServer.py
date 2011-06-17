@@ -207,9 +207,22 @@ class MyHandler(BaseHTTPRequestHandler):
 								for dep in action.dependencies:
 									deps += '{"compId": %d, "actionId": %d},' % (dep.component.id, dep.id)
 								deps = deps.strip(',') + ']'
-									
+								
+								# list startCmds
+								startCmds = '['
+								for cmd in action.startCommands:
+									startCmds += '{"id": %d, "command": "%s", "blocking": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower())
+								startCmds = startCmds.strip(',') + ']'
+								
+								# list stopCmds
+								stopCmds = '['
+								for cmd in action.stopCommands:
+									stopCmds += '{"id": %d, "command": "%s", "blocking": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower())
+								stopCmds = stopCmds.strip(',') + ']'
+
+								
 								description = '"' + action.description + '"' if action.description else 'null';
-								actions += '\n\t\t"%d": {\n\t\t\t"name": "%s", \n\t\t\t"desc": %s, \n\t\t\t"dependencies":%s\n\t\t},' % (action.id, action.name, description, deps)
+								actions += '\n\t\t"%d": {\n\t\t\t"name": "%s", \n\t\t\t"desc": %s, \n\t\t\t"dependencies":%s, \n\t\t\t"startCmds":%s, \n\t\t\t"stopCmds":%s\n\t\t},' % (action.id, action.name, description, deps, startCmds, stopCmds)
 							actions = actions.strip(',') + '\n\t}';
 							
 							
@@ -420,9 +433,10 @@ class MyHandler(BaseHTTPRequestHandler):
 			self.server.log.exception('An error occured sending the request')
 
 
-	# 
+	# Logging produces too much output
 	def log_request(self, code='-', size='-'):
-    		self.server.log.debug('Request: "%s" %s %s' % (self.requestline, str(code), str(size)))
+#    	self.server.log.debug('Request: "%s" %s %s' % (self.requestline, str(code), str(size)))
+		pass
 
 	def log_error(self, format, *args):
 		self.server.log.error(format%args)

@@ -41,7 +41,13 @@
 .buttons div {	float: left; }
 
 .text {
-	padding: 40px 0 0 0 ;
+/*	padding: 40px 0 0 0 ;*/
+	width: 100%;
+	height: 107px;
+	margin: 28px 0 0;
+	overflow-y: auto;
+	padding: 5px 0 0;
+	/* margin-top + padding-top + height = 140 */
 }
 .actionView table {
 }

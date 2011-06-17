@@ -1,4 +1,4 @@
-import threading, time, MySQLdb
+import threading, time, MySQLdb, datetime
 from utils.host import Host
 from utils.actions.action import Action
 from utils.actions.shellCommand import ShellCommand
@@ -39,6 +39,9 @@ class ServerThread(threading.Thread):
 
 		# Connect to Hosts
 		self.startAllHosts()
+		
+		# quit all components that might be running
+		self.forceTerminateAllComponents()
 		
 
 
@@ -217,6 +220,7 @@ class ServerThread(threading.Thread):
 			name = row[2]
 			parentId = row[3] # int or None
 			hostId = row[4]
+			
 
 			# compActions may be none
 			compActions = actionsByCompAndName[compId] if compId in actionsByCompAndName else []
@@ -284,12 +288,14 @@ class ServerThread(threading.Thread):
 	# Passing None caueses the server to log out the currently active user and do nothing 
 	def prepareServerForNewUser(self, user):
 		username = ''
-		if isinstance(user, User):
-			username = user.name
+		if user is None:
+			user = None
+		elif isinstance(user, User):
+			user = self.getUserCreateIfNotExistent(user.name)
 		elif isinstance(user, basestring):
-			username = user
+			user = self.getUserCreateIfNotExistent(user)
 		else:
-			raise ValueError('User must be either a User Class or a string')
+			raise ValueError('User must be either None, a User Class or a string')
 
 		
 
@@ -304,7 +310,7 @@ class ServerThread(threading.Thread):
 		# Clear the eventHistory
 		EventHistory.clear()
 		
-		self.activeUser = self.getUserCreateIfNotExistent(username)
+		self.activeUser = user
 
 
 	# Same as prepareServerForNewUser(None)
@@ -366,6 +372,11 @@ class ServerThread(threading.Thread):
 
 
 	def addReservation(self, user, start_date, end_date):
+		if not isinstance(end_date, datetime.datetime):
+			raise ValueError('End Parameter is not an instance of datetime')
+		if not isinstance(start_date, datetime.datetime):
+			raise ValueError('Start Parameter is not an instance of datetime')
+		
 		id = len(self.reservations)
 		self.reservations[id] = {'user': user, 'start': start_date, 'end':end_date}
 		return id
@@ -378,18 +389,37 @@ class ServerThread(threading.Thread):
 			
 		self.reservations[id] = None
 		
-	def extendReservation(self, id, end, user):
+	def extendReservation(self, id, end_date, user):
+		if not isinstance(end_date, datetime.datetime):
+			raise ValueError('End Parameter is not an instance of datetime')
 		if not id in self.reservations or not self.reservations[id]:
 			raise ValueError('Invalid id passed "%s"' % str(id))
 		if not self.reservations[id]['user'] == user:
 			raise ValueError('Unauthorized')
 		
-		self.reservations[id]['end'] = end
+		self.reservations[id]['end'] = end_date
+		
+	def getActiveReservation(self):
+		now = datetime.datetime.now()
+		for reservation in self.reservations.values():
+			if reservation['start'] <= now and reservation['end'] > now:
+				return reservation
+		return None
 		
 	def run(self):
+		activeReservation = None
 		while self.alive:
 			try:
-				time.sleep(1)
+				activeReservation = self.getActiveReservation()
+				if not activeReservation:
+					if self.activeUser:
+						self.prepareServerForNewUser(None)
+				else:
+					if activeReservation['user'] != self.activeUser:
+						self.prepareServerForNewUser(activeReservation['user'])
+				
+					
+				time.sleep(3)
 			except Exception as e:
 				print ("Exception occured: " + str(e))
 

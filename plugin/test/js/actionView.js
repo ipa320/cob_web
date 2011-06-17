@@ -1,5 +1,5 @@
 var actionViewCode = '<h3 class="actionView-name"><a href="#" class="ph_action-name">PH_name <span class="active">Active</span></a></h3>\
-				<div>\
+				<div style="overflow-y: hidden; padding-right: 0; padding-bottom: 0">\
 					<div class="buttons">\
 						<div class="start-buttons"> \
 							<a href="#" class="start-button">Run</a>\
@@ -83,6 +83,7 @@ $.fn.updateActionView = function(action, components, options, force) {
 		
 		// render dependencies
 		dep = this.find(".ph_action-dep");
+		html = ''
 		for (i in action.dependencies) {
 			dependency = action.dependencies[i];
 			if (components[dependency.compId] === undefined)
@@ -94,10 +95,15 @@ $.fn.updateActionView = function(action, components, options, force) {
 			a = component.getAction(dependency.actionId);
 			
 			if(a.isActive()) 
-				dep.html('<span class="ui-icon ui-icon-check"></span><a href="#" class="running">' + component.name + " &raquo; " + a.name + '</a>');
+				html += '<span class="ui-icon ui-icon-check"></span><a href="#" class="running">' + component.name + " &raquo; " + a.name + '</a>';
 			else
-				dep.html('<span class="ui-icon ui-icon-power"></span><a href="#" class="notRunning">' + component.name + " &raquo; " + a.name + '</a>');
+				html += '<span class="ui-icon ui-icon-power"></span><a href="#" class="notRunning">' + component.name + " &raquo; " + a.name + '</a>';
+				
+			html += '<br />'
 		}
+		// remove the last <br />
+		html = html.substring(0, html.length-6);
+		dep.html(html)
 		
 		
 		if (action.isActive()) {
@@ -119,8 +125,13 @@ $.fn.updateActionView = function(action, components, options, force) {
 		
 		
 		// have to disable the buttons seperatrely, won't work otherwise
-		this.find(".start-buttons a").button({'disabled': options['disabled']});
-		this.find(".stop-buttons a").button({'disabled': options['disabled']});
+		this.find(".start-buttons a").button({'disabled': !action.canStart() || options['disabled']});
+		
+		// only disable stop button if the action cannot be stopped
+		this.find(".stop-buttons .stop-button").button({'disabled': !action.canStop() || options['disabled']});
+		this.find(".stop-buttons .kill-button").button({'disabled': options['disabled']});
+		
+		
 		this.find(".log-buttons a").button({'disabled': options['disabled']});
 	}
 };

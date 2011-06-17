@@ -9,8 +9,11 @@ var application = new (function() {
 	
 	this.reservations = null;
 	
-	// timeout for frequent updates
+	// timeout for frequent updates (only if in charge)
 	this.updateTimeoutId = -1;
+	
+	// timeout for status checks (only if not in charge)
+	this.statusTimeoutId = -1;
 	
 	// timestamp of last request
 	this.lastUpdateTimestamp = 0;
@@ -196,20 +199,22 @@ var application = new (function() {
 			this.components = {}
 			
 			for (id in compData) {
+				id = parseInt(id);
 				comp = compData[id];
 				// check whether all required fields are set. host, parentId may be null
-				if (!id || !comp || !comp.name || !comp.actions || !(comp.actions instanceof Object))
+				if (!id || isNaN(id) || !comp.name || !comp.actions || !(comp.actions instanceof Object))
 					throw new Error('Invalid Comp-Object received')
 
 				// parse the actions first
 				actions = {};
 				for (actionId in comp.actions) {
+					actionId = parseInt(actionId);
 					action = comp.actions[actionId];
 					// check whether all required fields are set. description might be null
-					if (!actionId || !action || !action.name || !action.dependencies || !(action.dependencies instanceof Object))
+					if (!actionId || isNaN(actionId) || !action || !action.name || !action.dependencies || !(action.dependencies instanceof Object) || !(action.startCmds instanceof Object) || !(action.stopCmds instanceof Object))
 						throw new Error('Invalid Action-Object received')
 					
-					actions[actionId] = new Action(actionId, action.name, id, action.desc, action.dependencies)
+					actions[actionId] = new Action(actionId, action.name, id, action.desc, action.dependencies, action.startCmds, action.stopCmds)
 				}
 
 				this.components[id] = new Component(id, comp.host, comp.name, comp.parentId, actions);
@@ -316,6 +321,12 @@ var application = new (function() {
 			// set the timout only if we're in charge
 			if (this.status == this.SERVER_IN_CHARGE)
 				this.updateTimeoutId = setTimeout("application.updateEventHistory()", 2000);
+				
+			// if not in charge, set a timeout to frequently request the server status and check
+			// whether we're now in charge
+			else
+				this.statusTimeoutId = setTimeout("application.checkServerStatusChanged()", 2000);
+				
 			handler.success('Application initialized');
 		}
 		catch (err) {
@@ -338,44 +349,52 @@ var application = new (function() {
 	 * Select a component. If id is null, select the first item on root level
  	 */
 	this.select = function(selectId) {
-		// if the location is locked, do not allow to change location
-		if (screenManager.isLockedLocation())
-			return;
-		
-		
-		// check whether components-object is empty. its a associative array, so 
-		// we cannot use length
-		var hasComponents=false;
-		for (i in this.components) {
-			hasComponents=true;
-			break;
-		}
-		
-		// components may be empty 
-		if (hasComponents) {
-			targetId = null;
-			for (id in this.components) {
-				if (id === selectId || (!selectId && this.components[id].parentId === null)) {
-					targetId = id;
-					break;
+		try {
+			// selectId must be either null or a number
+			if (selectId != null && typeof(selectId) != 'number')
+				throw new Error('Parameter for select must be either null or a number.');
+			
+			// if the location is locked, do not allow to change location
+			if (screenManager.isLockedLocation())
+				return;
+			
+			
+			// check whether components-object is empty. its a associative array, so 
+			// we cannot use length
+			var hasComponents=false;
+			for (i in this.components) {
+				hasComponents=true;
+				break;
+			}
+			
+			// components may be empty 
+			if (hasComponents) {
+				targetId = null;
+				for (id in this.components) {
+					// dont use the strict === here, because id is a string and selectId a number
+					if (id == selectId || (!selectId && this.components[id].parentId === null)) {
+						targetId = parseInt(id);
+						break;
+					}
 				}
+
+				if (targetId === null || isNaN(targetId))
+					throw new Error('Passed id was not found "' + selectId + '"');
+
+
+				this.selectedComponent = this.components[targetId];
+				this.componentView.renderComponentView(this.selectedComponent, this.components, {'disabled': this.status!=this.SERVER_IN_CHARGE});
+			}
+			else {
+				this.selectedComponent = null;
 			}
 
-			if (targetId === null)
-				throw new Error('Passed id was not found "' + selectId + '"');
-
-			if (this.selectedComponent === this.components[targetId])
-				return;
-
-			this.selectedComponent = this.components[targetId];
-			this.componentView.renderComponentView(this.selectedComponent, this.components, {'disabled': this.status!=this.SERVER_IN_CHARGE});
+			this.menuView.renderMenuView(this.components, {selected: this.selectedComponent});
+			this.infoBoxView.renderInfoBox(this.username, this.statusToString());
 		}
-		else {
-			this.selectedComponent = null;
+		catch (err) {
+			alert("Error occured selecting the component: " + selectId + " (" + typeof(selectId) + ")\n" + err);
 		}
-
-		this.menuView.renderMenuView(this.components, {selected: this.selectedComponent});
-		this.infoBoxView.renderInfoBox(this.username, this.statusToString());
 	}
 	
 	
@@ -430,7 +449,8 @@ var application = new (function() {
 	
 	
 	/*
-	 * Function for frequently updating event History
+	 * Functions for frequently requesting eventHistoryData and updating user interface
+	 * Only used if in charge fo the server. Otherwise see checkServerStatusChanged
 	 */
 	this.updateEventHistory = function()
 	{
@@ -441,13 +461,13 @@ var application = new (function() {
 			error:   function(data) { obj.updateEventHistoryError(data);   }
 		});
 	}
-	this.updateEventHistorySuccess = function(data, handler) {
+	this.updateEventHistorySuccess = function(data) {
 		try {
 			options = {'forceComponentUpdate': false};
 			$.extend(options, this.refreshOptions);
 			
 			changes = this.processEventHistoryData(data);
-			if (changes) {
+			if (changes && this.selectedComponent) {
 				this.componentView.updateComponentView(this.selectedComponent, this.components, null, options.forceComponentUpdate);
 				this.menuView.renderMenuView(this.components);
 			}
@@ -461,8 +481,63 @@ var application = new (function() {
 			alert('An error occured processing History Data: ' + err);
 		}
 	}
-	this.updateEventHistoryError = function(data, handler) {
-		alert('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
+	/*
+	 * Callback function if requesting eventHistoryData failed.
+	 * If error Code is 401 Unauthorized, check whether the server owner changed!
+	 */
+	this.updateEventHistoryError = function(data) {
+		// check status for 401
+		if (data.status == 401) {
+			// lock the screen
+			screenManager.lockDisplay(new WaitDialogView())
+			
+			// request the status data and check whether owner changed
+			$.ajax({
+				url: this.urlPrefix + '/status',
+				success: function(statusData) { 
+					if (statusData.status != this.SERVER_IN_CHARGE) {
+						screenManager.unlock();
+						screenManager.lockDisplay(new OwnerChangedDialogView())
+					}
+					else
+						alert('Event History Data could not be loaded: 401 Unauthorized. Yet still in charge of the server [' + data.responseText + ']');
+				},
+				error:  function(data) { alert('Event History Data could not be loaded: 401 Unauthorized. Server Status could not be requested either [' + data.status + '; ' + data.responseText + ']'); }
+			});
+		}
+		else
+			alert('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
+	}
+	
+	/*
+	 * Functions for checking whether the server status changed so that we're in charge.
+	 * Only used if not in charge. Otherwise see updateEventHistory
+	 */
+	 this.checkServerStatusChanged = function()
+	 {
+		var obj = this;
+		$.ajax({
+			url: this.urlPrefix + '/status',
+			success: function(data) { obj.checkServerStatusChangedSuccess(data); },
+			error:   function(data) { obj.checkServerStatusChangedError(data);   }
+		});
+	}
+	this.checkServerStatusChangedSuccess = function(data) {
+		try {
+			// if now in charge, reload
+			if (data.status == this.SERVER_IN_CHARGE)
+				location.reload(true);
+				
+			// if not, check the stauts again soon
+			else
+				this.statusTimeoutId = setTimeout("application.checkServerStatusChanged()", 2000);
+		}
+		catch (err) {
+			alert('An error occured processing Server Status ' + err);
+		}
+	}
+	this.checkServerStatusChangedError = function(data) {
+		alert('Server Status Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 	
 	
@@ -479,9 +554,10 @@ var application = new (function() {
 			this.menuView.renderMenuView(this.components);
 			
 			$.ajax({
+				dataType: 'text',
 				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/start',
 				success: function(data) { application.startActionSuccess(data) },
-				error:   function(data) { application.startActionSuccess(data) }//startActionError
+				error:   function(data) { application.startActionError(data) }
 			});
 		}
 		catch (err) {
@@ -492,6 +568,10 @@ var application = new (function() {
 	{
 		screenManager.unlockLocation();
 		this.refreshOptions['forceComponentUpdate'] = true;		
+	}
+	this.startActionError = function(data)
+	{
+		alert('Component could not be started [' + data.status + '; ' + data.responseText + ']');
 	}
 
 		
@@ -505,11 +585,10 @@ var application = new (function() {
 			this.menuView.renderMenuView(this.components);
 			
 			$.ajax({
+				dataType: 'text',
 				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/stop',
-				success: function(data) { application.startActionSuccess(data); },
-//				success: function(data) { application.stopActionSuccess(data); },
-				error:   function(data) { application.startActionSuccess(data); }
-//				error:   function(data) { application.stopActionSuccess(data); }
+				success: function(data) { application.stopActionSuccess(data); },
+				error:   function(data) { application.stopActionSuccess(data); }
 			});
 		}
 		catch (err) {
@@ -518,6 +597,12 @@ var application = new (function() {
 	}
 	this.stopActionSuccess = function(data)
 	{
+		screenManager.unlockLocation();
+		this.refreshOptions['forceComponentUpdate'] = true;		
+	}
+	this.stopActionError = function(data)
+	{
+		alert('Component could not be stopped [' + data.status + '; ' + data.responseText + ']');
 	}
 	
 	this.killAction = function(actionId, compId) {
@@ -530,19 +615,24 @@ var application = new (function() {
 			this.menuView.renderMenuView(this.components);
 			
 			$.ajax({
+				dataType: 'text',
 				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/kill',
-				success: function(data) { application.startActionSuccess(data); },
-//				success: function(data) { application.stopActionSuccess(data); },
-				error:   function(data) { application.startActionSuccess(data); }
-//				error:   function(data) { application.stopActionSuccess(data); }
+				success: function(data) { application.killActionSuccess(data); },
+				error:   function(data) { application.killActionError(data); }
 			});
 		}
 		catch (err) {
 			alert("Error occured trying to stop an Action:\n" + err);
 		}
 	}
-	this.stopActionSuccess = function(data)
+	this.killActionSuccess = function(data)
 	{
+		screenManager.unlockLocation();
+		this.refreshOptions['forceComponentUpdate'] = true;	
+	}
+	this.killActionError = function(data)
+	{
+		alert('Component could not be killed [' + data.status + '; ' + data.responseText + ']');
 	}
 	
 	this.statusToString = function() {
@@ -672,5 +762,26 @@ var application = new (function() {
 			return null;
 			
 		return date;
+	}
+	
+	
+	this.editComponent = function()
+	{
+		try {
+			// if the location is locked, do not allow to change location
+			if (screenManager.isLockedLocation())
+				return;
+				
+			if (!this.selectedComponent)
+				throw new Error("Selected Component is not defined");
+				
+			this.componentView.renderComponentEditView(this.selectedComponent); //this.components
+
+			// no more component selected
+			this.selectedComponent = null;
+		}	
+		catch (err) {
+			alert ("Error occured trying to edit component: \n" + err);
+		}
 	}
 })();

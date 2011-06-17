@@ -22,7 +22,7 @@ class Component():
 
 		# better solution needed
 		if len(self.actions) and not self.host:
-			raise CorruptDatabaseError('Component has actions but no host. id: %d' % compId)
+			raise CorruptDatabaseError('Component has actions but no host. %s' % str(self))
 
 
 		for action in self.actions.values():

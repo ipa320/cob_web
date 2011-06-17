@@ -32,7 +32,7 @@ function renderMenuElements(parentId, level, components, options, i, size)
 			if (options.selected instanceof Object && options.selected.id === id)
 				checked = 'checked="checked"';
 
-			navButtons.append('<div class="level-' + level + '"><input type="checkbox" ' + checked + ' onchange="javascript:application.select(\'' + id + '\')" class="nav-button" name="nav" id="nav-' + id + '" /><label for="nav-' + id + '" class="' + btnClass + '">' + components[id].name + '</label></div>');
+			navButtons.append('<div class="level-' + level + '"><input type="checkbox" ' + checked + ' onchange="javascript:application.select(' + id + ')" class="nav-button" name="nav" id="nav-' + id + '" /><label for="nav-' + id + '" class="' + btnClass + '">' + components[id].name + '</label></div>');
 			if (component.allActionsRunning())
 				icon = "ui-icon-check";
 			else if (component.actionsRunning())

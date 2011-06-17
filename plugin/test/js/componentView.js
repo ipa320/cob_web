@@ -1,4 +1,4 @@
-var componentViewCode = '<h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView"></div>';
+var componentViewCode = '<a href="javascript:application.editComponent()" class="edit-button">Edit</a><h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView"></div>';
 
 $.fn.renderComponentView = function(component, components, options) {
 	if (!(component instanceof Component))
@@ -20,6 +20,9 @@ $.fn.renderComponentView = function(component, components, options) {
 
 	// set the values that stay forever
 	this.find(".ph_comp-name").text(component.name);
+	
+	// create the edit-button
+	this.find(".edit-button").button({ icons: {primary: 'ui-icon-scissors'} })
 
 	this.updateComponentView(component, components, options, true);
 };
