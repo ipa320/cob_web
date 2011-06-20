@@ -4,12 +4,15 @@ from network.screenReader import ScreenReader
 
 
 class Action():
-	def __init__(self, rId, name, startCommands, stopCommands, dependencyIds, description, log):
+	def __init__(self, rId, name, _startCommands, _stopCommands, dependencyIds, description, log):
 		self.id = int(rId)
 		self.name = name
 		self.log = log
-		self.startCommands = startCommands
-		self.stopCommands = stopCommands
+		
+		# dicts with id as key
+		self._startCommands = _startCommands
+		self._stopCommands = _stopCommands
+		
 		self.dependencyIds = dependencyIds
 		self.description = description;
 
@@ -34,10 +37,10 @@ class Action():
 		return False
 		
 	def canStart(self):
-		return len(self.startCommands)>0
+		return len(self._startCommands)>0
 		
 	def canStop(self):
-		return len(self.stopCommands)>0
+		return len(self._stopCommands)>0
 
 	def screenReaderStopped(self, reader):
 		if not self.component:
@@ -55,14 +58,14 @@ class Action():
 				self.log.info('Cannot start Action "%s", no commands found' % (self.name))
 				return
 			
-			self.log.info('Starting Action "%s". "%d" Commands found' % (self.name, len(self.startCommands)))
+			self.log.info('Starting Action "%s". "%d" Commands found' % (self.name, len(self._startCommands)))
 
 			if len(self.dependencies):
 				self.log.info('Action depends on: %s' % list('%s>%s' % (item.component.name, item.name) for item in self.dependencies))
 				for dep in self.dependencies:
 					dep.start()
 
-			for cmd in self.startCommands:
+			for cmd in self._startCommands.values():
 				channel = self.component.host.invokeShell()
 				self.startChannels.append(channel)
 
@@ -97,9 +100,9 @@ class Action():
 				self.log.info('Cannot stop Action "%s" (force=%s), no commands found' % (self.name, str(force)))
 				return
 			
-			self.log.info('Stopping Action "%s" (force=%s). "%d" Commands found' % (self.name, str(force), len(self.stopCommands)))
+			self.log.info('Stopping Action "%s" (force=%s). "%d" Commands found' % (self.name, str(force), len(self._stopCommands)))
 
-			for cmd in self.stopCommands:
+			for cmd in self._stopCommands.values():
 				channel = self.component.host.invokeShell()
 				command = self.createScreenCmd(cmd)
 				self.log.debug('Running stop command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
@@ -133,16 +136,16 @@ class Action():
 			raise AttributeError('Host is not set for %s' % str(self))
 
 		if self.isAlive() or force:
-			self.log.info('Killing Action "%s" (force=%s) "%d" Commands found ' % (self.name, str(force), len(self.startCommands)+len(self.stopCommands)))
+			self.log.info('Killing Action "%s" (force=%s) "%d" Commands found ' % (self.name, str(force), len(self._startCommands)+len(self._stopCommands)))
 
 			# send a break (^C == chr(3)) to every channel
 			for channel in self.startChannels:
 				channel.send(chr(3))
 
 			# non blocking commands, so only one shell required
-			# kill both, start and stop commands
+			# kill both screens for start and stop command
 			channel = self.component.host.invokeShell()
-			for cmd in self.startCommands+self.stopCommands:
+			for cmd in self._startCommands.values()+self._stopCommands.values():
 				cmd = self.createKillCmd(cmd)
 				self.log.debug('Running kill command "%s" by Action "%s"' % (cmd.strip().replace('\n','\\n'), self.name))
 				channel.send(cmd)
@@ -186,3 +189,29 @@ class Action():
 	def createKillCmd(self, cmd):
 		return 'screen -X -S %s_%d_%d kill\n' % (self.name, self.id, cmd.id)
 
+
+	def hasCommand(self, cmdId):
+		return self.hasStartCommand(cmdId) or self.hasStopCommand(cmdId)
+		
+	def hasStartCommand(self, cmdId):
+		return cmdId in self._startCommands
+		
+	def hasStopCommand(self, cmdId):
+		return cmdId in self._stopCommands
+	
+	def getCommand(self, cmdId):
+		if self.hasStartCommand(cmdId):
+			return self._startCommands[cmdId]
+		elif self.hasStopCommand(cmdId):
+			return self._stopCommands[cmdId]
+		else:
+			return None
+			
+	def getStartCommands(self):
+		return self._startCommands.values()
+	def getStopCommands(self):
+		return self._stopCommands.values()
+	
+	
+	def appendDependency(self, action):
+		self.dependencies.append(action)

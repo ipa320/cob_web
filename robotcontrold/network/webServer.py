@@ -1,4 +1,4 @@
-import threading, time, base64, datetime
+import threading, time, base64, datetime, urllib, json
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from utils.eventHistory import EventHistory
 from myExceptions.webServerExceptions import *
@@ -126,7 +126,8 @@ class MyHandler(BaseHTTPRequestHandler):
 				temp = optionsString.split('&')
 				for t in temp:
 					key, value = t.split('=',1) if t.find('=') > 0 else (t, '')
-					options[key] = value
+					options[key] = urllib.unquote(value) if value else None
+					
 					
 				action = args[0]
 				
@@ -210,18 +211,18 @@ class MyHandler(BaseHTTPRequestHandler):
 								
 								# list startCmds
 								startCmds = '['
-								for cmd in action.startCommands:
+								for cmd in action.getStartCommands():
 									startCmds += '{"id": %d, "command": "%s", "blocking": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower())
 								startCmds = startCmds.strip(',') + ']'
 								
 								# list stopCmds
 								stopCmds = '['
-								for cmd in action.stopCommands:
+								for cmd in action.getStopCommands():
 									stopCmds += '{"id": %d, "command": "%s", "blocking": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower())
 								stopCmds = stopCmds.strip(',') + ']'
 
 								
-								description = '"' + action.description + '"' if action.description else 'null';
+								description = '"' + action.description.replace('"', '\\"') + '"' if action.description else 'null';
 								actions += '\n\t\t"%d": {\n\t\t\t"name": "%s", \n\t\t\t"desc": %s, \n\t\t\t"dependencies":%s, \n\t\t\t"startCmds":%s, \n\t\t\t"stopCmds":%s\n\t\t},' % (action.id, action.name, description, deps, startCmds, stopCmds)
 							actions = actions.strip(',') + '\n\t}';
 							
@@ -386,6 +387,17 @@ class MyHandler(BaseHTTPRequestHandler):
 						
 					else:
 						raise ArgumentRequestError('Unexpected reservations argument "%s"' % args[2], self.path)
+					
+					
+					
+					
+				# store a component when changed
+				elif action == 'store':
+					if not 'json' in options:
+						raise ArgumentRequestError('json parameter not received. Received options: %s' % str(options), self.path)
+						
+					serverThread.storeComponent(json.loads(options['json']), requestUser)
+					output = "OK"
 					
 
 				else:

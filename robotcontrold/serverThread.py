@@ -157,9 +157,9 @@ class ServerThread(threading.Thread):
 			blocking = row[4] == 'Y'
 
 			if not action_id in shellCommands:
-				shellCommands[action_id] = {'start':[], 'stop': []}
+				shellCommands[action_id] = {'start':{}, 'stop': {}}
 
-			shellCommands[action_id][rType].append(ShellCommand(rId, cmd, blocking))
+			shellCommands[action_id][rType][rId] = ShellCommand(rId, cmd, blocking)
 
 
 
@@ -180,8 +180,8 @@ class ServerThread(threading.Thread):
 			description = row[4];
 
 			# actions can have several start/stop commands assigned (start / stop). But they don't have to.
-			startCmds = shellCommands[rId]['start'] if rId in shellCommands else []
-			stopCmds =  shellCommands[rId]['stop']  if rId in shellCommands else []
+			startCmds = shellCommands[rId]['start'] if rId in shellCommands else {}
+			stopCmds =  shellCommands[rId]['stop']  if rId in shellCommands else {}
 			
 			# create an associative array to store all actions sorted by compId -> rId
 			# two actions of one component must not have the same name
@@ -202,7 +202,7 @@ class ServerThread(threading.Thread):
 				if not depId in actionsById:
 					raise CorruptDatabaseError('Dependency "%d" for action ("%s", id:"%d") not found' % (depId, action.name, action.id))
 
-				action.dependencies.append(actionsById[depId])
+				action.appendDependency(actionsById[depId])
 
 
 
@@ -425,3 +425,151 @@ class ServerThread(threading.Thread):
 
 		
 		self.stop()
+
+	
+	# stores a component based on an object given
+	def storeComponent(self, data, user):
+		#maps temporary ids (negativ ones) to the actual new ids returned by the database
+		idMap		= {}
+		
+		id			= int(data['id'])  #negativ for new ones
+		name		= data['name']
+		parentId	= int(data['parentId']) if data['parentId'] else None #might be None
+		hostId		= int(data['hostId'])
+		actions		= data['actions']
+		
+		# check if it's a valid hostId and parentId
+		if not hostId in self.hosts:
+			raise ValueError('The passed hostId (%d) is unknown' % hostId)
+			
+		# check if it's a valid parentId
+		parent = None
+		if parentId:
+			if not user.hasComponent(parentId):
+				raise ValueError('The passed parentId (%d) is unknown' % parentId)
+			parent = user.get(parentId)
+		
+		
+		
+		# if id is negative, create a new component
+		if id < 0:
+			component = None #...
+			#idMaps ...
+			pass
+			
+		# else we need to update the component
+		else:
+			# is it a valid component
+			if not user.hasComponent(id):
+				raise ValueError('The passed componentId (%d) is unknown' % id)
+			
+			component = user.get(id)
+			
+			# cannot update a running component
+			if component.isAlive():
+				raise ValueError('Cannot update a running component')
+				
+			# update the component
+			component.host = self.hosts[hostId]
+			component.name = name
+			component.parent = parent
+			
+			# Update the database
+			sql = "UPDATE `components` SET `host_id`=%s, `parent_id`=%s, `name`=%s WHERE `id`=%s"
+			self.cursor.execute(sql, [hostId, parentId, name, component.id])
+			
+			
+		# Now create / update the actions
+		# We have to loop through every action first to create and update all actions. We cannot 
+		# update the dependency field yet, as we have no valid ids so far. Therefore we need to
+		# create the new actions first and map the temporary ids (negative ones) to the actual ids
+		# returned by the database
+		for action in actions:
+			aId 			= int(action['id']) #new actions have a negativ id
+			aName			= action['name']
+			description		= action['description']
+			startCommands	= action['startCommands']
+			stopCommands	= action['stopCommands']
+			# compId field is ignored as the action must be part of this component
+			
+			# if an actionId is specified, it must be valid
+			if aId > 0 and not component.hasAction(aId):
+				raise ValueError('The given actionId is not a valid id for the component [compId=%d, actionId=%d]' % (component.id, aId))
+
+			if aId < 0:
+				# idMaps ...
+				action = None # ...
+				pass
+				
+			else:
+				action = component.getAction(aId)
+				action.name = aName
+				action.description = description
+				
+				sql = "Update `componentActions` SET `name`=%s, `description`=%s, `dependencies`=%s WHERE `id`=%s"
+				self.cursor.execute(sql, [action.name, action.description, None, action.id])
+				
+
+			# parse the startCommands
+			for cmd in startCommands:
+ 				cId			= int(cmd['id']) # new start commands have a negative index
+				commandStr	= cmd['command']
+				blocking	= cmd['blocking']
+				
+				# create new
+				if cId < 0:
+					# idMap ...
+					# add it to the action
+					pass
+				
+				# update existing
+				else:
+					if not action.hasCommand(cId):
+						raise ValueError('Command specified a parent-action id that doesn\'t match [compId=%d, actionId=%d, commandId=%d]' % (component.id, action.id, cId))
+					
+					command = action.getCommand(cId)
+					command.command = commandStr
+					command.blocking = blocking
+					
+					sql = "UPDATE `shellCommands` SET `command`=%s, `blocking`=%s WHERE `id`=%s"
+					self.cursor.execute(sql, [commandStr, 'Y' if blocking else 'N', cId])
+			
+
+
+		# Now we cann loop through the dependencies and check whether they are all valid
+		for action in actions:
+			dependencies	= action['dependencies']
+
+			
+			# make sure every dependency is valid and create the string (ids joined by semicolons)
+			depString = ''
+			depArray = []
+			for dep in dependencies:
+				actionId = int(dep['actionId']) 
+				compId   = int(dep['compId'])
+				
+				# if the action id is negative (i.e. newly created), try to remap
+				if actionId < 0:
+					if not actionId in idMaps:
+						raise ValueError('Action id is negative, but no mapping entry found. [compId=%d, actionId=%d]' % (compId, actionId))
+					actionId = idMaps[actionId]
+					
+				# if the comp id is negative (i.e.  newly created), try to remap
+				if compId < 0:
+					if not compId in idMaps:
+						raise ValueError('CompId id is negative, but no mapping entry found. [compId=%d, actionId=%d]' % (compId, actionId))
+					compId = idMaps[compId]
+				
+				
+				# if the action Id could not be found
+				if not user.hasComponent(compId) or not user.get(compId).hasAction(actionId):
+					raise ValueError('Invalid Dependency specified [compId=%d, actionId=%d]' % (compId, actionId))
+				
+				depString += actionId + ';'
+				depArray.append(dep)
+			
+			# remove trailing ;
+			depString.strip(';')
+
+			
+			# Now that we've checked the dependencies, udpate the database again

@@ -48,7 +48,10 @@ class Component():
 			break
 
 	def isAlive(self):
-		return self.isAlive
+		for action in self.actions.values():
+			if action.isAlive():
+				return True
+		return False
 
 
 
@@ -111,3 +114,9 @@ class Component():
 
 		return self.actions[actionId]
 
+	# 
+	def hasAction(self, actionId):
+		return actionId in self.actions
+		
+	def appendAction(self, action):
+		self.actions[action.id] = action

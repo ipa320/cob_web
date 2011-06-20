@@ -1,6 +1,6 @@
-var actionViewCode = '<h3 class="actionView-name"><a href="#" class="ph_action-name">PH_name <span class="active">Active</span></a></h3>\
+var actionViewCode = '<h3 class="actionView-name"><a href="#" class="ph_action-name">PH_name</a></h3>\
 				<div style="overflow-y: hidden; padding-right: 0; padding-bottom: 0">\
-					<div class="buttons">\
+					<div class="actionView-buttons">\
 						<div class="start-buttons"> \
 							<a href="#" class="start-button">Run</a>\
 						</div>\
@@ -13,12 +13,11 @@ var actionViewCode = '<h3 class="actionView-name"><a href="#" class="ph_action-n
 							<a href="#" class="refreshLog-button">Refresh</a>\
 						</div>\
 					</div>\
-					<div class="text"><table>\
+					<div class="actionView-text"><table>\
 						<tr class="even"><th>name:</td><td class="ph_action-name">PH_name</td></tr>\
 						<tr class="even"><th>Description:</td><td class="ph_action-desc"><i>Keine Beschreibung angegeben</i></div>\</td></tr>\
 						<tr class="even"><th>Dependencies:</th><td class="ph_action-dep"></td></tr> \
-						</table>\
-					</div>\
+					</table></div>\
 				</div>';
 
 
@@ -30,9 +29,7 @@ $.fn.renderActionView = function(action, components, options) {
 	// it's a new object
 	if (!this.hasClass('actionView')) {
 		this.addClass('actionView');
-		// insert the static id so we can create unique ids
-		data = actionViewCode.replace(/\{id\}/g, action.id);
-		this.append(data);
+		this.html(actionViewCode);
 
 		// Accordion
 		active = styleDataManager.isActionTabClosed(action.id) ? false : null;

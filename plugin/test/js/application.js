@@ -359,16 +359,9 @@ var application = new (function() {
 				return;
 			
 			
-			// check whether components-object is empty. its a associative array, so 
-			// we cannot use length
-			var hasComponents=false;
-			for (i in this.components) {
-				hasComponents=true;
-				break;
-			}
-			
+			// check whether components-object is empty. its a associative array, because
 			// components may be empty 
-			if (hasComponents) {
+			if (!$.isEmptyObject(this.components)) {
 				targetId = null;
 				for (id in this.components) {
 					// dont use the strict === here, because id is a string and selectId a number
@@ -775,13 +768,32 @@ var application = new (function() {
 			if (!this.selectedComponent)
 				throw new Error("Selected Component is not defined");
 				
-			this.componentView.renderComponentEditView(this.selectedComponent); //this.components
+			// clone the current component, to avoid changes being made to the actual component
+			this.componentView.renderComponentEditView(this.selectedComponent.clone(), this.components);
 
 			// no more component selected
 			this.selectedComponent = null;
 		}	
 		catch (err) {
 			alert ("Error occured trying to edit component: \n" + err);
+		}
+	}
+	
+	this.saveComponent = function(component)
+	{
+		try {
+			$.ajax({
+				url: this.urlPrefix + '/store/?json=' + component.createJSONString(),
+				dataType: 'text',
+				success: function(data) { console.log('success'); console.log(data); },
+				error:   function(data) { console.log('failure'); console.log(data); }
+			});
+			
+			this.components[component.id] = component;
+			this.select(component.id);
+		}
+		catch (err) {
+			alert ("Error occured trying to save component: \n" + err);
 		}
 	}
 })();

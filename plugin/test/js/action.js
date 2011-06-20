@@ -39,6 +39,25 @@ var Action = function(id, name, compId, description, dependencies, startCmds, st
 		return this.stopCommands.length > 0;
 	}
 	
-	// update last Change
-	this.updateLastChange();
+	this.createJSONObject = function() {
+		return {
+			'id':			this.id,
+			'name':			this.name,
+			'compId':		this.compId,
+			'description':	this.description,
+			'dependencies':	this.dependencies,
+			'startCommands':this.startCommands,
+			'stopCommands':	this.stopCommands
+		};
+	}
+	this.createJSONString = function()
+	{
+		return JSON.stringify(this.createJSONObject());
+	}
+	
+	// clone
+	this.clone = function() {
+		// slice(0) creates a copy of the array
+		return new Action(this.id, this.name, this.compId, this.description, this.dependencies.slice(0), this.startCommands.slice(0), this.stopCommands.slice(0));
+	}
 }

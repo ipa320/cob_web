@@ -5,7 +5,7 @@ class User():
 	def __init__(self, name):
 		# important: always process the name in lowercase
 		self.name = name.lower()
-		self._items = {}
+		self._components = {}
 
 	def __str__(self):
 		return 'User [name=%s]' % self.name
@@ -21,7 +21,7 @@ class User():
 		if not isinstance(comp, Component):
 			raise ValueError('Comp must be an instance of Component')
 
-		self._items[comp.id] = comp
+		self._components[comp.id] = comp
 
 
 	# key must be the component's id
@@ -30,24 +30,31 @@ class User():
 		if not isinstance(key, int):
 			raise ValueError('key must be an integer')
 
-		if not key in self._items:
+		if not key in self._components:
 			return None
 
-		return self._items[key]
+		return self._components[key]
+	
+	# stub
+	def getComponent(self, key):
+		return self.get(key)
+		
+	def hasComponent(self, compId):
+		return compId in self._components
 
 
 	# return all ids i.e. keys() of components
 	def getIDs(self):
-		return self._items.keys()
+		return self._components.keys()
 
 
 	# used to iterate
 	def iteritems(self):
-		return self._items.iteritems()
+		return self._components.iteritems()
 
 
 	# get all items
 	def components(self):
-		return self._items.values()
+		return self._components.values()
 
 
