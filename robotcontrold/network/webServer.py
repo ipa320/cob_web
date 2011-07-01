@@ -396,8 +396,8 @@ class MyHandler(BaseHTTPRequestHandler):
 					if not 'json' in options:
 						raise ArgumentRequestError('json parameter not received. Received options: %s' % str(options), self.path)
 						
-					serverThread.storeComponent(json.loads(options['json']), requestUser)
-					output = "OK"
+					idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+					output = json.dumps(idMap)
 					
 
 				else:

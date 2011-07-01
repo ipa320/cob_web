@@ -4,14 +4,16 @@ from network.screenReader import ScreenReader
 
 
 class Action():
-	def __init__(self, rId, name, _startCommands, _stopCommands, dependencyIds, description, log):
+	def __init__(self, rId, name, startCommands, stopCommands, dependencyIds, description, log):
 		self.id = int(rId)
 		self.name = name
 		self.log = log
 		
 		# dicts with id as key
-		self._startCommands = _startCommands
-		self._stopCommands = _stopCommands
+		if not isinstance(startCommands, dict) or not isinstance(stopCommands, dict):
+			raise ValueError('Start and Stop Commands must be dicts')
+		self._startCommands = startCommands
+		self._stopCommands = stopCommands
 		
 		self.dependencyIds = dependencyIds
 		self.description = description;
@@ -41,6 +43,12 @@ class Action():
 		
 	def canStop(self):
 		return len(self._stopCommands)>0
+		
+	def addStartCommand(self, cmd):
+		self._startCommands[cmd.id] = cmd
+	
+	def addStopCommand(self, cmd):
+		self._stopCommands[cmd.id] = cmd
 
 	def screenReaderStopped(self, reader):
 		if not self.component:
@@ -206,6 +214,9 @@ class Action():
 			return self._stopCommands[cmdId]
 		else:
 			return None
+			
+	def getCommandIds(self):
+		return self._startCommands.keys() + self._stopCommands.keys()
 			
 	def getStartCommands(self):
 		return self._startCommands.values()

@@ -88,10 +88,10 @@ class Host(Thread):
 				self.ssh.connect()
 			except socket.timeout as e:
 				self.log.debug('Connection to %s timed out' % str(self))
-				return
+				return False
 			except Exception as e:
 				self.log.debug('Could not connect to %s' % str(self))
-				return
+				return False
 
 			try:
 #				self.ctrlChannel = self.invokeShell()
@@ -103,11 +103,13 @@ class Host(Thread):
 #				self.screenReader.start()
 				self.log.info('Connected to %s' % str(self))
 				EventHistory.hostOnline(self)
+				return True
 
 			except Exception as e:
 				self.log.exception('Could open control. Clossing %s' % str(self))
 				self.screenReader = None
 				self.disconnect()
+				return False
 
 
 
@@ -135,7 +137,9 @@ class Host(Thread):
 	def run(self):
 		while self.alive:
 			if not self.isConnected():
-				self.connect()
+				if not self.connect():
+					# wait a certain amount of time before trying to reconnect
+					time.sleep(5)
 			else:
 				try:
 					delay = ping.do_one(self.hostname, 2)

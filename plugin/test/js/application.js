@@ -25,6 +25,12 @@ var application = new (function() {
 	// options defined for the next redraw
 	this.refreshOptions = []
 	
+	this._nextTempId=-1;
+	
+	this.getUniqueTemporaryId = function() {
+		return this._nextTempId--;
+	}
+	
 	
 	
 
@@ -784,16 +790,61 @@ var application = new (function() {
 		try {
 			$.ajax({
 				url: this.urlPrefix + '/store/?json=' + component.createJSONString(),
-				dataType: 'text',
-				success: function(data) { console.log('success'); console.log(data); },
-				error:   function(data) { console.log('failure'); console.log(data); }
+				success: function(data) { application.saveComponentSuccess(data, component) },
+				error:   application.saveComponentError
 			});
-			
-			this.components[component.id] = component;
-			this.select(component.id);
 		}
 		catch (err) {
 			alert ("Error occured trying to save component: \n" + err);
 		}
+	}
+	
+	this.saveComponentSuccess = function(idMap, component)
+	{
+		try {
+			if (component.id < 0)
+				component.id = idMap[component.id];
+			
+			// remap the actions
+			newActions = {}
+			for (id in component.actions) {
+				id = parseInt(id);
+				var action = component.actions[id];
+				// ignore empty actions
+				if (action.name.trim()) {
+					if (id < 0)
+						newActions[idMap[id]] = action;
+					else
+						newActions[id] = action;
+				}
+					
+				// remap the shellCommands
+				for (i in action.startCommands) {
+					id = action.startCommands[i].id;
+					if (!action.startCommands[i].command.trim())
+						action.startCommands.splice(i, 1);
+					else if (id < 0)
+						action.startCommands[i].id = idMap[id];
+				}
+				for (i in action.stopCommands) {
+					id = action.stopCommands[i].id;
+					if (!action.stopCommands[i].command.trim())
+						action.stopCommands.splice(i, 1);
+					else if (id < 0)
+						action.stopCommands[i].id = idMap[id];
+				}
+			}
+			component.actions = newActions;
+					
+			application.components[component.id] = component;
+			application.select(component.id);
+		}
+		catch (err) {
+			alert("Error occured updating the altered component: \n" + err);
+		}
+	}
+		
+	this.saveComponentError = function(data) {
+		alert('Component could not be altered [' + data.status + '; ' + data.responseText + ']');
 	}
 })();

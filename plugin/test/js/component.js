@@ -9,6 +9,7 @@ var Component = function(id, hostId, name, parentId, actions) {
 	// make sure it's null if not defined
 	this.parentId = parentId || null;
 
+	// associative array with action id as key
 	this.actions = actions;
 
 	this.parent = null;
@@ -65,7 +66,7 @@ var Component = function(id, hostId, name, parentId, actions) {
 	}
 	this.createJSONString = function()
 	{
-		alert(JSON.stringify(this.createJSONObject()));
+//		alert(JSON.stringify(this.createJSONObject()));
 		return JSON.stringify(this.createJSONObject());
 	}
 	

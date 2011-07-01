@@ -79,7 +79,11 @@ td.ph_action_edit-dep a.notRunning {
 .shellStartCommandsEditView {
 	margin-bottom: 80px;
 }
-.editShellCommand div {
+.editShellCommand div.buttons {
+	float: left;
+	margin: 15px 15px 0 0;
+}
+.editShellCommand div.options {
 	float: right;
 	text-align: center;
 	font-weight: bold;
@@ -89,6 +93,6 @@ td.ph_action_edit-dep a.notRunning {
 	margin-left: 10px;
 }
 .editShellCommand textarea {
-	width: 90%;
+	width: 80%;
 	height: 60px;
 }

@@ -492,6 +492,7 @@ class ServerThread(threading.Thread):
 			stopCommands	= action['stopCommands']
 			# compId field is ignored as the action must be part of this component
 			
+			
 			# if an actionId is specified, it must be valid
 			if aId > 0 and not component.hasAction(aId):
 				raise ValueError('The given actionId is not a valid id for the component [compId=%d, actionId=%d]' % (component.id, aId))
@@ -510,16 +511,32 @@ class ServerThread(threading.Thread):
 				self.cursor.execute(sql, [action.name, action.description, None, action.id])
 				
 
-			# parse the startCommands
-			for cmd in startCommands:
+			# parse the commands
+			for cmd in startCommands+stopCommands:
+				isStartCommand = cmd in startCommands
+				
  				cId			= int(cmd['id']) # new start commands have a negative index
 				commandStr	= cmd['command']
 				blocking	= cmd['blocking']
 				
 				# create new
-				if cId < 0:
-					# idMap ...
-					# add it to the action
+				if not commandStr.strip():
+					# only delete actual commands, temporary commands are not stored yet
+					if cId > 0:
+						sql = "DELETE FROM `shellCommands` WHERE `id`=%s"
+						self.cursor.execute(sql, [cId])
+				
+				elif cId < 0:
+					sql = 'INSERT INTO `shellCommands` (`command`, `action_id`, `blocking`, `type`) VALUES(%s, %s, %s, %s)'
+					self.cursor.execute(sql, [commandStr, action.id, 'Y' if blocking else 'N', 'start' if isStartCommand else 'stop'])
+					
+					autoId = self.cursor.lastrowid
+					idMap[cId] = autoId
+					
+					if isStartCommand:
+						action.addStartCommand(ShellCommand(autoId, commandStr, blocking))
+					else:
+						action.addStopCommand(ShellCommand(autoId, commandStr, blocking))
 					pass
 				
 				# update existing
@@ -533,6 +550,8 @@ class ServerThread(threading.Thread):
 					
 					sql = "UPDATE `shellCommands` SET `command`=%s, `blocking`=%s WHERE `id`=%s"
 					self.cursor.execute(sql, [commandStr, 'Y' if blocking else 'N', cId])
+			
+			
 			
 
 
@@ -565,11 +584,16 @@ class ServerThread(threading.Thread):
 				if not user.hasComponent(compId) or not user.get(compId).hasAction(actionId):
 					raise ValueError('Invalid Dependency specified [compId=%d, actionId=%d]' % (compId, actionId))
 				
-				depString += actionId + ';'
+				depString += str(actionId) + ';'
 				depArray.append(dep)
 			
 			# remove trailing ;
-			depString.strip(';')
-
+			depString = depString.strip(';') or None
+			
 			
 			# Now that we've checked the dependencies, udpate the database again
+			sql = 'UPDATE `componentActions` SET `dependencies`=%s WHERE `id`=%s'
+			self.cursor.execute(sql, [depString, action['id']])
+			
+		return idMap
+			
