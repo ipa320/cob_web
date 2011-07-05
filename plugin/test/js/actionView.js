@@ -13,7 +13,7 @@ var actionViewCode = '<h3 class="actionView-name"><a href="#" class="ph_action-n
 							<a href="#" class="refreshLog-button">Refresh</a>\
 						</div>\
 					</div>\
-					<div class="actionView-text"><table>\
+					<div class="actionView-text"><table cellspacing="0" cellpadding="0">\
 						<tr class="even"><th>name:</td><td class="ph_action-name">PH_name</td></tr>\
 						<tr class="even"><th>Description:</td><td class="ph_action-desc"><i>Keine Beschreibung angegeben</i></div>\</td></tr>\
 						<tr class="even"><th>Dependencies:</th><td class="ph_action-dep"></td></tr> \
@@ -32,7 +32,7 @@ $.fn.renderActionView = function(action, components, options) {
 		this.html(actionViewCode);
 
 		// Accordion
-		active = styleDataManager.isActionTabClosed(action.id) ? false : null;
+/*		active = styleDataManager.isActionTabClosed(action.id) ? false : null;
 		this.accordion({ header: "h3", collapsible: true, active: active });
 		this.bind('accordionchange', function(event, ui) {
 			styleDataManager.toggleActionTab(action.id);
@@ -49,16 +49,12 @@ $.fn.renderActionView = function(action, components, options) {
 		this.find(".kill-button").button({ icons: {primary: "ui-icon-notice"} });
 		this.find(".showLog-button").button({ icons: {primary: "ui-icon-document-b" } });
 		this.find(".refreshLog-button").button({ icons: {primary: "ui-icon-refresh" } });
-			
+	*/		
 		// Set name and description. These values don't change
 		this.find(".ph_action-name").text(action.name);
 		
 		if (action.description)
 			this.find(".ph_action-desc").html(action.description);
-			
-		this.find('.start-button').click(function() { application.startAction(action.id, action.compId); return false; });
-		this.find('.stop-button').click(function() { application.stopAction(action.id, action.compId); return false; });
-		this.find('.kill-button').click(function() { application.killAction(action.id, action.compId); return false; });
 	}
 
 	this.updateActionView(action, components, options, true);

@@ -34,11 +34,11 @@ function renderMenuElements(parentId, level, components, options, i, size)
 
 			navButtons.append('<div class="level-' + level + '"><input type="checkbox" ' + checked + ' onchange="javascript:application.select(' + id + ')" class="nav-button" name="nav" id="nav-' + id + '" /><label for="nav-' + id + '" class="' + btnClass + '">' + components[id].name + '</label></div>');
 			if (component.allActionsRunning())
-				icon = "ui-icon-check";
+				icon = "ui-icon-menu-component-on";
 			else if (component.actionsRunning())
-				icon = "ui-icon-gear";
+				icon = "ui-icon-menu-component-partlyOn";
 			else
-				icon = "ui-icon-power";
+				icon = "ui-icon-menu-component-off";
 			button = $("#nav-" + id);
 			button.button({ 'icons': {'primary': icon } }); // ui-icon-check // ui-icon-close
 			

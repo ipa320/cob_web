@@ -15,6 +15,22 @@ var Component = function(id, hostId, name, parentId, actions) {
 	this.parent = null;
 	this.children = {};
 	
+	// Every componetn must have a main action that has the same name as the
+	// component
+	this._mainAction = null;
+	for (i in this.actions)
+		if (this.actions[i].name == this.name) {
+			this._mainAction = this.actions[i];
+			break;
+		}
+	if (this._mainAction === null)
+		throw new Error("The Component has no main Component. Name: " + this.name);
+	
+	
+	
+	this.getMainAction = function() {
+		return this._mainAction;
+	}
 
 
 	this.hasAction = function(actionId) {
