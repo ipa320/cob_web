@@ -1,4 +1,4 @@
-var componentViewCode = '\<a href="javascript:application.editComponent()" class="edit-button">Edit</a><h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView">\
+var componentViewCode = '\<h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView">\
 	<div class="componentView">\
 		<div class="componentView-topBar componentView-name"><span class="ui-icon ui-icon-triangle-1-s" />PH_COMP-NAME</div>\
 		<div class="componentView-content" >\
@@ -39,23 +39,11 @@ $.fn.renderComponentView = function(component, components, options) {
 	this.find(".edit-button").button({ icons: {primary: 'ui-icon-scissors'} })
 
 
-	// Create buttonsets
-//	this.find(".start-buttons").buttonset();
-//	this.find(".stop-buttons").buttonset();
+	// Create log buttonset
 	this.find(".log-buttons").buttonset();
-
-	// Create buttons
-//	this.find(".start-button").button({ icons: {primary: "ui-icon-play"} });
-//	this.find(".stop-button").button({ icons: {primary: "ui-icon-stop" } });
-//	this.find(".kill-button").button({ icons: {primary: "ui-icon-notice"} });
 	this.find(".showLog-button").button({ icons: {primary: "ui-icon-document-b" } });
 	this.find(".refreshLog-button").button({ icons: {primary: "ui-icon-refresh" } });
 	
-	// set the buttons actions
-	this.find('.start-button').click(function() { application.startAction(action.id, action.compId); return false; });
-	this.find('.stop-button').click(function() { application.stopAction(action.id, action.compId); return false; });
-	this.find('.kill-button').click(function() { application.killAction(action.id, action.compId); return false; });
-
 
 	// render the buttons
 	var actionsButtons = this.find(".actions-buttons");
@@ -221,5 +209,11 @@ function createActionButtons(action, appendName)
 	stopButton.button({ icons: {primary: "ui-icon-stop" } });
 	killButton.button({ icons: {primary: "ui-icon-notice"} });
 	
+	
+	// set the buttons' actions
+	startButton.click(function() { application.startAction(action.id, action.compId); return false; });
+	stopButton.click(function() { application.stopAction(action.id, action.compId); return false; });
+	killButton.click(function() { application.killAction(action.id, action.compId); return false; });
+		
 	return div;
 }

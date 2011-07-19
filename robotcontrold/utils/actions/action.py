@@ -4,7 +4,7 @@ from network.screenReader import ScreenReader
 
 
 class Action():
-	def __init__(self, rId, name, startCommands, stopCommands, dependencyIds, description, log):
+	def __init__(self, rId, name, startCommands, stopCommands, description, log):
 		self.id = int(rId)
 		self.name = name
 		self.log = log
@@ -12,11 +12,12 @@ class Action():
 		# dicts with id as key
 		if not isinstance(startCommands, dict) or not isinstance(stopCommands, dict):
 			raise ValueError('Start and Stop Commands must be dicts')
+		
+		# dicts key id <-> shellCommand
 		self._startCommands = startCommands
 		self._stopCommands = stopCommands
 		
-		self.dependencyIds = dependencyIds
-		self.description = description;
+		self.description = description		or ""
 
 		self.component = None
 		self.screenReaders = []
@@ -31,7 +32,7 @@ class Action():
 
 	def setComponent(self, component):
 		self.component = component
-
+		
 	def isAlive(self):
 		for reader in self.screenReaders:
 			if reader and reader.isAlive():
@@ -69,7 +70,7 @@ class Action():
 			self.log.info('Starting Action "%s". "%d" Commands found' % (self.name, len(self._startCommands)))
 
 			if len(self.dependencies):
-				self.log.info('Action depends on: %s' % list('%s>%s' % (item.component.name, item.name) for item in self.dependencies))
+				self.log.info('Action depends on: %s' % list('%s>%s' % (item.component.getName(), item.name) for item in self.dependencies))
 				for dep in self.dependencies:
 					dep.start()
 
@@ -225,4 +226,5 @@ class Action():
 	
 	
 	def appendDependency(self, action):
-		self.dependencies.append(action)
+		if not action in self.dependencies:
+			self.dependencies.append(action)

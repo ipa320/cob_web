@@ -2,10 +2,10 @@ var Action = function(id, name, compId, description, dependencies, startCmds, st
 	this.id = id;
 	this.name = name;
 	this.compId = compId;
-	this.description = description;
-	this.dependencies = dependencies;
-	this.startCommands = startCmds;
-	this.stopCommands = stopCmds;
+	this.description = description	 || "";
+	this.dependencies = dependencies || [];
+	this.startCommands = startCmds   || [];
+	this.stopCommands = stopCmds	 || [];
 	
 	
 	this._active = false;

@@ -4,11 +4,11 @@ from myExceptions.databaseExceptions import CorruptDatabaseError
 
 class Component():
 	
-	def __init__(self, rId, username, host, name, parentId, actions, log):
+	def __init__(self, rId, username, host, mainAction, parentId, actions, log):
 		self.id = int(rId)
 		self.username = username
 		self.host = host
-		self.name = name
+		self.mainAction = mainAction
 
 		# parentId might be None for groups
 		self.parentId = int(parentId) if parentId else None
@@ -31,11 +31,15 @@ class Component():
 
 		self.children = []
 		self.parent = None
+		
+		
+	def getName(self):
+		return self.mainAction.name
 
 
 
 	def __str__(self):
-		return "Component [id=%d, username=%s, host_id=%s, name=%s, parent_id=%s]" % (self.id, self.username, str(self.host.id) if self.host else 'None', self.name, str(self.parentId))
+		return "Component [id=%d, username=%s, host_id=%s, name=%s, parent_id=%s]" % (self.id, self.username, str(self.host.id) if self.host else 'None', self.getName(), str(self.parentId))
 
 
 	# Component.stop should be called anyway, this function is just to make sure we 

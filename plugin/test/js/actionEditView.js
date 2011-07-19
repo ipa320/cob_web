@@ -148,17 +148,23 @@ function dependencySelectCode(components, dep)
 	return select;
 }
 
-var shellCommandEditViewCode = '<div class="buttons"><a href="#" class="delete-button">-</a></div><div class="options">Join<br />Thread<br /><input type="checkbox" class="ph_shell_command_edit_blocking" /></div><textarea class="ph_edit_shell_command-command">PH_EDIT_SHELL_COMMAND-COMMAND</textarea>';
+var shellCommandEditViewCode = '<div class="buttons"><a href="#" class="delete-button">-</a></div><div class="options">Hide<br />Log<br /><input type="checkbox" class="ph_shell_command_hide_log" /></div><div class="options">Join<br />Thread<br /><input type="checkbox" class="ph_shell_command_edit_blocking" /></div><textarea class="ph_edit_shell_command-command">PH_EDIT_SHELL_COMMAND-COMMAND</textarea>';
 $.fn.renderShellCommandEditView = function(command)
 {
 	this.addClass('editShellCommand');
 	this.html(shellCommandEditViewCode);
 	
-	inputBlocking = this.find("input.ph_shell_command_edit_blocking");
+	// init the blocking checkbox
+	var inputBlocking = this.find("input.ph_shell_command_edit_blocking");
 	inputBlocking.focusout(function() { command.blocking = this.checked === true; } );
-	
 	if (command.blocking)
 		inputBlocking.attr("checked", "checked");
+		
+	// init the hidelog checkbox
+	var inputHideLog = this.find("input.ph_shell_command_hide_log")
+	inputHideLog.focusout(function() { command.hideLog = this.checked === true; } );
+	if (command.hideLog)
+		inputHideLog.attr("checked", "checked");
 	
 	inputCommand = this.find('textarea.ph_edit_shell_command-command');
 	inputCommand.val(command.command);

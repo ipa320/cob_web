@@ -182,7 +182,7 @@ class MyHandler(BaseHTTPRequestHandler):
 							
 					
 				# Request host / component data
-				elif action == 'data':					
+				elif action == 'data':
 					# data/(host|comp)
 					if len(args) < 2:
 						raise ArgumentRequestError('Wrong argument count for "data". %s found, at least 2 Required.' % str(args), self.path)
@@ -196,7 +196,7 @@ class MyHandler(BaseHTTPRequestHandler):
 						# remove the trailing comma
 						output = output.strip(',') + '}'
 					
-					
+					#TODO: use json dump a la json.dump(comp.webInformation)!
 					elif args[1] == 'comp':						
 						output = '{'
 						for comp in requestUser.components():
@@ -212,13 +212,13 @@ class MyHandler(BaseHTTPRequestHandler):
 								# list startCmds
 								startCmds = '['
 								for cmd in action.getStartCommands():
-									startCmds += '{"id": %d, "command": "%s", "blocking": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower())
+									startCmds += '{"id": %d, "command": "%s", "blocking": %s, "hideLog": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower(), str(cmd.hideLog).lower())
 								startCmds = startCmds.strip(',') + ']'
 								
 								# list stopCmds
 								stopCmds = '['
 								for cmd in action.getStopCommands():
-									stopCmds += '{"id": %d, "command": "%s", "blocking": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower())
+									stopCmds += '{"id": %d, "command": "%s", "blocking": %s, "hideLog": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower(), str(cmd.hideLog).lower())
 								stopCmds = stopCmds.strip(',') + ']'
 
 								
@@ -230,7 +230,7 @@ class MyHandler(BaseHTTPRequestHandler):
 							# hostId and parentId might be None
 							hostId   = '"' + str(comp.host.id)  + '"' if comp.host else 'null'
 							parentId = '"' + str(comp.parentId) + '"' if comp.parentId else 'null'
-							output += '\n"%d": {\n\t"host": %s, \n\t"name": "%s", \n\t"parentId": %s, \n\t"actions": %s\n},' % (comp.id, hostId, comp.name, parentId, actions)
+							output += '\n"%d": {\n\t"host": %s, \n\t"name": "%s", \n\t"parentId": %s, \n\t"actions": %s\n},' % (comp.id, hostId, comp.getName(), parentId, actions)
 						# remove the trailing comma
 						output = output.strip(',') + '}'
 						
@@ -250,7 +250,7 @@ class MyHandler(BaseHTTPRequestHandler):
 							
 						timestamp = int(args[2])
 						data = EventHistory.getEventData(timestamp)
-						
+						#TODO: use json dump
 						output = '{"timestamp": "%d", "events": [' % int(time.time())
 						for item in data:
 							if item['type'] == EventHistory.ACTION_STATUS_EVENT:
@@ -283,13 +283,12 @@ class MyHandler(BaseHTTPRequestHandler):
 					command = args[3]
 
 					comp = activeUser.get(compId)
-					action = comp.getAction(actionId)
-
 					if not comp:
 						raise ArgumentRequestError('Component with id "%d" not found' % compId, self.path)
 
+					action = comp.getAction(actionId)
 					if not action:
-						raise ArgumentRequestError('Action "%d" for component "%d, %s" not found.' % (actionId, compId, comp.name), self.path)
+						raise ArgumentRequestError('Action "%d" for component "%d, %s" not found.' % (actionId, compId, comp.getName()), self.path)
 
 
 					if command == 'start':
@@ -319,6 +318,7 @@ class MyHandler(BaseHTTPRequestHandler):
 						for id in data.keys():
 							reservation = data[id]
 							if reservation:
+								#TODO: use json dump
 								title = '%s %s - %s' % (reservation['user'].name, reservation['start'].strftime('%H:%M'), reservation['end'].strftime('%H:%M'))
 								owner = 'true' if reservation['user'] == requestUser else 'false'
 								start = reservation['start'].strftime('%Y-%m-%d-%H-%M')

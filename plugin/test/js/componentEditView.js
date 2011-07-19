@@ -1,4 +1,4 @@
-var componentEditViewCode = '<a href="#" class="edit-finished-button">Done</a><h1>Component "<input type="text" class="ph_edit_comp-name"></span>"</h1><div class="actionEditsView"></div>';
+var componentEditViewCode = '<a href="#" class="edit-finished-button">Done</a><h1>Component "<span class="ph_edit_comp-name"></span>"</h1><div class="actionEditsView"></div>';
 
 $.fn.renderComponentEditView = function(component, components, options) {
 	if (!(component instanceof Component))
@@ -17,9 +17,8 @@ $.fn.renderComponentEditView = function(component, components, options) {
 	}
 
 	// set the values that stay forever
-	inputName = this.find("input.ph_edit_comp-name");
-	inputName.val(component.name);
-	inputName.focusout(function() { component.name = this.value });
+	name = this.find(".ph_edit_comp-name");
+	name.text(component.name);
 	
 	// create the edit-button
 	but = this.find(".edit-finished-button");

@@ -32,8 +32,6 @@ var application = new (function() {
 	}
 	
 	
-	
-
 	this.init = function(urlPrefix, username, views, handler) {
 		// urlPrefix without trailing /
 		this.urlPrefix = urlPrefix;
@@ -186,6 +184,7 @@ var application = new (function() {
 
 	}
 	this.hostDataError = function(data, handler) {
+		console.log(data);
 		handler.error('Host Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 
@@ -315,6 +314,7 @@ var application = new (function() {
 		}
 	}
 	this.eventHistoryDataError = function(data, handler) {
+		console.log(data);
 		handler.error('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 	
@@ -555,8 +555,24 @@ var application = new (function() {
 			$.ajax({
 				dataType: 'text',
 				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/start',
-				success: function(data) { application.startActionSuccess(data) },
-				error:   function(data) { application.startActionError(data) }
+				success: function(data) {
+					application.startActionSuccess(data);
+					
+					// if func is a function, it's used for the success
+					if (typeof(func) === 'function')
+						func(data);
+					
+					// if it's an object, check for a success function
+					if(typeof(func) === 'object' && typeof(func.success) === 'function')
+						func.success(data);
+				},
+				error:   function(data) {
+					application.startActionError(data);
+					
+					// check for an error function in the func object
+					if(typeof(func) === 'object' && typeof(func.success) === 'function')
+						func.success(data);
+				}
 			});
 		}
 		catch (err) {
@@ -573,8 +589,8 @@ var application = new (function() {
 		alert('Component could not be started [' + data.status + '; ' + data.responseText + ']');
 	}
 
-		
-	this.stopAction = function(actionId, compId) {
+	this.stopAction = function(actionId, compId, func)
+	{
 		try {
 			component = this.getComponent(compId);
 			action = component.getAction(actionId);
@@ -586,8 +602,24 @@ var application = new (function() {
 			$.ajax({
 				dataType: 'text',
 				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/stop',
-				success: function(data) { application.stopActionSuccess(data); },
-				error:   function(data) { application.stopActionSuccess(data); }
+				success: function(data) {
+					application.stopActionSuccess(data);
+					
+					// if func is a function, it's used for the success
+					if (typeof(func) === 'function')
+						func(data);
+					
+					// if it's an object, check for a success function
+					if(typeof(func) === 'object' && typeof(func.success) === 'function')
+						func.success(data);
+				},
+				error:   function(data) {
+					application.stopActionSuccess(data);
+					
+					// check for an error function in the func object
+					if(typeof(func) === 'object' && typeof(func.success) === 'function')
+						func.success(data);
+				}
 			});
 		}
 		catch (err) {
@@ -604,7 +636,7 @@ var application = new (function() {
 		alert('Component could not be stopped [' + data.status + '; ' + data.responseText + ']');
 	}
 	
-	this.killAction = function(actionId, compId) {
+	this.killAction = function(actionId, compId, func) {
 		try {
 			component = this.getComponent(compId);
 			action = component.getAction(actionId);
@@ -616,8 +648,24 @@ var application = new (function() {
 			$.ajax({
 				dataType: 'text',
 				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/kill',
-				success: function(data) { application.killActionSuccess(data); },
-				error:   function(data) { application.killActionError(data); }
+				success: function(data) {
+					application.killActionSuccess(data);
+					
+					// if func is a function, it's used for the success
+					if (typeof(func) === 'function')
+						func(data);
+					
+					// if it's an object, check for a success function
+					if(typeof(func) === 'object' && typeof(func.success) === 'function')
+						func.success(data);
+				},
+				error:   function(data) {
+					application.killActionError(data);
+					
+					// check for an error function in the func object
+					if(typeof(func) === 'object' && typeof(func.success) === 'function')
+						func.success(data);
+				}
 			});
 		}
 		catch (err) {
@@ -771,17 +819,51 @@ var application = new (function() {
 			if (screenManager.isLockedLocation())
 				return;
 				
+			// if no component is selected, simply return
 			if (!this.selectedComponent)
-				throw new Error("Selected Component is not defined");
-				
-			// clone the current component, to avoid changes being made to the actual component
-			this.componentView.renderComponentEditView(this.selectedComponent.clone(), this.components);
+				return;
+			
+			// if the current component is running, ask the user to stop it first
+			if (this.selectedComponent.actionsRunning()) 
+				alert('The current component is still running. Please stop it first');
+			
+			else {
+				// clone the current component, to avoid changes being made to the actual component
+				this.componentView.renderComponentEditView(this.selectedComponent.clone(), this.components);
 
-			// no more component selected
-			this.selectedComponent = null;
+				// no more component selected
+				this.selectedComponent = null;
+			}
 		}	
 		catch (err) {
 			alert ("Error occured trying to edit component: \n" + err);
+			console.log(err);
+		}
+	}
+	
+	this.createComponent = function() 
+	{
+		try {
+			// if the location is locked, do not allow to change location
+			if (screenManager.isLockedLocation())
+				return;
+				
+			// if no component is selected, simply return
+			if (!this.selectedComponent)
+				return;
+			
+			var compId = this.getUniqueTemporaryId();
+			var actionId = this.getUniqueTemporaryId();
+			var actions = {actionId: new Action(actionId, "New Component")};
+			var comp = new Component(compId, null, "New Component", 1/*null*/, actions);
+			this.componentView.renderComponentEditView(comp, this.components);
+
+			// no more component selected
+			this.selectedComponent = null;
+		}
+		catch (err) {
+			alert ("Error occured trying to create a new component: \n" + err);
+			console.log(err);
 		}
 	}
 	
@@ -840,11 +922,11 @@ var application = new (function() {
 			application.select(component.id);
 		}
 		catch (err) {
-			alert("Error occured updating the altered component: \n" + err);
+			alert("Error occured updating the component: \n" + err);
 		}
 	}
 		
 	this.saveComponentError = function(data) {
-		alert('Component could not be altered [' + data.status + '; ' + data.responseText + ']');
+		alert('Component could not be updated [' + data.status + '; ' + data.responseText + ']');
 	}
 })();

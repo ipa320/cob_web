@@ -27,6 +27,8 @@ function renderMenuElements(parentId, level, components, options, i, size)
 			btnClass = 'btn-middle'
 			if (i == 0) btnClass = 'btn-top';
 			if (i == size - 1) btnClass = 'btn-bottom'
+			console.log(i + " - " + size  + " - " + (i==size-1));
+			i++;
 
 			checked = '';
 			if (options.selected instanceof Object && options.selected.id === id)
@@ -46,12 +48,12 @@ function renderMenuElements(parentId, level, components, options, i, size)
 			if (screenManager.isLockedLocation()) {
 				button.button({ 'disabled': true });
 			}
-
-			i++;
+			
 
 			// render all children
-			renderMenuElements(id, level+1, components, options, i, size);
+			i = renderMenuElements(id, level+1, components, options, i, size);
+			
 		}
 	}
-	return true;
+	return i;
 }

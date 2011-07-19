@@ -10,7 +10,7 @@ var Component = function(id, hostId, name, parentId, actions) {
 	this.parentId = parentId || null;
 
 	// associative array with action id as key
-	this.actions = actions;
+	this.actions = actions || {};
 
 	this.parent = null;
 	this.children = {};
@@ -18,11 +18,12 @@ var Component = function(id, hostId, name, parentId, actions) {
 	// Every componetn must have a main action that has the same name as the
 	// component
 	this._mainAction = null;
-	for (i in this.actions)
+	for (i in this.actions) 
 		if (this.actions[i].name == this.name) {
 			this._mainAction = this.actions[i];
 			break;
 		}
+	
 	if (this._mainAction === null)
 		throw new Error("The Component has no main Component. Name: " + this.name);
 	
@@ -70,7 +71,6 @@ var Component = function(id, hostId, name, parentId, actions) {
 		var json_object = {
 			'id': 		this.id,
 			'hostId':	this.hostId,
-			'name':		this.name,
 			'parentId':	this.parentId,
 			'actions':	[]
 		};
