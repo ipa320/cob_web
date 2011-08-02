@@ -189,52 +189,21 @@ class MyHandler(BaseHTTPRequestHandler):
 
 					
 					if args[1] == 'host':
-						hosts = serverThread.hosts
-						output = '{'
-						for host in hosts.values():
-							output += '"%d": {"hostname": "%s", "user": "%s", "port": "%s"},' % (host.id, host.hostname, host.user, host.port)
-						# remove the trailing comma
-						output = output.strip(',') + '}'
-					
-					#TODO: use json dump a la json.dump(comp.webInformation)!
-					elif args[1] == 'comp':						
-						output = '{'
-						for comp in requestUser.components():
-							# first create the actions string for this comp
-							actions = '{'
-							for action in comp.actions.values():
-								# list dependencies
-								deps = '['
-								for dep in action.dependencies:
-									deps += '{"compId": %d, "actionId": %d},' % (dep.component.id, dep.id)
-								deps = deps.strip(',') + ']'
-								
-								# list startCmds
-								startCmds = '['
-								for cmd in action.getStartCommands():
-									startCmds += '{"id": %d, "command": "%s", "blocking": %s, "hideLog": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower(), str(cmd.hideLog).lower())
-								startCmds = startCmds.strip(',') + ']'
-								
-								# list stopCmds
-								stopCmds = '['
-								for cmd in action.getStopCommands():
-									stopCmds += '{"id": %d, "command": "%s", "blocking": %s, "hideLog": %s},' % (cmd.id, repr(cmd.command)[1:-1].replace("\"", "\\\""), str(cmd.blocking).lower(), str(cmd.hideLog).lower())
-								stopCmds = stopCmds.strip(',') + ']'
-
-								
-								description = '"' + action.description.replace('"', '\\"') + '"' if action.description else 'null';
-								actions += '\n\t\t"%d": {\n\t\t\t"name": "%s", \n\t\t\t"desc": %s, \n\t\t\t"dependencies":%s, \n\t\t\t"startCmds":%s, \n\t\t\t"stopCmds":%s\n\t\t},' % (action.id, action.name, description, deps, startCmds, stopCmds)
-							actions = actions.strip(',') + '\n\t}';
-							
-							
-							# hostId and parentId might be None
-							hostId   = '"' + str(comp.host.id)  + '"' if comp.host else 'null'
-							parentId = '"' + str(comp.parentId) + '"' if comp.parentId else 'null'
-							output += '\n"%d": {\n\t"host": %s, \n\t"name": "%s", \n\t"parentId": %s, \n\t"actions": %s\n},' % (comp.id, hostId, comp.getName(), parentId, actions)
-						# remove the trailing comma
-						output = output.strip(',') + '}'
+						JSONObj = {}
+						
+						for host in serverThread.hosts.values():
+							JSONObj[host.id] = host.createJSONObj()
+						output = json.dumps(JSONObj)
 						
 					
+					#TODO: use json dump a la json.dump(comp.webInformation)!
+					elif args[1] == 'comp':
+						JSONObj = {}
+
+						for comp in requestUser.components():
+							JSONObj[comp.id] = comp.createJSONObj();
+						output = json.dumps(JSONObj)	
+						
 	
 					# Events					
 					elif args[1] == 'eventHistory':
@@ -254,9 +223,9 @@ class MyHandler(BaseHTTPRequestHandler):
 						output = '{"timestamp": "%d", "events": [' % int(time.time())
 						for item in data:
 							if item['type'] == EventHistory.ACTION_STATUS_EVENT:
-								output += '\n\t{"type": "%d", "id": "%d", "comp": "%d", "status": "%d", "ts": "%d"},' % (item['type'], item['id'], item['comp'], item['status'], item['stamp'])
+								output += '\n\t{"type": %d, "id": %d, "comp": %d, "status": %d, "ts": %d},' % (item['type'], item['id'], item['comp'], item['status'], item['stamp'])
 							if item['type'] == EventHistory.HOST_EVENT:
-								output += '\n\t{"type": "%d", "id": "%d", "status": "%d", "ts": "%d"},' % (item['type'], item['id'], item['status'], item['stamp'])
+								output += '\n\t{"type": %d, "id": %d, "status": %d, "ts": %d},' % (item['type'], item['id'], item['status'], item['stamp'])
 						output = output.strip(',') + '\n]}'
 						
 						

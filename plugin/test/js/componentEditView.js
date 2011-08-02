@@ -10,10 +10,13 @@ $.fn.renderComponentEditView = function(component, components, options) {
 
 	actionEditsView = this.find(".actionEditsView");
 	for (i in component.actions) {
-		div = $(document.createElement("div"))
+		var div = $(document.createElement("div"));
+		var action = component.actions[i];
+		var isMain = component.getMainAction() == action;
+
 		actionEditsView.append(div);
-		div.attr("id", "actionEdit-" + component.actions[i].id);
-		div.renderActionEditView(component.actions[i], components);
+		div.attr("id", "actionEdit-" + action.id);		
+		div.renderActionEditView(action, component, components, isMain);
 	}
 
 	// set the values that stay forever

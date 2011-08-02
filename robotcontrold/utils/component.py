@@ -1,27 +1,22 @@
 import time
 from threading import Thread
 from myExceptions.databaseExceptions import CorruptDatabaseError
+from utils.host import Host
 
 class Component():
 	
-	def __init__(self, rId, username, host, mainAction, parentId, actions, log):
+	def __init__(self, rId, username, host, mainAction, actions, log):
 		self.id = int(rId)
-		self.username = username
-		self.host = host
 		self.mainAction = mainAction
-
-		# parentId might be None for groups
-		self.parentId = int(parentId) if parentId else None
 
 		# actions may be None (e.g. for "groups")
 		# but be careful, actions must be empty in that case as well
 		# actions are sorted by id
+		# main action is part of actions
 		self.actions = actions or {}
 
-		self.log = log
-
 		# better solution needed
-		if len(self.actions) and not self.host:
+		if len(self.actions) and not host:
 			raise CorruptDatabaseError('Component has actions but no host. %s' % str(self))
 
 
@@ -32,6 +27,50 @@ class Component():
 		self.children = []
 		self.parent = None
 		
+		#
+		self.initializeUnpickableData(host, log)
+		
+		
+	def initializeUnpickableData(self, hostObj, log):
+		if not hasattr(self, '_initialized'):
+			self._initialized = True
+			self.log = log
+			
+			# hostObject must be either an instance of host (e.g. passed
+			# directly by init) or it must be a dict (id/host pairs)
+			# In the latter case, the attribute _host_id must be key
+			# of the dict
+			if isinstance(hostObj, Host):
+				self.host = hostObj
+			elif isinstance(hostObj, dict):
+				if not hasattr(self, '_host_id'): raise Exception('Attribute _host_id not set')
+				if not self._host_id in hostObj:  raise Exception('_host_id [="%s"] is not in the dict' % str(self._host_id))
+				
+				self.host = hostObj[self._host_id]
+				delattr(self, '_host_id')
+			else:
+				raise Exception('hostObj must be instance of Host or dict')
+			
+			# initialize all complex members
+			for action in self.actions.values():
+				action.initializeUnpickableData(log)
+	
+	
+	# used for pickle in memcached. Exclude certain attributes such as log etc
+	def __getstate__(self):
+		return {
+			'id': self.id,
+			'actions': self.actions,
+			'mainAction': self.mainAction,
+			'parent': self.parent,
+			'children': self.children,
+			# the following field is added because the host cannot be 
+			# pickled with the component. we will remove this field 
+			# in the initializeUnpickableData, as soon as we can 
+			# get a reference to the actual host using this attribute
+			'_host_id': self.host.id
+		}
+		
 		
 	def getName(self):
 		return self.mainAction.name
@@ -39,17 +78,11 @@ class Component():
 
 
 	def __str__(self):
-		return "Component [id=%d, username=%s, host_id=%s, name=%s, parent_id=%s]" % (self.id, self.username, str(self.host.id) if self.host else 'None', self.getName(), str(self.parentId))
+		hostId = str(self.host.id) if self.host else 'None'
+		parentId = str(self.parent.id) if self.parent else None
+		return "Component [id=%d, host_id=%s, name=%s, parent_id=%s]" % (self.id, hostId, self.getName(), parentId)
 
 
-	# Component.stop should be called anyway, this function is just to make sure we 
-	# the connection in any case
-	def __del__(self):
-		for action in self.actions.values():
-			if action.isAlive():
-				self.log.error ('__del__ invoked and component still running: %s' % str(self))
-			self.stop()
-			break
 
 	def isAlive(self):
 		for action in self.actions.values():
@@ -57,6 +90,11 @@ class Component():
 				return True
 		return False
 
+	def setParent(self, parent):
+		self.parent = parent
+		
+	def appendChild(self, child):
+		self.children.append(child)
 
 
 
@@ -124,3 +162,19 @@ class Component():
 		
 	def appendAction(self, action):
 		self.actions[action.id] = action
+
+
+	# used for the webserver
+	def createJSONObj(self):
+		actionJSONObj = {}
+		for action in self.actions.values():
+			actionJSONObj[action.id] = action.createJSONObj()
+		
+		parentId = str(self.parent.id) if self.parent else None
+		
+		return {
+			'host':		self.host.id,
+			'name':		self.mainAction.name,
+			'parentId':	parentId,
+			'actions':	actionJSONObj
+		}

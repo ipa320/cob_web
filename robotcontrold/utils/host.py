@@ -11,33 +11,44 @@ from myExceptions.networkExceptions import NoConnectionToHostException
 class Host(Thread):
 	
 	def __init__(self, rId, hostname, port, user, pw, log):
-		Thread.__init__(self)
-
 		self.id = int(rId)
 		self.hostname = hostname
 		self.port = int(port)
 		self.user = user
 		self.pw = pw
 
-		self.log = log
-
-		self.ssh = SSH(self)
-		self.ctrlChannel = None
-		self.screenReader = None
-
-		self.alive = False
+		# ??
 		self._components = []
 		
+		self.initializeUnpickableData(log)
+		
+	# initialize all the data that doesn't get pickled
+	# this function has to be called when getting an object from memcahed
+	# to initialize the missing data
+	def initializeUnpickableData(self, log):
+		if not hasattr(self, '_initialized'):
+			Thread.__init__(self)
+			self._initialized = True
+			
+			self.log = log
+			self.alive = False
+			self.ssh = SSH(self)
+			self.ctrlChannel = None
+			self.screenReader = None
+		
+		
+	def __getstate__(self):
+		return {
+			'id': self.id,
+			'hostname': self.hostname,
+			'port': self.port,
+			'user': self.user,
+			'pw': self.pw,
+		}
+			
 
 	def __str__(self):
 		return "Host [id=%d, hostname=%s, port=%d, user=%s]" % (self.id, self.hostname, self.port, self.user)
-
-
-	# As usually just to be safe
-	def __del__(self):
-		if self.isConnected():
-			self.log.error('__del__ invoked and host still running: %s' % str(self))
-		self.disconnect()
 
 
 
@@ -52,7 +63,7 @@ class Host(Thread):
 		self._components.append(comp)
 
 	#@Override
-	def start(self, blocking=False):
+	def start(self, blocking=False):		
 		if not self.alive:
 			self.log.debug('Starting %s' % str(self))
 			self.alive = True
@@ -94,13 +105,6 @@ class Host(Thread):
 				return False
 
 			try:
-#				self.ctrlChannel = self.invokeShell()
-
-				# kill possible old controlScreens
-#				self.ctrlChannel.send('screen -X -S controlScreen kill\n')
-#				self.ctrlChannel.send('screen -L -S controlScreen\n')
-#				self.screenReader = ScreenReader('Host #%d' % self.id, self.ctrlChannel, self.log, echo=False)
-#				self.screenReader.start()
 				self.log.info('Connected to %s' % str(self))
 				EventHistory.hostOnline(self)
 				return True
@@ -118,15 +122,6 @@ class Host(Thread):
 		if self.isConnected():
 			try:
 				self.log.debug('Closing ControlChannel')
-#				try: self.ctrlChannel.send('exit\n')
-#				except Exception as e:
-#					self.log.exception('Could not close ControlChannel')
-
-#				# wait for screen reader to be closed
-#				if self.screenReader and self.screenReader.isAlive():
-#					self.log.debug('Joining ScreenReader for "Host #%d"' % self.id)
-#					self.screenReader.join()
-
 				self.ssh.disconnect()
 				self.log.info('Disconnected from %s' % str(self))
 			except Exception as e:
@@ -167,3 +162,12 @@ class Host(Thread):
 		self.screenReader = None
 		self.ssh.disconnect()
 
+
+	# Used for the webserver to send infomration to the client
+	def createJSONObj(self):
+		return {
+			'hostname':	self.hostname,
+			'user':		self.user,
+			'port':		self.port
+		}
+	

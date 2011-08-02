@@ -160,7 +160,7 @@ class Main():
 		for key,value in optlist:
 			# remove -- at the beginning of key
 			args[key[2:]] = value
-
+		
 		return args
 		
 
@@ -191,8 +191,8 @@ class Main():
 			if self.log:
 				self.log.info ('SIGNAL received > Shutting down')
 			self.stop()
-	
-	
+
+
 
 if __name__=='__main__':
 	if (sys.version_info[0] != 2 or sys.version_info[1] < 6):

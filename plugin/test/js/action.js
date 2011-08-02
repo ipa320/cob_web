@@ -1,15 +1,21 @@
-var Action = function(id, name, compId, description, dependencies, startCmds, stopCmds) {
-	this.id = id;
-	this.name = name;
-	this.compId = compId;
-	this.description = description	 || "";
-	this.dependencies = dependencies || [];
-	this.startCommands = startCmds   || [];
-	this.stopCommands = stopCmds	 || [];
-	
+var Action = function(id, name, compId, description, url, dependencies, startCmds, stopCmds) {
+	this.id 		   = id;
+	this.name 		   = name;
+	this.compId 	   = compId;
+	this.description   = description  || "";
+	this.dependencies  = dependencies || [];
+	this.startCommands = startCmds    || [];
+	this.stopCommands  = stopCmds	  || [];
+	this.url		   = url 		  || "";
 	
 	this._active = false;
 	this._lastChange = 0;
+	
+	// preload the url
+	if (this.url.length) {
+		this.iframe = $(document.createElement('iframe'));
+		this.iframe.attr('src', this.url);
+	}
 
 	this.getLastChange = function() {
 		return this._lastChange;
@@ -45,6 +51,7 @@ var Action = function(id, name, compId, description, dependencies, startCmds, st
 			'name':			this.name,
 			'compId':		this.compId,
 			'description':	this.description,
+			'url':			this.url,
 			'dependencies':	this.dependencies,
 			'startCommands':this.startCommands,
 			'stopCommands':	this.stopCommands
@@ -58,6 +65,6 @@ var Action = function(id, name, compId, description, dependencies, startCmds, st
 	// clone
 	this.clone = function() {
 		// slice(0) creates a copy of the array
-		return new Action(this.id, this.name, this.compId, this.description, this.dependencies.slice(0), this.startCommands.slice(0), this.stopCommands.slice(0));
+		return new Action(this.id, this.name, this.compId, this.description, this.url, this.dependencies.slice(0), this.startCommands.slice(0), this.stopCommands.slice(0));
 	}
 }

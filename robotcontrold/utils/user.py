@@ -1,21 +1,36 @@
 from utils.component import Component
-
+import memcache
 
 class User():
+	_users = {}
+	def getUser(name, log):
+		if name in User._users:
+			user = User._users[name]
+		else:
+			mc = memcache.Client(['127.0.0.1:21201'])
+			user = mc.get(name)
+			if not user:
+				user = User(name)
+				mc.set(name, user)
+			# some initialization requred after unpickling
+			else:
+				user.initializeUnpickledData(log)
+		return user
+		
 	def __init__(self, name):
 		# important: always process the name in lowercase
 		self.name = name.lower()
 		self._components = {}
+		
+		
+	def initializeUnpickableData(self, hosts, log):
+		for component in self._components.values():
+			component.initializeUnpickableData(hosts, log)
+	
 
 	def __str__(self):
 		return 'User [name=%s]' % self.name
 
-	def __eq__(self, obj):
-		return isinstance(obj, User) and obj.name == self.name
-
-	# The User is only defined by its name
-	def __hash__(self):
-		return self.name.__hash__()
 
 	def append(self, comp):
 		if not isinstance(comp, Component):

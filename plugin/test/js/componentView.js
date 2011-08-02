@@ -53,11 +53,10 @@ $.fn.renderComponentView = function(component, components, options) {
 			actionsButtons.append(createActionButtons(component.actions[i]));
 	}
 	
-	this.accordion({ header: "h3", collapsible: false });
-	this.updateComponentView(component, components, options, true);
+	this.updateComponentView(component, components, options);
 };
 
-$.fn.updateComponentView = function(component, components, options, force) {
+$.fn.updateComponentView = function(component, components, options) {
 
 	if (!(component instanceof Component))
 		throw new Error("Argument must be an instance of Component");
@@ -116,8 +115,9 @@ $.fn.updateComponentView = function(component, components, options, force) {
 	this.find(".log-buttons a").button({'disabled': options['disabled']});
 	
 	renderDescription(table, descriptions);
-	renderDependencies(table, dependencies, components);
-	//	actionView.updateActionView(component.actions[i], components, options, force);
+	renderDependencies(table, dependencies, component);
+	
+	renderFrames(this, component.actions);
 };
 
 function renderDescription(container, descriptions)
@@ -145,7 +145,7 @@ function renderDescription(container, descriptions)
 	}
 }
 
-function renderDependencies(container, dependencies, components)
+function renderDependencies(container, dependencies, component)
 {	
 	if (dependencies.length > 0) {
 		var tr = $(document.createElement('tr')).addClass("dependencies");
@@ -155,13 +155,9 @@ function renderDependencies(container, dependencies, components)
 			html += '<div>';
 			
 			dependency = dependencies[i];
-			if (components[dependency.compId] === undefined)
-				throw new Error('Component "' + dependency.compId + '" not found')
-			component = components[dependency.compId];
-			
-			if (!component.hasAction(dependency.actionId))
-				throw new Error('Action "' + dependency.actionId + '" not found');
-			a = component.getAction(dependency.actionId);
+			if (!component.hasAction(dependency))
+				throw new Error('[ComponentView] Dependency-Action "' + dependency.actionId + '" not found');
+			a = component.getAction(dependency);
 			
 			if(a.isActive()) 
 				html += '<span class="ui-icon ui-icon-component-action-on"></span><a href="#" class="running">' + component.name + " &raquo; " + a.name + '</a>';
@@ -216,4 +212,19 @@ function createActionButtons(action, appendName)
 	killButton.click(function() { application.killAction(action.id, action.compId); return false; });
 		
 	return div;
+}
+
+function renderFrames(container, actions)
+{
+	for (actionId in actions) {
+		action = actions[actionId];
+		var actionClass = "action-" + action.id;
+		var renderedAlready = container.find("." + actionClass).size() > 0;
+		
+		if (action.url.length && action.isActive() && !renderedAlready)
+			$('<div class="iframe" />').addClass(actionClass).append(action.iframe).appendTo(container);
+		if (!action.isActive() && renderedAlready)
+			$("." + actionClass).remove();
+			
+	}
 }

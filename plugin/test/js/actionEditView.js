@@ -2,8 +2,10 @@ var actionEditViewCode = '<h3 class="actionEditView-name"><a href="#" class="ph_
 				<div >\
 					<div class="actionEditView-content">\
 						<div class="actionEditView-text"><table>\
-							<tr class="even"><th>name:</td><td><input type="text" class="ph_action_edit-name" value="PH_name" /></td></tr>\
-							<tr class="even"><th>Description:</td><td><textarea class="ph_action_edit-desc">Keine Beschreibung angegeben</textarea></div>\</td></tr>\
+							<tr class="even"><th>Name:</th><td><input type="text" class="ph_action_edit-name" value="PH_name" /></td></tr>\
+							<tr class="even ph_action_edit-host"><th>Host:</th><td class="ph_action_edit-host"></td></tr>\
+							<tr class="even"><th>Description:</th><td><textarea class="ph_action_edit-desc">Keine Beschreibung angegeben</textarea></div>\</td></tr>\
+							<tr class="even"><th>URL:</th><td><input class="ph_action_edit-url" /></div>\</td></tr>\
 							<tr class="even"><th>Dependencies:</th><td class="ph_action_edit-dep"></td></tr> \
 						</table></div>\
 						<div class="shellCommandsEditView">\
@@ -14,7 +16,7 @@ var actionEditViewCode = '<h3 class="actionEditView-name"><a href="#" class="ph_
 				</div>';
 
 
-$.fn.renderActionEditView = function(action, components, options) {
+$.fn.renderActionEditView = function(action, component, components, isMain, options) {
 	if (! (action instanceof Action))
 		throw new Error("Argument must be an instance of Action");
 		
@@ -25,35 +27,53 @@ $.fn.renderActionEditView = function(action, components, options) {
 		this.html(actionEditViewCode);
 
 		// Accordion
-		var active = styleDataManager.isActionTabClosed(action.id) ? false : null;
-		this.accordion({ header: "h3", collapsible: true, active: active });
-		this.bind('accordionchange', function(event, ui) {
-			styleDataManager.toggleActionTab(action.id);
-		});
+		this.accordion({ header: "h3", collapsible: true });
+
+		// render the host selection if this is the main action
+		if (isMain) {
+			console.log(component);
+			var hostSelect = $(Host.createSelectHtmlCode(component.hostId));
+			this.find("td.ph_action_edit-host").append(hostSelect);
+			hostSelect.change(function() {
+				var selected = $(this).find('option:selected')
+				var hostId = parseInt(selected.attr("hostId"));
+				component.hostId = hostId;
+			});
+		}
+		// else hide the row
+		else 
+			this.find("tr.ph_action_edit-host").hide();
+			
+		
+	
 			
 		// Set name and description. These values don't change
 		this.find("a.ph_action_edit-name").text(action.name);
 		
 		var inputName = this.find("input.ph_action_edit-name");
 		inputName.val(action.name);
-		inputName.focusout(function() { action.name = this.value; });
+		inputName.focusout(function() {
+			action.name = this.value;
+			//TODO:
+			if (isMain) component.name = this.value;
+		});
 		
-		inputDesc = this.find("textarea.ph_action_edit-desc");
+		var inputDesc = this.find("textarea.ph_action_edit-desc");
 		inputDesc.focusout(function() { action.description = this.value; });
 		if (action.description)
 			inputDesc.val(action.description);
+			
+		var inputUrl = this.find("input.ph_action_edit-url");
+		inputUrl.val(action.url);
+		inputUrl.focusout(function() { action.url = this.value; });
 	}
 
 
-	var defaultOptions = {'disabled': screenManager.isLockedLocation()};
-	var options = $.extend(defaultOptions, options);
-	
-	
 	// render dependencies
 	var dep = this.find(".ph_action_edit-dep");
 	for (i in action.dependencies) {
 		dependency = action.dependencies[i];
-		dep.append( dependencySelectCode( components, dependency ) );
+		dep.append( dependencySelectCode( component, dependency ) );
 		dep.append( '<br />' );
 	}
 	// remove the last <br />
@@ -63,7 +83,7 @@ $.fn.renderActionEditView = function(action, components, options) {
 	$(document.createElement("a")).attr("href", "#").text("Append new dependency").appendTo(dep).click(function() { 
 		var depObj={'compId': null, 'actionId': null};
 		action.dependencies.push(depObj);
-		dep.find("a").before($(dependencySelectCode(components, depObj)));
+		dep.find("a").before($(dependencySelectCode(component, depObj)));
 		return false;
 	});
 	
@@ -119,26 +139,23 @@ $.fn.renderActionEditView = function(action, components, options) {
 	});
 };
 
-function dependencySelectCode(components, dep)
+function dependencySelectCode(component, dep)
 {
 	html = '<select size="1"><option label=" - "> - </option>';
-	for (i in components) {
-		component = components[i];
-		html += '<optgroup label="' + component.name + '">';
+	html += '<optgroup label="' + component.name + '">';
 		
-		for (j in component.actions) {
-			action = component.actions[j];
-			selected = '';
-			if (action.id == dep.actionId)
-				selected = 'selected="selected"'
-			
-			html += '<option compId="' + i + '" actionId="' + j + '" label="' + component.name + ' &raquo; ' + action.name + '" ' + selected + '>' + component.name + ' &raquo; ' + action.name + '</option>';
-		}
+	for (j in component.actions) {
+		action = component.actions[j];
+		var selected = '';
+		if (action.id == dep)
+			selected = 'selected="selected"'
+		
+		html += '<option actionId="' + j + '" label="' + component.name + ' &raquo; ' + action.name + '" ' + selected + '>' + component.name + ' &raquo; ' + action.name + '</option>';
 	}
+	
 	html += '</select>';
 	select = $(html);
 	select.addClass("test");
-	alert(select.size() + "\n" + select[0] + "\n" + select + "\n" + select.hasClass("test"));
 	
 	select.change(function() {
 		var selected = $(this).find('option:selected')
@@ -147,6 +164,7 @@ function dependencySelectCode(components, dep)
 	});
 	return select;
 }
+
 
 var shellCommandEditViewCode = '<div class="buttons"><a href="#" class="delete-button">-</a></div><div class="options">Hide<br />Log<br /><input type="checkbox" class="ph_shell_command_hide_log" /></div><div class="options">Join<br />Thread<br /><input type="checkbox" class="ph_shell_command_edit_blocking" /></div><textarea class="ph_edit_shell_command-command">PH_EDIT_SHELL_COMMAND-COMMAND</textarea>';
 $.fn.renderShellCommandEditView = function(command)

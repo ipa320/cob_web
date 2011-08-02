@@ -7,12 +7,13 @@ from utils.component import Component
 from utils.user import User
 from utils.eventHistory import EventHistory
 
-
+import memcache, pickle
 
 
 class ServerThread(threading.Thread):
 	def __init__(self, log, args):
 		threading.Thread.__init__(self)
+		
 		self.alive = False
 
 		self.log = log
@@ -21,6 +22,7 @@ class ServerThread(threading.Thread):
 		self.conn = None
 		self.cursor = None
 
+		self.users = {}
 		self.activeUser = None
 		self.reservations = {}#None
 
@@ -28,22 +30,34 @@ class ServerThread(threading.Thread):
 		# Establish connection to the database
 		self.establishDatabaseConnection(args)
 
-		# Read User
-		self.readUsers()
-
 		# Read Hosts
 		self.readHosts()
+		#for host in self.hosts.values():
+		#	sql = "UPDATE `hosts` SET `pickledData`=%s WHERE `id`=%s"
+		#	self.cursor.execute(sql, [pickle.dumps(host), host.id])
 
-		# Read components
-		self.readComponents()
+
+		# Read Users
+		self.readUsers()
+		
+
+#		# Read components
+#		self.readComponents()
+#		for user in self.users.values():
+#			sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s"
+#			self.cursor.execute(sql, [pickle.dumps(user), user.name])
 
 		# Connect to Hosts
 		self.startAllHosts()
 		
 		# quit all components that might be running
 		self.forceTerminateAllComponents()
-		
-
+	
+	
+		# store all userse in mc
+#		for username in  self.users.keys():
+#			self.mc.set(username, self.users[username])
+#			print 'STORED: %s' % username
 
 
 	# self.stop should be called anyway, but just be be sure
@@ -101,43 +115,78 @@ class ServerThread(threading.Thread):
 		self.cursor = self.conn.cursor()
 
 
-	def readUsers(self):
-		self.log.info ('Reading Users')
-		
-		self.log.debug ('Loading Users from database')
-		self.users = {}
-		sql = 'SELECT DISTINCT `user_name` FROM `components`'
-		rows = self.cursor.execute(sql)
-		self.log.debug ('%d rows fetched' % rows)
-		while True:
-			row = self.cursor.fetchone()
-			if not row: break
-
-			# usernames always in lowercase!
-			self.users[row[0].lower()] = User(row[0])
-
-
-		self.log.debug ('%d users found' % len(self.users))
-
-
 	def readHosts(self):
 		self.log.info('Reading Hosts')
 
-
 		self.log.debug ('Loading Hosts from database')
 		self.hosts = {}
-		sql = 'SELECT `id`,`hostname`,`port`,`user`,`pw` FROM `hosts`'
+
+		sql = 'SELECT `id`, `pickledData` FROM `hosts`'
 		rows = self.cursor.execute(sql)
 		self.log.debug ('%d rows fetched' % rows)
 		while True:
 			row = self.cursor.fetchone()
 			if not row: break
 
-			hostId = row[0]
-			self.hosts[hostId] = Host(*row, log=self.log)
+			hostId = int(row[0])
+			host = pickle.loads(row[1])
+			host.initializeUnpickableData(self.log)
+			self.hosts[hostId] = host
 			
+	
+	def readUsers(self):
+		self.log.info('Reading Users')
 
+		self.users = {}
+		
+		sql = 'SELECT `user_name`, `pickledData` FROM `users`'
+		self.cursor.execute(sql)
+		
+		while True:
+			row = self.cursor.fetchone()
+			if not row: break
 
+			user = pickle.loads(row[1])
+			user.initializeUnpickableData(self.hosts, self.log)
+			self.users[row[0]] = user
+
+#	def readComponents(self):
+#		self.log.info('Reading Components')
+#		
+#		sql = "SELECT `user_name`, `host_id`, `parent_id`, `pickledData` FROM `components`"
+#		self.cursor.execute(sql)
+#		rows = self.cursor.fetchall()
+		
+	#	# first collect all the componoent data
+#		compsData = {}
+#		for row in rows:
+#			user = self.getUserCreateIfNotExistent(row[0])
+#			comp = pickle.loads(row[2])
+#			host_id = int(row[1])
+#			parent_id = int(row[2])
+#			
+#			compData[comp.id] = {'comp': comp, 'host_id': host_id, 'parent_id': parent_id, 'children': children}
+#			
+#			
+#		# now iterate through the data again to initialize the components
+#		# with the correct host / parent / children 
+#		for compData in compsData.values():
+#			comp = compData['comp']
+#			host_id = compData['host_id']
+#			parent_id = compData['parent_id']
+#			
+#			if not host_id in self.hosts:
+#				raise CorruptDatabaseError('The host [id="%d"] associated to the component [id="%d"] could not be found' % (host_id, comp.id))
+#			host = self.hosts[host_id]
+#				
+#			if not parent_id in compsData:
+#				raise CorruptDatabaseError('The parent [id="%d"] associated to the component [id="%d"] could not be found' % (parent_id, comp.id))
+#			parent = compsData[parent_id]['comp']
+#			
+#			# initialize the component with the parent
+#			comp.initializeUnpickableData(self.hosts[compData['hostId']], 
+		
+		
 	def readComponents(self):
 		self.log.info('Reading Components')
 		
@@ -156,7 +205,7 @@ class ServerThread(threading.Thread):
 			parent_id		= int(row[4]) if row[4] else None
 			
 			# fetch all actions assigned to this component
-			sql = "SELECT `id`, `name`, `dependencies`, `description` FROM `componentActions` WHERE `comp_id`=%s"
+			sql = "SELECT `id`, `name`, `dependencies`, `description`, `url` FROM `componentActions` WHERE `comp_id`=%s"
 			self.cursor.execute(sql, [id])
 			actionsData = self.cursor.fetchall()
 			
@@ -168,6 +217,7 @@ class ServerThread(threading.Thread):
 				name			= row[1]
 				dependencyIds	= list(int(s) for s in str(row[2]).split(';')) if row[2] else []
 				description		= row[3]
+				url				= row[4]
 				
 				
 				# fetch all shell commands assigned to this action
@@ -196,7 +246,7 @@ class ServerThread(threading.Thread):
 				dependencies[actionId] = dependencyIds
 						
 				# create the action object.
-				action = Action(actionId, name, startCommands, stopCommands, description, self.log)
+				action = Action(actionId, name, startCommands, stopCommands, description, url, self.log)
 				actions[actionId] = action
 				
 				
@@ -225,35 +275,34 @@ class ServerThread(threading.Thread):
 				parents[id] = parent_id
 			
 			# Create the component object
-			component = Component(id, user_name, host, mainAction, parent_id, actions, self.log)
+			component = Component(id, user_name, host, mainAction, actions, self.log)
 			components[id] = component
 			
 			
 			# add the component to the user's components
-			self.users[user_name].append(component)
+			self.getUserCreateIfNotExistent(user_name).append(component)
 		
 		
 		# Now that all components are created, set the parents
 		for id in parents.keys():
 			parent_id = parents[id]
-			
+		
 			# check whether parent_id is valid
 			if not parent_id in components:
 				raise CorruptDatabaseError('The given parent_id "%d" for component "%d" was not found' % (parent_id, id))
-				
+			
 			# set parent / child
 			component = components[id]
 			parent = components[parent_id]
-			
-			component.parent = parent
-			parent.children.append(component)
-			
-
+		
+			component.setParent(parent)
+			parent.appendChild(component)
+		
 
 	def startAllHosts(self):
 		self.log.debug('Start all Hosts')
 		for host in self.hosts.values():
-			# start in blocking mode
+			# start in blocking mode i.e
 			host.start(blocking=True)
 		
 
@@ -267,9 +316,6 @@ class ServerThread(threading.Thread):
 	# get the user object that belongs to a name
 	# create a new user if it does not exist
 	def getUserCreateIfNotExistent(self, name):
-		if not isinstance(name, basestring):
-			raise ValueError('Name must be a string')
-		
 		# username must be in the users array
 		if not name in self.users:
 			user = User(name)
@@ -427,6 +473,7 @@ class ServerThread(threading.Thread):
 	#TODO: check for valid mainActino_id !!	
 	# stores a component based on an object given
 	def storeComponent(self, data, user):
+		import random
 		#maps temporary ids (negativ ones) to the actual new ids returned by the database
 		idMap		= {}
 		
@@ -451,12 +498,13 @@ class ServerThread(threading.Thread):
 		# if id is negative, create a new component
 		if id < 0:
 			host = self.hosts[hostId] if hostId in self.hosts else None
-			component = Component(0, user.name, host, None, parentId, [], self.log)
+			component = Component(0, user.name, host, None, [], self.log)
 			
 			# Note: use None / 0 for main action id. Updating later 
-			sql = "INSERT INTO `components` (`user_name`, `host_id`, `mainAction_id`, `parent_id`) VALUES(%s,%s,%s,%s)"
-			self.cursor.execute(sql, [user.name, host.id if host else None, 0, parent.id if parent else None])
-			autoId = self.cursor.lastrowid
+			#sql = "INSERT INTO `components` (`user_name`, `host_id`, `mainAction_id`, `parent_id`) VALUES(%s,%s,%s,%s)"
+			#self.cursor.execute(sql, [user.name, host.id if host else None, 0, parent.id if parent else None])
+			#autoId = self.cursor.lastrowid
+			autoId = int(random.random()*1000)
 			
 			component.id = autoId
 			idMap[id] = autoId
@@ -481,8 +529,8 @@ class ServerThread(threading.Thread):
 			component.parent = parent
 			
 			# Update the database
-			sql = "UPDATE `components` SET `host_id`=%s, `parent_id`=%s WHERE `id`=%s"
-			self.cursor.execute(sql, [hostId, parentId, component.id])
+			#sql = "UPDATE `components` SET `host_id`=%s, `parent_id`=%s WHERE `id`=%s"
+			#self.cursor.execute(sql, [hostId, parentId, component.id])
 			
 			
 		# Now create / update the actions
@@ -494,6 +542,7 @@ class ServerThread(threading.Thread):
 			aId 			= int(action['id']) #new actions have a negativ id
 			aName			= action['name']
 			description		= action['description']
+			url				= action['url']
 			startCommands	= action['startCommands']
 			stopCommands	= action['stopCommands']
 			# compId field is ignored as the action must be part of this component
@@ -504,12 +553,13 @@ class ServerThread(threading.Thread):
 				raise ValueError('The given actionId is not a valid id for the component [compId=%d, actionId=%d]' % (component.id, aId))
 
 			if aId < 0:
-				action = Action(0, aName, {}, {}, description, self.log)
+				action = Action(0, aName, {}, {}, description, url, self.log)
 				action.setComponent(component)
 				
-				sql = "INSERT INTO `componentActions` (`name`, `comp_id`, `description`) VALUES(%s,%s,%s)"
-				self.cursor.execute(sql, [action.name, component.id, action.description])
-				autoId = self.cursor.lastrowid
+				#sql = "INSERT INTO `componentActions` (`name`, `comp_id`, `description`) VALUES(%s,%s,%s)"
+				#self.cursor.execute(sql, [action.name, component.id, action.description])
+				#autoId = self.cursor.lastrowid
+				autoId = int(random.random()*1000)
 				
 				# remap 
 				idMap[aId] = autoId
@@ -524,8 +574,8 @@ class ServerThread(threading.Thread):
 				action.name = aName
 				action.description = description
 				
-				sql = "UPDATE `componentActions` SET `name`=%s, `description`=%s, `dependencies`=%s WHERE `id`=%s"
-				self.cursor.execute(sql, [action.name, action.description, None, action.id])
+				#sql = "UPDATE `componentActions` SET `name`=%s, `description`=%s, `dependencies`=%s WHERE `id`=%s"
+				#self.cursor.execute(sql, [action.name, action.description, None, action.id])
 				
 
 			# If we created a new component, mainAction_id is None for that component. 
@@ -534,8 +584,8 @@ class ServerThread(threading.Thread):
 				component.mainAction = action
 				
 				# update the database
-				sql = "UPDATE `components` SET `mainAction_id`=%s WHERE `id`=%s"
-				self.cursor.execute(sql, [action.id, component.id])
+				#sql = "UPDATE `components` SET `mainAction_id`=%s WHERE `id`=%s"
+				#self.cursor.execute(sql, [action.id, component.id])
 				
 
 			# parse the commands
@@ -551,16 +601,18 @@ class ServerThread(threading.Thread):
 				if not commandStr.strip():
 					# if the command is new (temporary id < 0), do nothing, as the command was not
 					# stored yet anyway
-					if cId > 0:
-						sql = "DELETE FROM `shellCommands` WHERE `id`=%s"
-						self.cursor.execute(sql, [cId])
+					#if cId > 0:
+					#	sql = "DELETE FROM `shellCommands` WHERE `id`=%s"
+					#	self.cursor.execute(sql, [cId])
+					pass
 				
 				# if it's a valid new command, store it now
 				elif cId < 0:
-					sql = 'INSERT INTO `shellCommands` (`command`, `action_id`, `blocking`, `hideLog`, `type`) VALUES(%s, %s, %s, %s)'
-					self.cursor.execute(sql, [commandStr, action.id, 'Y' if blocking else 'N', 'Y' if hideLog else 'N', 'start' if isStartCommand else 'stop'])
+					#sql = 'INSERT INTO `shellCommands` (`command`, `action_id`, `blocking`, `hideLog`, `type`) VALUES(%s, %s, %s, %s)'
+					#self.cursor.execute(sql, [commandStr, action.id, 'Y' if blocking else 'N', 'Y' if hideLog else 'N', 'start' if isStartCommand else 'stop'])
 					
-					autoId = self.cursor.lastrowid
+					#autoId = self.cursor.lastrowid
+					autoId = int(random.random()*1000)
 					idMap[cId] = autoId
 					
 					if isStartCommand:
@@ -579,8 +631,8 @@ class ServerThread(threading.Thread):
 					command.blocking = blocking
 					command.hideLog = hideLog
 					
-					sql = "UPDATE `shellCommands` SET `command`=%s, `blocking`=%s, `hideLog`=%s WHERE `id`=%s"
-					self.cursor.execute(sql, [commandStr, 'Y' if blocking else 'N', 'Y' if hideLog else 'N', cId])
+					#sql = "UPDATE `shellCommands` SET `command`=%s, `blocking`=%s, `hideLog`=%s WHERE `id`=%s"
+					#self.cursor.execute(sql, [commandStr, 'Y' if blocking else 'N', 'Y' if hideLog else 'N', cId])
 			
 			
 			
@@ -589,42 +641,36 @@ class ServerThread(threading.Thread):
 		# Now we cann loop through the dependencies and check whether they are all valid
 		for action in actions:
 			dependencies	= action['dependencies']
-
 			
 			# make sure every dependency is valid and create the string (ids joined by semicolons)
 			depString = ''
 			depArray = []
 			for dep in dependencies:
-				actionId = int(dep['actionId']) 
-				compId   = int(dep['compId'])
+				depId = int(dep) 
 				
 				# if the action id is negative (i.e. newly created), try to remap
-				if actionId < 0:
-					if not actionId in idMaps:
-						raise ValueError('Action id is negative, but no mapping entry found. [compId=%d, actionId=%d]' % (compId, actionId))
-					actionId = idMaps[actionId]
+				if depId < 0:
+					if not depId in idMaps:
+						raise ValueError('Action id is negative, but no mapping entry found. [depId=%d]' % depId)
+					depId = idMaps[depId]
 					
-				# if the comp id is negative (i.e.  newly created), try to remap
-				if compId < 0:
-					if not compId in idMaps:
-						raise ValueError('CompId id is negative, but no mapping entry found. [compId=%d, actionId=%d]' % (compId, actionId))
-					compId = idMaps[compId]
-				
 				
 				# if the action Id could not be found
-				if not user.hasComponent(compId) or not user.get(compId).hasAction(actionId):
-					raise ValueError('Invalid Dependency specified [compId=%d, actionId=%d]' % (compId, actionId))
+				if not component.hasAction(depId):
+					raise ValueError('Invalid Dependency specified [actionId=%d]' % depId)
 				
-				depString += str(actionId) + ';'
-				depArray.append(dep)
+				#TODO	
+				#action.appendDependency(component.getActiondepId))
+				
+				#depString += str(actionId) + ';'
+				#depArray.append(dep)
 			
 			# remove trailing ;
-			depString = depString.strip(';') or None
+			#depString = depString.strip(';') or None
 			
 			
 			# Now that we've checked the dependencies, udpate the database again
-			sql = 'UPDATE `componentActions` SET `dependencies`=%s WHERE `id`=%s'
-			self.cursor.execute(sql, [depString, action['id']])
+			#sql = 'UPDATE `componentActions` SET `dependencies`=%s WHERE `id`=%s'
+			#self.cursor.execute(sql, [depString, action['id']])
 			
 		return idMap
-			

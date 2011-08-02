@@ -133,7 +133,18 @@ var application = new (function() {
 				handler.success('Server online, User authenticated, Server is not available');
 				
 			// load host data next
-			this.loadHostData(handler);
+			Host.loadHostData(this.urlPrefix,
+				function() {
+					handler.success('Host Data Received');
+
+					// load component data next
+					application.loadCompData(handler);
+				},
+				function(data) {
+					console.log(data);
+					handler.error('Host Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
+				}
+			);
 		}
 		catch (err) {
 			handler.error('Error occured while parsing host data:\n' + err);
@@ -150,43 +161,6 @@ var application = new (function() {
 			handler.error('Unknwon error code received: ' + data.status);
 	}
 
-
-	/*
-	 * Load / parse Host Data from Remote Server
-	 */
-	this.loadHostData = function(handler)  {
-		var obj = this;
-		$.ajax({
-			url: this.urlPrefix + '/data/host',
-			success: function(data) { obj.hostDataSuccess(data, handler); },
-			error:   function(data) { obj.hostDataError(data, handler);   }
-		});
-	}
-	this.hostDataSuccess = function(hostData, handler) {
-		try {
-			this.hosts = {}
-			
-			for (id in hostData) {
-				host = hostData[id];
-				if (!id || !host.hostname || !host.user || !host.port)
-					throw new Error('Invalid Host-Object received');
-				this.hosts[id] = new Host(id, host.hostname, host.user, host.port);
-			}
-				
-			handler.success('Host Data Received');
-
-			// load component data next
-			this.loadCompData(handler);
-		}
-		catch (err) {
-			handler.error('Error occured while parsing host data:\n' + err);
-		}
-
-	}
-	this.hostDataError = function(data, handler) {
-		console.log(data);
-		handler.error('Host Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
-	}
 
 
 	/*
@@ -216,10 +190,12 @@ var application = new (function() {
 					actionId = parseInt(actionId);
 					action = comp.actions[actionId];
 					// check whether all required fields are set. description might be null
-					if (!actionId || isNaN(actionId) || !action || !action.name || !action.dependencies || !(action.dependencies instanceof Object) || !(action.startCmds instanceof Object) || !(action.stopCmds instanceof Object))
+					if (!actionId || isNaN(actionId) || !action || !action.name || !action.dependencies || !(action.dependencies instanceof Object) || !(action.startCmds instanceof Object) || !(action.stopCmds instanceof Object)) {
+						console.log(action);
 						throw new Error('Invalid Action-Object received')
+					}
 					
-					actions[actionId] = new Action(actionId, action.name, id, action.desc, action.dependencies, action.startCmds, action.stopCmds)
+					actions[actionId] = new Action(actionId, action.name, id, action.desc, action.url, action.dependencies, action.startCmds, action.stopCmds)
 				}
 
 				this.components[id] = new Component(id, comp.host, comp.name, comp.parentId, actions);
@@ -854,8 +830,10 @@ var application = new (function() {
 			
 			var compId = this.getUniqueTemporaryId();
 			var actionId = this.getUniqueTemporaryId();
-			var actions = {actionId: new Action(actionId, "New Component")};
-			var comp = new Component(compId, null, "New Component", 1/*null*/, actions);
+			var actions = {}
+			actions[actionId] = new Action(actionId, "New Component");
+			
+			var comp = new Component(compId, null, "New Component", null, actions);
 			this.componentView.renderComponentEditView(comp, this.components);
 
 			// no more component selected
@@ -883,47 +861,57 @@ var application = new (function() {
 	
 	this.saveComponentSuccess = function(idMap, component)
 	{
-		try {
+		//try {
 			if (component.id < 0)
 				component.id = idMap[component.id];
 			
 			// remap the actions
 			newActions = {}
+			
+			// go through all the component's actions, delete empty actions / commands
+			// and remap the ids
+			console.log(component)
+			
 			for (id in component.actions) {
+				console.log(id)
 				id = parseInt(id);
 				var action = component.actions[id];
+				
 				// ignore empty actions
 				if (action.name.trim()) {
 					if (id < 0)
 						newActions[idMap[id]] = action;
 					else
 						newActions[id] = action;
-				}
+				
 					
-				// remap the shellCommands
-				for (i in action.startCommands) {
-					id = action.startCommands[i].id;
-					if (!action.startCommands[i].command.trim())
-						action.startCommands.splice(i, 1);
-					else if (id < 0)
-						action.startCommands[i].id = idMap[id];
-				}
-				for (i in action.stopCommands) {
-					id = action.stopCommands[i].id;
-					if (!action.stopCommands[i].command.trim())
-						action.stopCommands.splice(i, 1);
-					else if (id < 0)
-						action.stopCommands[i].id = idMap[id];
+					// remap the shellCommands
+					for (i in action.startCommands) {
+						id = action.startCommands[i].id;
+						
+						// skip the command if it's empty
+						if (!action.startCommands[i].command.trim())
+							action.startCommands.splice(i, 1);
+						else if (id < 0)
+							action.startCommands[i].id = idMap[id];
+					}
+					for (i in action.stopCommands) {
+						id = action.stopCommands[i].id;
+						if (!action.stopCommands[i].command.trim())
+							action.stopCommands.splice(i, 1);
+						else if (id < 0)
+							action.stopCommands[i].id = idMap[id];
+					}
 				}
 			}
 			component.actions = newActions;
 					
 			application.components[component.id] = component;
 			application.select(component.id);
-		}
-		catch (err) {
-			alert("Error occured updating the component: \n" + err);
-		}
+//		}
+	//	catch (err) {
+		//	alert("Error occured updating the component: \n" + err);
+		//}
 	}
 		
 	this.saveComponentError = function(data) {

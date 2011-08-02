@@ -4,10 +4,10 @@ from network.screenReader import ScreenReader
 
 
 class Action():
-	def __init__(self, rId, name, startCommands, stopCommands, description, log):
+	def __init__(self, rId, name, startCommands, stopCommands, description, url, log):
 		self.id = int(rId)
 		self.name = name
-		self.log = log
+		self.url = url
 		
 		# dicts with id as key
 		if not isinstance(startCommands, dict) or not isinstance(stopCommands, dict):
@@ -18,11 +18,34 @@ class Action():
 		self._stopCommands = stopCommands
 		
 		self.description = description		or ""
+		self.dependencies = []
 
 		self.component = None
-		self.screenReaders = []
-		self.startChannels = []
-		self.dependencies = []
+
+		
+		self.initializeUnpickableData(log)
+		
+		
+	def initializeUnpickableData(self, log):
+		if not hasattr(self, '_initialized'):
+			self._initialized = True
+			self.screenReaders = []
+			self.startChannels = []
+			self.log = log
+			
+	
+	# used for pickle in memcached. Exclude certain attributes such as log etc
+	def __getstate__(self):
+		return {
+			'id': self.id,
+			'name': self.name,
+			'url':	self.url,
+			'_startCommands': self._startCommands,
+			'_stopCommands': self._stopCommands,
+			'component': self.component,
+			'dependencies': self.dependencies,
+			'description': self.description
+		}
 
 
 
@@ -67,7 +90,7 @@ class Action():
 				self.log.info('Cannot start Action "%s", no commands found' % (self.name))
 				return
 			
-			self.log.info('Starting Action "%s". "%d" Commands found' % (self.name, len(self._startCommands)))
+			self.log.info('Starting Action "%s". "%d" Commands / "%d" dependencies found' % (self.name, len(self._startCommands), len(self.dependencies)))
 
 			if len(self.dependencies):
 				self.log.info('Action depends on: %s' % list('%s>%s' % (item.component.getName(), item.name) for item in self.dependencies))
@@ -228,3 +251,17 @@ class Action():
 	def appendDependency(self, action):
 		if not action in self.dependencies:
 			self.dependencies.append(action)
+
+
+	
+	# used for webserver
+	def createJSONObj(self):
+		return {
+			'actionId':			self.id,
+			'name':				self.name,
+			'desc':				self.description,
+			'url':				self.url,
+			'dependencies':		list(action.id for action in self.dependencies),
+			'startCmds':		list(cmd.createJSONObj() for cmd in self.getStartCommands()),
+			'stopCmds':			list(cmd.createJSONObj() for cmd in self.getStopCommands())
+		}
