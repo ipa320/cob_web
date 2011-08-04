@@ -1,17 +1,17 @@
 var componentViewCode = '\<h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView">\
 	<div class="componentView">\
-		<div class="componentView-topBar componentView-name"><span class="ui-icon ui-icon-triangle-1-s" />PH_COMP-NAME</div>\
+		<div class="componentView-topBar componentView-name"><span class="ui-icon ui-icon-triangle-1-s" />Control Panel</div>\
 		<div class="componentView-content" >\
 			<div class="componentView-buttons">\
 				<div class="log-buttons">\
-					<a href="#" class="showLog-button">ShowLog</a>\
-					<a href="#" class="refreshLog-button">Refresh</a>\
+					<input type="checkbox" class="showLog-button" id="showLog" /><label for="showLog">ShowLog</label>\
 				</div>\
 				<div class="actions-buttons"></div>\
 			</div>\
 			<div><table class="componentView-summary" cellspacing="0" cellpadding="0">\
 			</table></div>\
 		</div>\
+		<div class="logView">testtest</div>\
 	</div>';
 //<a href="javascript:application.editComponent()" class="edit-button">Edit</a><h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView">
 
@@ -41,8 +41,11 @@ $.fn.renderComponentView = function(component, components, options) {
 
 	// Create log buttonset
 	this.find(".log-buttons").buttonset();
-	this.find(".showLog-button").button({ icons: {primary: "ui-icon-document-b" } });
-	this.find(".refreshLog-button").button({ icons: {primary: "ui-icon-refresh" } });
+	var showLogButton = this.find(".showLog-button");
+	showLogButton.button({ 'icons': {primary: "ui-icon-document-b" } });
+	
+	// hide the logView at startup
+	this.find(".logView").hide()
 	
 
 	// render the buttons
@@ -52,6 +55,23 @@ $.fn.renderComponentView = function(component, components, options) {
 		 if (component.actions[i] != mainAction)
 			actionsButtons.append(createActionButtons(component.actions[i]));
 	}
+	
+	// set the actions for the log Button
+	var logView = this.find(".logView");
+	showLogButton.click(function() { 
+		if (!logView.is(":visible")) {
+			var setTextCallback = function(html) {
+				logView.setLogContent(html);
+			};
+			
+			logView.show();
+			logView.renderLogView(component, function(id) { application.loadLog(id, setTextCallback); });
+			application.loadLog(component.getMainAction().id, setTextCallback);
+		}
+		else {
+			logView.hide();
+		}
+	});
 	
 	this.updateComponentView(component, components, options);
 };
@@ -127,18 +147,18 @@ function renderDescription(container, descriptions)
 	
 	for (name in descriptions) {
 		var tr = $(document.createElement("tr"));
-		var class = "";
+		var myClass = "";
 		
 		if (isFirst) {
 			tr.append("<th>Description: </th>");
-			class = "ph_action-desc";
+			myClass = "ph_action-desc";
 		}
 		else {
 			tr.append("<th></th>");
-			class = "ph_action-hl ph_action-desc";
+			myClass = "ph_action-hl ph_action-desc";
 		}
 		
-		tr.append('<td class="' + class + '"><span class="name">' + name + ' &raquo; </span>' + descriptions[name] + '</td>');
+		tr.append('<td class="' + myClass + '"><span class="name">' + name + ' &raquo; </span>' + descriptions[name] + '</td>');
 					
 		isFirst = false;
 		container.append(tr);
@@ -210,6 +230,7 @@ function createActionButtons(action, appendName)
 	startButton.click(function() { application.startAction(action.id, action.compId); return false; });
 	stopButton.click(function() { application.stopAction(action.id, action.compId); return false; });
 	killButton.click(function() { application.killAction(action.id, action.compId); return false; });
+	
 		
 	return div;
 }

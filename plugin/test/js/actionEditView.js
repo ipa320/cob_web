@@ -4,7 +4,7 @@ var actionEditViewCode = '<h3 class="actionEditView-name"><a href="#" class="ph_
 						<div class="actionEditView-text"><table>\
 							<tr class="even"><th>Name:</th><td><input type="text" class="ph_action_edit-name" value="PH_name" /></td></tr>\
 							<tr class="even ph_action_edit-host"><th>Host:</th><td class="ph_action_edit-host"></td></tr>\
-							<tr class="even"><th>Description:</th><td><textarea class="ph_action_edit-desc">Keine Beschreibung angegeben</textarea></div>\</td></tr>\
+							<tr class="even"><th>Description:</th><td><textarea class="ph_action_edit-desc"></textarea></div>\</td></tr>\
 							<tr class="even"><th>URL:</th><td><input class="ph_action_edit-url" /></div>\</td></tr>\
 							<tr class="even"><th>Dependencies:</th><td class="ph_action_edit-dep"></td></tr> \
 						</table></div>\
@@ -103,7 +103,7 @@ $.fn.renderActionEditView = function(action, component, components, isMain, opti
 	shellStartCommandsEditView.append(a);
 	a.click(function() { 
 		id = application.getUniqueTemporaryId();
-		var cmd = {'id': id, 'command':'', 'blocking': false};
+		var cmd = {'id': id, 'command':'', 'blocking': false, 'hideLog': false};
 		action.startCommands.push(cmd);
 
 		div = $(document.createElement("div"));
@@ -128,7 +128,7 @@ $.fn.renderActionEditView = function(action, component, components, isMain, opti
 	shellStopCommandsEditView.append(a);
 	a.click(function() { 
 		id = application.getUniqueTemporaryId();
-		var cmd = {'id': id, 'command':'', 'blocking': false};
+		var cmd = {'id': id, 'command':'', 'blocking': false, 'hideLog': false};
 		action.stopCommands.push(cmd);
 
 		div = $(document.createElement("div"));

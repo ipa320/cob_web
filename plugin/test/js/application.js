@@ -99,11 +99,11 @@ var application = new (function() {
 	 */
 	this.getComponent = function(compId) {
 		if (!(parseInt(compId) > 0))
-			throw new Error('Invalid component id');
+			throw new Error('Invalid component id "' + compId + '"');
 			
 		component = this.components[compId];
 		if (component === undefined)
-			throw new Error('Invalid Component Id passed');
+			throw new Error('Invalid Component Id "' + compId + '" passed');
 			
 		return component;
 	}
@@ -823,10 +823,6 @@ var application = new (function() {
 			// if the location is locked, do not allow to change location
 			if (screenManager.isLockedLocation())
 				return;
-				
-			// if no component is selected, simply return
-			if (!this.selectedComponent)
-				return;
 			
 			var compId = this.getUniqueTemporaryId();
 			var actionId = this.getUniqueTemporaryId();
@@ -861,7 +857,7 @@ var application = new (function() {
 	
 	this.saveComponentSuccess = function(idMap, component)
 	{
-		//try {
+		try {
 			if (component.id < 0)
 				component.id = idMap[component.id];
 			
@@ -870,7 +866,6 @@ var application = new (function() {
 			
 			// go through all the component's actions, delete empty actions / commands
 			// and remap the ids
-			console.log(component)
 			
 			for (id in component.actions) {
 				console.log(id)
@@ -879,10 +874,19 @@ var application = new (function() {
 				
 				// ignore empty actions
 				if (action.name.trim()) {
-					if (id < 0)
+					
+					// update the action's id. If the id was remapped, store it in a 
+					// newly created array with the remapped id as key value.
+					if (id < 0) {
+						action.id = idMap[id];
 						newActions[idMap[id]] = action;
+					}
 					else
 						newActions[id] = action;
+					
+					// set the compId (dont bother to check if it's negative, since it
+					// must be the same as the component's in any case)
+					action.compId = component.id
 				
 					
 					// remap the shellCommands
@@ -908,13 +912,77 @@ var application = new (function() {
 					
 			application.components[component.id] = component;
 			application.select(component.id);
-//		}
-	//	catch (err) {
-		//	alert("Error occured updating the component: \n" + err);
-		//}
+		}
+		catch (err) {
+			alert("Error occured updating the component: \n" + err);
+		}
 	}
-		
 	this.saveComponentError = function(data) {
 		alert('Component could not be updated [' + data.status + '; ' + data.responseText + ']');
+	}
+	
+	this.deleteComponent = function()
+	{
+		try {
+			// if the location is locked, do not allow to change location
+			if (screenManager.isLockedLocation())
+				return;
+				
+			// if no component is selected, simply return
+			if (!this.selectedComponent)
+				return;
+				
+			// send a request to the server
+			var compId = this.selectedComponent.id;
+			$.ajax({
+				url: this.urlPrefix + '/delete/' + compId,
+				dataType: 'text',
+				success: function(data) { application.deleteComponentSuccess(compId) },
+				error:   function(data) { application.deleteComponentError(data) }
+			});
+		}
+		catch (err) {
+			alert("Error occured trying to delete the component:\n" + err);
+		}
+	}
+	this.deleteComponentSuccess = function(id)
+	{
+		delete this.components[id];
+		
+		// rerender 
+		this.select(null)
+	}
+	this.deleteComponentError = function(data) {
+		alert('Component could not be deleted [' + data.status + '; ' + data.responseText + ']');
+	}
+	
+	// used to load the log file
+	this.loadLog = function(actionId, callback) 
+	{
+		try {
+			// if the location is locked, do not allow to change location
+			if (screenManager.isLockedLocation())
+				return;
+				
+			// if no component is selected, simply return
+			if (!this.selectedComponent)
+				return;
+				
+			var compId = this.selectedComponent.id;
+			// send a request to the server
+			var compId = this.selectedComponent.id;
+			$.ajax({
+				url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/status',
+				dataType: 'text',
+				success: function(data) { if(application.selectedComponent && compId == application.selectedComponent.id) callback(data); },
+				error:   function(data) { application.loadLogError(data); }
+			});
+		}
+		catch (err) {
+			alert("Error occured trying to load the component's logfiles:\n" + err);
+		}
+	}
+	this.loadLogError = function(data) {
+		alert('Component\'s logfiles could not be loaded [' + data.status + '; ' + data.responseText + ']');
 	}
 })();

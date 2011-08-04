@@ -72,7 +72,7 @@ div.componentView-topBar .ui-icon {
  */
 .componentView-summary {
 /*	width: 100%;*/
-	margin: 10px 0 0;
+	margin: 10px 0;
 	overflow-y: auto;
 	/* margin-top + padding-top + height = 140 */
 }
@@ -140,6 +140,20 @@ td.ph_action-dep a.notRunning {
 /*	color: red;*/
 	color: #888;
 }
+
+/*
+ * Log
+ */
+/*div.logView {
+	font-family: courier new;
+	font-size: 12px;
+	border: 1px solid #DDDDDD;
+	background-color: #EFEFEF;
+	height: 400px;
+	margin: 12px;
+	padding: 10px;
+	overflow: auto;
+}*/
 
 /*
  * iframe

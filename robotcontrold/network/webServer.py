@@ -112,8 +112,6 @@ class MyHandler(BaseHTTPRequestHandler):
 					
 				# get the request user
 				requestUser = serverThread.getUserCreateIfNotExistent(auth['user'])
-				if not requestUser:
-					raise UnauthorizedRequestError('Invalid Auth-Token. No user found.', self.path)
 				
 
 				# split the path by the first ?
@@ -369,8 +367,20 @@ class MyHandler(BaseHTTPRequestHandler):
 					output = json.dumps(idMap)
 					
 
+				# delete a component
+				elif action == 'delete':
+					if len(args) != 2:
+						raise ArgumentRequestError('No componentId passed as argument', self.path)
+					
+					requestUser.deleteComponent(args[1])
+					output = '{"success": true}'
+						
+					
+
 				else:
 					raise UnknownRequestError('Unknown request. Args: %s.' % str(args), self.path)
+					
+				
 					
 				# if output was not set, raise an error	
 				if not output:

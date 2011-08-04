@@ -10087,3 +10087,1422 @@ AttributeError: Action instance has no attribute 'dependencies'
 2011-08-02 13:34:50,828 - ServerThread - INFO - Starting ServerThread
 2011-08-02 13:34:50,828 - WebServer - DEBUG - Starting WebServer
 2011-08-02 13:34:50,829 - WebServer - DEBUG - Serve forever
+2011-08-02 14:16:29,679 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-08-02 14:16:29,680 - ServerThread - INFO - Stopping ServerThread
+2011-08-02 14:16:29,680 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-02 14:16:29,680 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-02 14:16:29,681 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-02 14:16:29,731 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-02 14:16:29,731 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-02 14:16:29,732 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-02 14:16:31,734 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-02 14:16:31,735 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-02 14:16:31,736 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-02 14:16:31,777 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-02 14:16:31,779 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-02 14:16:31,780 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-02 14:16:31,803 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-02 14:16:31,804 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-02 14:16:31,806 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-02 14:16:31,809 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-02 14:16:31,810 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-02 14:16:31,846 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-02 14:16:31,848 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-02 14:16:31,848 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-02 14:16:31,849 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-02 14:16:33,852 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-02 14:16:33,853 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-02 14:16:33,854 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-02 14:16:33,906 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-02 14:16:33,907 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-02 14:16:33,908 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-02 14:16:33,910 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-02 14:16:35,911 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-02 14:16:35,912 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-02 14:16:35,913 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-02 14:16:35,982 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-02 14:16:35,983 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-02 14:16:35,985 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-02 14:16:35,986 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-02 14:16:35,987 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-02 14:16:36,008 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-02 14:16:36,009 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-02 14:16:36,011 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-02 14:16:36,012 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-02 14:16:36,014 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-02 14:16:36,014 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-02 14:16:36,037 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-02 14:16:36,039 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2011-08-02 14:16:36,039 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
+2011-08-02 14:16:36,063 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-02 14:16:36,065 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-02 14:16:36,065 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-02 14:16:36,074 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-02 14:16:36,076 - ServerThread - INFO - Disconnecting all Hosts
+2011-08-02 14:16:36,076 - ServerThread - DEBUG - Closing ControlChannel
+2011-08-02 14:16:36,106 - ServerThread - INFO - Disconnected from Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-02 14:16:36,106 - ServerThread - DEBUG - Stopping Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-02 14:16:36,155 - WebServer - DEBUG - Stopping WebServer
+2011-08-04 12:15:50,342 - robotcontrold - DEBUG - Creating ServerThread
+2011-08-04 12:15:50,347 - ServerThread - INFO - Establishing Mysql Connection
+2011-08-04 12:15:50,819 - ServerThread - INFO - Reading Hosts
+2011-08-04 12:15:50,819 - ServerThread - DEBUG - Loading Hosts from database
+2011-08-04 12:15:50,820 - ServerThread - DEBUG - 1 rows fetched
+2011-08-04 12:15:50,836 - ServerThread - INFO - Reading Users
+2011-08-04 12:15:50,840 - ServerThread - DEBUG - Start all Hosts
+2011-08-04 12:15:50,841 - ServerThread - DEBUG - Starting Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 12:15:51,211 - ServerThread - INFO - Connected to Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 12:15:51,212 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 12:15:51,212 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 12:15:51,213 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 12:15:55,080 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 12:15:55,080 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 12:15:55,083 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:15:57,085 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:15:59,088 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:15:59,089 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 12:15:59,090 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 12:15:59,158 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 12:15:59,160 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:15:59,161 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 12:15:59,198 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 12:15:59,199 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 12:15:59,200 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 12:15:59,202 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:15:59,202 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 12:15:59,239 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 12:15:59,240 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 12:15:59,241 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:16:01,243 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:16:05,244 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:16:05,246 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 12:16:05,246 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 12:16:05,284 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 12:16:05,284 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 12:16:05,285 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:16:07,287 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:07,288 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 12:16:07,289 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 12:16:07,358 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 12:16:07,359 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 12:16:07,360 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 12:16:07,362 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:07,362 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 12:16:07,383 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 12:16:07,384 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 12:16:07,385 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 12:16:07,391 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:07,392 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 12:16:07,393 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 12:16:07,431 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:07,433 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 12:16:07,435 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 12:16:07,441 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:07,441 - robotcontrold - DEBUG - Creating WebServer
+2011-08-04 12:16:07,443 - WebServer - INFO - Creating WebServer on port 8000
+2011-08-04 12:16:07,444 - ServerThread - INFO - Starting ServerThread
+2011-08-04 12:16:07,445 - WebServer - DEBUG - Starting WebServer
+2011-08-04 12:16:07,445 - WebServer - DEBUG - Serve forever
+2011-08-04 12:16:37,463 - ServerThread - INFO - Preparing the Server for new user: 
+2011-08-04 12:16:37,463 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 12:16:37,463 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 12:16:37,464 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 12:16:37,470 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 12:16:37,471 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 12:16:37,472 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:37,473 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:16:39,474 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:39,475 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 12:16:39,476 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 12:16:39,545 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 12:16:39,546 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:39,548 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 12:16:39,569 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 12:16:39,569 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 12:16:39,572 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 12:16:39,574 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:39,576 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 12:16:39,598 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 12:16:39,599 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 12:16:39,600 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:16:41,601 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:16:41,603 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 12:16:41,603 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 12:16:41,673 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 12:16:41,673 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 12:16:41,675 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:16:43,676 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:43,677 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 12:16:43,678 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 12:16:43,716 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 12:16:43,716 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 12:16:43,719 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 12:16:43,721 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:43,721 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 12:16:43,758 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 12:16:43,759 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 12:16:43,762 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 12:16:43,763 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:43,765 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 12:16:43,765 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 12:16:43,786 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:43,787 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 12:16:43,788 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 12:16:43,798 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 12:16:50,309 - ServerThread - INFO - Starting Action "roscore". "2" Commands / "1" dependencies found
+2011-08-04 12:16:50,309 - ServerThread - INFO - Action depends on: ['roscore>vnc']
+2011-08-04 12:16:50,310 - ServerThread - INFO - Starting Action "vnc". "2" Commands / "0" dependencies found
+2011-08-04 12:16:50,321 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 12:16:50,321 - ServerThread - DEBUG - Running start command "screen -S vnc_2_3\nvncserver :1 -fg -httpport 8081\nexit\n" by Action "vnc"
+2011-08-04 12:16:50,324 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:50,351 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 12:16:50,352 - ServerThread - DEBUG - Running start command "screen -S vnc_2_4\nwhile ! ps ax | grep -i "Xvnc :1" | grep -v grep; do sleep 2; done\nexit\n" by Action "vnc"
+2011-08-04 12:16:50,353 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:16:52,333 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:52,354 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:54,355 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:16:54,359 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 12:16:54,396 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 12:16:54,397 - ServerThread - DEBUG - Running start command "screen -S roscore_1_1\n$(rospack find cob_webportal_scripts)/roscore start\nexit\n" by Action "roscore"
+2011-08-04 12:16:54,414 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 12:16:54,414 - ServerThread - DEBUG - Running start command "screen -S roscore_1_10\n$(rospack find cob_webportal_scripts)/roscore waitToRun\nexit\n" by Action "roscore"
+2011-08-04 12:16:54,416 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:16:56,399 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:16:56,418 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:16:58,401 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:16:58,420 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:16:58,421 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 12:17:02,404 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:27:54,863 - ServerThread - INFO - Stopping Action "roscore" (force=False). "1" Commands found
+2011-08-04 12:27:54,899 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 12:27:54,899 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 12:27:54,905 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:27:54,906 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:27:56,901 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:27:56,902 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 12:27:56,907 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 12:27:56,909 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 12:28:02,112 - ServerThread - INFO - Stopping Action "vnc" (force=False). "1" Commands found
+2011-08-04 12:28:02,122 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 12:28:02,123 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 12:28:02,124 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:28:02,138 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:28:02,899 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:28:02,900 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 12:28:04,140 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 12:28:04,143 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 12:28:31,721 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 368, in do_GET
+    idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 482, in storeComponent
+    hostId		= int(data['hostId'])
+TypeError: int() argument must be a string or a number, not 'NoneType'
+2011-08-04 12:28:41,881 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 368, in do_GET
+    idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 598, in storeComponent
+    hideLog		= cmd['hideLog']
+KeyError: 'hideLog'
+2011-08-04 12:29:07,464 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 368, in do_GET
+    idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 598, in storeComponent
+    hideLog		= cmd['hideLog']
+KeyError: 'hideLog'
+2011-08-04 12:34:20,694 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 368, in do_GET
+    idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 482, in storeComponent
+    hostId		= int(data['hostId'])
+TypeError: int() argument must be a string or a number, not 'NoneType'
+2011-08-04 12:36:08,093 - ServerThread - INFO - Starting Action "roscore3". "2" Commands / "0" dependencies found
+2011-08-04 12:36:08,102 - ServerThread - DEBUG - Starting screenReader for "roscore3"
+2011-08-04 12:36:08,104 - ServerThread - DEBUG - Running start command "screen -S roscore3_436_148\n$(rospack find cob_webportal_scripts)/roscore start\nexit\n" by Action "roscore3"
+2011-08-04 12:36:08,107 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 12:36:08,144 - ServerThread - DEBUG - Starting screenReader for "roscore3"
+2011-08-04 12:36:08,145 - ServerThread - DEBUG - Running start command "screen -S roscore3_436_351\n$(rospack find cob_webportal_scripts)/roscore waitToRun\nexit\n" by Action "roscore3"
+2011-08-04 12:36:10,110 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 12:36:10,110 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 12:36:10,147 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 12:36:10,149 - ServerThread - DEBUG - ScreenReader "roscore3" finished
+2011-08-04 12:36:16,164 - ServerThread - INFO - Stopping Action "roscore3" (force=False). "1" Commands found
+2011-08-04 12:36:16,173 - ServerThread - DEBUG - Running stop command "screen -S roscore3_436_447\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore3"
+2011-08-04 12:36:16,174 - ServerThread - DEBUG - Starting screenReader for "roscore3"
+2011-08-04 12:36:16,175 - ServerThread - DEBUG - Action "roscore3"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:36:16,177 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 12:36:18,117 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 12:36:18,120 - ServerThread - DEBUG - ScreenReader "roscore3" finished
+2011-08-04 12:36:18,120 - ServerThread - DEBUG - Action "roscore3"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 12:36:18,179 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 12:36:18,181 - ServerThread - DEBUG - ScreenReader "roscore3" finished
+2011-08-04 12:36:42,993 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 368, in do_GET
+    idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 482, in storeComponent
+    hostId		= int(data['hostId'])
+TypeError: int() argument must be a string or a number, not 'NoneType'
+2011-08-04 13:16:01,552 - ServerThread - INFO - Logging current user out: simon
+2011-08-04 13:16:01,552 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 13:16:01,553 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 13:16:01,553 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 13:16:01,572 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 13:16:01,573 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 13:16:01,574 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:03,575 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 13:16:03,578 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 13:16:03,579 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 13:16:03,647 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 13:16:03,668 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:03,669 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 13:16:03,707 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 13:16:03,709 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 13:16:03,709 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 13:16:03,710 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:03,711 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 13:16:03,780 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 13:16:03,780 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 13:16:03,781 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:05,783 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 13:16:05,785 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 13:16:05,786 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 13:16:05,822 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 13:16:05,823 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 13:16:05,824 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:07,826 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 13:16:07,827 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 13:16:07,828 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 13:16:07,897 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 13:16:07,898 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 13:16:07,900 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 13:16:07,900 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:07,901 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 13:16:07,922 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 13:16:07,923 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 13:16:07,924 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 13:16:07,926 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:07,926 - ServerThread - INFO - Cannot stop Action "roscore2" (force=True), no commands found
+2011-08-04 13:16:07,927 - ServerThread - INFO - Killing Action "roscore2" (force=True) "0" Commands found 
+2011-08-04 13:16:07,949 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:07,950 - ServerThread - INFO - Stopping Action "roscore4" (force=True). "1" Commands found
+2011-08-04 13:16:07,958 - ServerThread - DEBUG - Running stop command "screen -S roscore4_491_757\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore4"
+2011-08-04 13:16:07,959 - ServerThread - DEBUG - Starting screenReader for "roscore4"
+2011-08-04 13:16:07,961 - ServerThread - DEBUG - Action "roscore4"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:09,961 - ServerThread - DEBUG - ScreenReader received a new line for "roscore4"
+2011-08-04 13:16:09,963 - ServerThread - DEBUG - ScreenReader "roscore4" finished
+2011-08-04 13:16:09,964 - ServerThread - INFO - Killing Action "roscore4" (force=True) "3" Commands found 
+2011-08-04 13:16:10,001 - ServerThread - DEBUG - Running kill command "screen -X -S roscore4_491_196 kill" by Action "roscore4"
+2011-08-04 13:16:10,002 - ServerThread - DEBUG - Running kill command "screen -X -S roscore4_491_165 kill" by Action "roscore4"
+2011-08-04 13:16:10,004 - ServerThread - DEBUG - Running kill command "screen -X -S roscore4_491_757 kill" by Action "roscore4"
+2011-08-04 13:16:10,006 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:10,007 - ServerThread - INFO - Stopping Action "roscore3" (force=True). "1" Commands found
+2011-08-04 13:16:10,043 - ServerThread - DEBUG - Running stop command "screen -S roscore3_436_447\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore3"
+2011-08-04 13:16:10,044 - ServerThread - DEBUG - Starting screenReader for "roscore3"
+2011-08-04 13:16:10,045 - ServerThread - DEBUG - Action "roscore3"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:12,046 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 13:16:12,048 - ServerThread - DEBUG - ScreenReader "roscore3" finished
+2011-08-04 13:16:12,048 - ServerThread - INFO - Killing Action "roscore3" (force=True) "3" Commands found 
+2011-08-04 13:16:12,116 - ServerThread - DEBUG - Running kill command "screen -X -S roscore3_436_148 kill" by Action "roscore3"
+2011-08-04 13:16:12,117 - ServerThread - DEBUG - Running kill command "screen -X -S roscore3_436_351 kill" by Action "roscore3"
+2011-08-04 13:16:12,120 - ServerThread - DEBUG - Running kill command "screen -X -S roscore3_436_447 kill" by Action "roscore3"
+2011-08-04 13:16:12,121 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:12,121 - ServerThread - INFO - Stopping Action "roscore5" (force=True). "1" Commands found
+2011-08-04 13:16:12,159 - ServerThread - DEBUG - Running stop command "screen -S roscore5_642_521\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore5"
+2011-08-04 13:16:12,159 - ServerThread - DEBUG - Starting screenReader for "roscore5"
+2011-08-04 13:16:12,160 - ServerThread - DEBUG - Action "roscore5"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:14,162 - ServerThread - DEBUG - ScreenReader received a new line for "roscore5"
+2011-08-04 13:16:14,164 - ServerThread - DEBUG - ScreenReader "roscore5" finished
+2011-08-04 13:16:14,164 - ServerThread - INFO - Killing Action "roscore5" (force=True) "2" Commands found 
+2011-08-04 13:16:14,201 - ServerThread - DEBUG - Running kill command "screen -X -S roscore5_642_857 kill" by Action "roscore5"
+2011-08-04 13:16:14,202 - ServerThread - DEBUG - Running kill command "screen -X -S roscore5_642_521 kill" by Action "roscore5"
+2011-08-04 13:16:14,204 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:14,205 - ServerThread - INFO - Cannot stop Action "roscore2" (force=True), no commands found
+2011-08-04 13:16:14,205 - ServerThread - INFO - Killing Action "roscore2" (force=True) "0" Commands found 
+2011-08-04 13:16:14,226 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:14,227 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 13:16:14,229 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 13:16:14,235 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:14,237 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 13:16:14,237 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 13:16:14,274 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:14,277 - ServerThread - INFO - Stopping Action "roscore7" (force=True). "1" Commands found
+2011-08-04 13:16:14,313 - ServerThread - DEBUG - Running stop command "screen -S roscore7_247_110\nls\nexit\n" by Action "roscore7"
+2011-08-04 13:16:14,314 - ServerThread - DEBUG - Starting screenReader for "roscore7"
+2011-08-04 13:16:14,315 - ServerThread - DEBUG - Action "roscore7"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:16,316 - ServerThread - DEBUG - ScreenReader received a new line for "roscore7"
+2011-08-04 13:16:16,317 - ServerThread - DEBUG - ScreenReader received a new line for "roscore7"
+2011-08-04 13:16:16,319 - ServerThread - DEBUG - ScreenReader "roscore7" finished
+2011-08-04 13:16:16,320 - ServerThread - INFO - Killing Action "roscore7" (force=True) "2" Commands found 
+2011-08-04 13:16:16,332 - ServerThread - DEBUG - Running kill command "screen -X -S roscore7_247_720 kill" by Action "roscore7"
+2011-08-04 13:16:16,334 - ServerThread - DEBUG - Running kill command "screen -X -S roscore7_247_110 kill" by Action "roscore7"
+2011-08-04 13:16:16,335 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:16:16,338 - ServerThread - INFO - Stopping Action "roscore6" (force=True). "1" Commands found
+2011-08-04 13:16:16,364 - ServerThread - DEBUG - Running stop command "screen -S roscore6_492_122\nls\nexit\n" by Action "roscore6"
+2011-08-04 13:16:16,367 - ServerThread - DEBUG - Starting screenReader for "roscore6"
+2011-08-04 13:16:16,369 - ServerThread - DEBUG - Action "roscore6"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:16:16,369 - ServerThread - DEBUG - ScreenReader received a new line for "roscore6"
+2011-08-04 13:16:18,372 - ServerThread - DEBUG - ScreenReader received a new line for "roscore6"
+2011-08-04 13:16:18,373 - ServerThread - DEBUG - ScreenReader received a new line for "roscore6"
+2011-08-04 13:16:18,375 - ServerThread - DEBUG - ScreenReader "roscore6" finished
+2011-08-04 13:16:18,376 - ServerThread - INFO - Killing Action "roscore6" (force=True) "2" Commands found 
+2011-08-04 13:16:18,449 - ServerThread - DEBUG - Running kill command "screen -X -S roscore6_492_403 kill" by Action "roscore6"
+2011-08-04 13:16:18,450 - ServerThread - DEBUG - Running kill command "screen -X -S roscore6_492_122 kill" by Action "roscore6"
+2011-08-04 13:16:18,453 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:13,692 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-08-04 13:27:13,692 - ServerThread - INFO - Stopping ServerThread
+2011-08-04 13:27:13,772 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 13:27:13,773 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 13:27:13,773 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 13:27:13,780 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 13:27:13,780 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 13:27:13,781 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:15,783 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 13:27:15,784 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 13:27:15,785 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 13:27:15,854 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 13:27:15,855 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:15,856 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 13:27:15,877 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 13:27:15,878 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 13:27:15,881 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 13:27:15,882 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:15,883 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 13:27:15,905 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 13:27:15,906 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 13:27:15,907 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:17,907 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 13:27:17,908 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 13:27:17,909 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 13:27:17,978 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 13:27:17,978 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 13:27:17,979 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:19,981 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 13:27:19,982 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 13:27:19,983 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 13:27:20,052 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 13:27:20,053 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 13:27:20,054 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 13:27:20,055 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:20,056 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 13:27:20,077 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 13:27:20,079 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 13:27:20,080 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 13:27:20,081 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:20,082 - ServerThread - INFO - Cannot stop Action "roscore2" (force=True), no commands found
+2011-08-04 13:27:20,082 - ServerThread - INFO - Killing Action "roscore2" (force=True) "0" Commands found 
+2011-08-04 13:27:20,106 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:20,107 - ServerThread - INFO - Stopping Action "roscore4" (force=True). "1" Commands found
+2011-08-04 13:27:20,114 - ServerThread - DEBUG - Running stop command "screen -S roscore4_491_757\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore4"
+2011-08-04 13:27:20,115 - ServerThread - DEBUG - Starting screenReader for "roscore4"
+2011-08-04 13:27:20,116 - ServerThread - DEBUG - Action "roscore4"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:22,117 - ServerThread - DEBUG - ScreenReader received a new line for "roscore4"
+2011-08-04 13:27:22,119 - ServerThread - DEBUG - ScreenReader "roscore4" finished
+2011-08-04 13:27:22,120 - ServerThread - INFO - Killing Action "roscore4" (force=True) "3" Commands found 
+2011-08-04 13:27:22,188 - ServerThread - DEBUG - Running kill command "screen -X -S roscore4_491_196 kill" by Action "roscore4"
+2011-08-04 13:27:22,189 - ServerThread - DEBUG - Running kill command "screen -X -S roscore4_491_165 kill" by Action "roscore4"
+2011-08-04 13:27:22,191 - ServerThread - DEBUG - Running kill command "screen -X -S roscore4_491_757 kill" by Action "roscore4"
+2011-08-04 13:27:22,192 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:22,193 - ServerThread - INFO - Stopping Action "roscore3" (force=True). "1" Commands found
+2011-08-04 13:27:22,213 - ServerThread - DEBUG - Running stop command "screen -S roscore3_436_447\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore3"
+2011-08-04 13:27:22,214 - ServerThread - DEBUG - Starting screenReader for "roscore3"
+2011-08-04 13:27:22,215 - ServerThread - DEBUG - Action "roscore3"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:24,216 - ServerThread - DEBUG - ScreenReader received a new line for "roscore3"
+2011-08-04 13:27:24,218 - ServerThread - DEBUG - ScreenReader "roscore3" finished
+2011-08-04 13:27:24,218 - ServerThread - INFO - Killing Action "roscore3" (force=True) "3" Commands found 
+2011-08-04 13:27:24,288 - ServerThread - DEBUG - Running kill command "screen -X -S roscore3_436_148 kill" by Action "roscore3"
+2011-08-04 13:27:24,289 - ServerThread - DEBUG - Running kill command "screen -X -S roscore3_436_351 kill" by Action "roscore3"
+2011-08-04 13:27:24,291 - ServerThread - DEBUG - Running kill command "screen -X -S roscore3_436_447 kill" by Action "roscore3"
+2011-08-04 13:27:24,291 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:24,292 - ServerThread - INFO - Stopping Action "roscore5" (force=True). "1" Commands found
+2011-08-04 13:27:24,313 - ServerThread - DEBUG - Running stop command "screen -S roscore5_642_521\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore5"
+2011-08-04 13:27:24,313 - ServerThread - DEBUG - Starting screenReader for "roscore5"
+2011-08-04 13:27:24,316 - ServerThread - DEBUG - Action "roscore5"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:26,317 - ServerThread - DEBUG - ScreenReader received a new line for "roscore5"
+2011-08-04 13:27:26,319 - ServerThread - DEBUG - ScreenReader "roscore5" finished
+2011-08-04 13:27:26,320 - ServerThread - INFO - Killing Action "roscore5" (force=True) "2" Commands found 
+2011-08-04 13:27:26,388 - ServerThread - DEBUG - Running kill command "screen -X -S roscore5_642_857 kill" by Action "roscore5"
+2011-08-04 13:27:26,389 - ServerThread - DEBUG - Running kill command "screen -X -S roscore5_642_521 kill" by Action "roscore5"
+2011-08-04 13:27:26,391 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:26,391 - ServerThread - INFO - Cannot stop Action "roscore2" (force=True), no commands found
+2011-08-04 13:27:26,392 - ServerThread - INFO - Killing Action "roscore2" (force=True) "0" Commands found 
+2011-08-04 13:27:26,413 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:26,413 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 13:27:26,415 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 13:27:26,425 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:26,427 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 13:27:26,428 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 13:27:26,466 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:26,468 - ServerThread - INFO - Stopping Action "roscore7" (force=True). "1" Commands found
+2011-08-04 13:27:26,509 - ServerThread - DEBUG - Running stop command "screen -S roscore7_247_110\nls\nexit\n" by Action "roscore7"
+2011-08-04 13:27:26,510 - ServerThread - DEBUG - Starting screenReader for "roscore7"
+2011-08-04 13:27:26,511 - ServerThread - DEBUG - Action "roscore7"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:28,512 - ServerThread - DEBUG - ScreenReader received a new line for "roscore7"
+2011-08-04 13:27:28,513 - ServerThread - DEBUG - ScreenReader received a new line for "roscore7"
+2011-08-04 13:27:28,514 - ServerThread - DEBUG - ScreenReader "roscore7" finished
+2011-08-04 13:27:28,515 - ServerThread - INFO - Killing Action "roscore7" (force=True) "2" Commands found 
+2011-08-04 13:27:28,553 - ServerThread - DEBUG - Running kill command "screen -X -S roscore7_247_720 kill" by Action "roscore7"
+2011-08-04 13:27:28,554 - ServerThread - DEBUG - Running kill command "screen -X -S roscore7_247_110 kill" by Action "roscore7"
+2011-08-04 13:27:28,556 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:28,558 - ServerThread - INFO - Stopping Action "roscore6" (force=True). "1" Commands found
+2011-08-04 13:27:28,595 - ServerThread - DEBUG - Running stop command "screen -S roscore6_492_122\nls\nexit\n" by Action "roscore6"
+2011-08-04 13:27:28,596 - ServerThread - DEBUG - Starting screenReader for "roscore6"
+2011-08-04 13:27:28,597 - ServerThread - DEBUG - ScreenReader received a new line for "roscore6"
+2011-08-04 13:27:28,599 - ServerThread - DEBUG - Action "roscore6"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 13:27:30,601 - ServerThread - DEBUG - ScreenReader received a new line for "roscore6"
+2011-08-04 13:27:30,602 - ServerThread - DEBUG - ScreenReader received a new line for "roscore6"
+2011-08-04 13:27:30,604 - ServerThread - DEBUG - ScreenReader "roscore6" finished
+2011-08-04 13:27:30,604 - ServerThread - INFO - Killing Action "roscore6" (force=True) "2" Commands found 
+2011-08-04 13:27:30,643 - ServerThread - DEBUG - Running kill command "screen -X -S roscore6_492_403 kill" by Action "roscore6"
+2011-08-04 13:27:30,644 - ServerThread - DEBUG - Running kill command "screen -X -S roscore6_492_122 kill" by Action "roscore6"
+2011-08-04 13:27:30,645 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 13:27:30,646 - ServerThread - INFO - Disconnecting all Hosts
+2011-08-04 13:27:30,646 - ServerThread - DEBUG - Closing ControlChannel
+2011-08-04 13:27:30,656 - ServerThread - INFO - Disconnected from Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 13:27:30,656 - ServerThread - DEBUG - Stopping Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 13:27:31,130 - WebServer - DEBUG - Stopping WebServer
+2011-08-04 14:12:42,501 - robotcontrold - DEBUG - Creating ServerThread
+2011-08-04 14:12:42,510 - ServerThread - INFO - Establishing Mysql Connection
+2011-08-04 14:12:42,979 - ServerThread - INFO - Reading Hosts
+2011-08-04 14:12:42,980 - ServerThread - DEBUG - Loading Hosts from database
+2011-08-04 14:12:42,998 - ServerThread - DEBUG - 1 rows fetched
+2011-08-04 14:12:43,040 - ServerThread - INFO - Reading Users
+2011-08-04 14:12:43,044 - ServerThread - DEBUG - Start all Hosts
+2011-08-04 14:12:43,044 - ServerThread - DEBUG - Starting Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:12:43,369 - ServerThread - INFO - Connected to Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:12:43,369 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:12:43,370 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:12:43,370 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:12:43,477 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:12:43,477 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:12:43,480 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:12:45,482 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:12:45,483 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:12:45,484 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:12:45,485 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:12:45,553 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:12:45,555 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:12:45,556 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:12:45,577 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:12:45,578 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:12:45,579 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:12:45,582 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:12:45,583 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:12:45,610 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:12:45,610 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:12:45,612 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:12:47,612 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:12:47,613 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:12:47,614 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:12:47,683 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:12:47,683 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:12:47,684 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:12:49,686 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:12:49,688 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:12:49,689 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:12:49,725 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:12:49,726 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:12:49,728 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:12:49,729 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:12:49,729 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:12:49,749 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:12:49,752 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:12:49,753 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:12:49,754 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:12:49,755 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:12:49,755 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:12:49,776 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:12:49,778 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:12:49,779 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:12:49,785 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:12:49,786 - robotcontrold - DEBUG - Creating WebServer
+2011-08-04 14:12:49,787 - WebServer - INFO - Creating WebServer on port 8000
+2011-08-04 14:12:49,788 - ServerThread - INFO - Starting ServerThread
+2011-08-04 14:12:49,789 - WebServer - DEBUG - Starting WebServer
+2011-08-04 14:12:49,789 - WebServer - DEBUG - Serve forever
+2011-08-04 14:16:45,301 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 368, in do_GET
+    idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 482, in storeComponent
+    hostId		= int(data['hostId'])
+TypeError: int() argument must be a string or a number, not 'NoneType'
+2011-08-04 14:18:53,086 - ServerThread - INFO - Preparing the Server for new user: 
+2011-08-04 14:18:53,086 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:18:53,087 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:18:53,087 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:18:53,098 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:18:53,098 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:18:53,100 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:18:53,102 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:18:55,103 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:18:55,104 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:18:55,105 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:18:55,174 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:18:55,176 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:18:55,177 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:18:55,214 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:18:55,215 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:18:55,218 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:18:55,218 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:18:55,219 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:18:55,244 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:18:55,245 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:18:55,248 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:18:55,248 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:18:57,252 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:18:57,253 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:18:57,254 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:18:57,333 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:18:57,333 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:18:57,338 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:18:57,354 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:18:59,356 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:18:59,357 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:18:59,358 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:18:59,427 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:18:59,427 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:18:59,430 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:18:59,431 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:18:59,431 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:18:59,452 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:18:59,453 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:18:59,455 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:18:59,457 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:18:59,459 - ServerThread - INFO - Cannot stop Action "roscore2" (force=True), no commands found
+2011-08-04 14:18:59,460 - ServerThread - INFO - Killing Action "roscore2" (force=True) "1" Commands found 
+2011-08-04 14:18:59,500 - ServerThread - DEBUG - Running kill command "screen -X -S roscore2_764_31 kill" by Action "roscore2"
+2011-08-04 14:18:59,501 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:18:59,504 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:18:59,504 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:18:59,511 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:18:59,512 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:18:59,512 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:18:59,529 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:19:11,821 - ServerThread - INFO - Starting Action "roscore". "2" Commands / "1" dependencies found
+2011-08-04 14:19:11,821 - ServerThread - INFO - Action depends on: ['roscore>vnc']
+2011-08-04 14:19:11,822 - ServerThread - INFO - Starting Action "vnc". "2" Commands / "0" dependencies found
+2011-08-04 14:19:11,839 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:19:11,839 - ServerThread - DEBUG - Running start command "screen -S vnc_2_3\nvncserver :1 -fg -httpport 8081\nexit\n" by Action "vnc"
+2011-08-04 14:19:11,842 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:19:11,879 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:19:11,879 - ServerThread - DEBUG - Running start command "screen -S vnc_2_4\nwhile ! ps ax | grep -i "Xvnc :1" | grep -v grep; do sleep 2; done\nexit\n" by Action "vnc"
+2011-08-04 14:19:11,880 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:19:13,845 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:19:13,880 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:19:13,880 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:19:13,883 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:19:13,952 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:19:13,953 - ServerThread - DEBUG - Running start command "screen -S roscore_1_1\n$(rospack find cob_webportal_scripts)/roscore start\nexit\n" by Action "roscore"
+2011-08-04 14:19:13,960 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:19:13,961 - ServerThread - DEBUG - Running start command "screen -S roscore_1_10\n$(rospack find cob_webportal_scripts)/roscore waitToRun\nexit\n" by Action "roscore"
+2011-08-04 14:19:13,962 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:19:15,955 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:19:15,956 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:19:15,963 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:19:15,965 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:19:25,746 - ServerThread - INFO - Starting Action "roscore2". "1" Commands / "0" dependencies found
+2011-08-04 14:19:25,755 - ServerThread - DEBUG - Starting screenReader for "roscore2"
+2011-08-04 14:19:25,756 - ServerThread - DEBUG - Running start command "screen -S roscore2_764_31\nls\nexit\n" by Action "roscore2"
+2011-08-04 14:19:27,758 - ServerThread - DEBUG - ScreenReader received a new line for "roscore2"
+2011-08-04 14:19:27,758 - ServerThread - DEBUG - ScreenReader received a new line for "roscore2"
+2011-08-04 14:19:27,760 - ServerThread - DEBUG - ScreenReader "roscore2" finished
+2011-08-04 14:38:47,311 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-08-04 14:38:47,311 - ServerThread - INFO - Stopping ServerThread
+2011-08-04 14:38:47,311 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:38:47,312 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:38:47,312 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:38:47,318 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:38:47,319 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:38:47,320 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:38:49,321 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:38:49,324 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:38:49,324 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:38:49,361 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:38:49,362 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:38:49,364 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:38:49,389 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:38:49,390 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:38:49,392 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:38:49,393 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:38:49,394 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:38:49,419 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:38:49,420 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:38:49,421 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:38:51,060 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:38:51,062 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:38:51,423 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:38:51,425 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:38:51,425 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:38:51,494 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:38:51,495 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:38:51,496 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:38:52,954 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:38:52,956 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:38:53,497 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:38:53,499 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:38:53,499 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:38:53,568 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:38:53,570 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:38:53,571 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:38:53,572 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:38:53,573 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:38:53,593 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:38:53,596 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:38:53,597 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:38:53,598 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:38:53,599 - ServerThread - INFO - Cannot stop Action "roscore2" (force=True), no commands found
+2011-08-04 14:38:53,600 - ServerThread - INFO - Killing Action "roscore2" (force=True) "1" Commands found 
+2011-08-04 14:38:53,619 - ServerThread - DEBUG - Running kill command "screen -X -S roscore2_764_31 kill" by Action "roscore2"
+2011-08-04 14:38:53,620 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:38:53,622 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:38:53,622 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:38:53,645 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:38:53,646 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:38:53,647 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:38:53,653 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:38:53,654 - ServerThread - INFO - Disconnecting all Hosts
+2011-08-04 14:38:53,656 - ServerThread - DEBUG - Closing ControlChannel
+2011-08-04 14:38:53,673 - ServerThread - INFO - Disconnected from Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:38:53,674 - ServerThread - DEBUG - Stopping Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:38:54,067 - WebServer - DEBUG - Stopping WebServer
+2011-08-04 14:38:58,590 - robotcontrold - DEBUG - Creating ServerThread
+2011-08-04 14:38:58,591 - ServerThread - INFO - Establishing Mysql Connection
+2011-08-04 14:38:58,646 - ServerThread - INFO - Reading Hosts
+2011-08-04 14:38:58,647 - ServerThread - DEBUG - Loading Hosts from database
+2011-08-04 14:38:58,647 - ServerThread - DEBUG - 1 rows fetched
+2011-08-04 14:38:58,654 - ServerThread - INFO - Reading Users
+2011-08-04 14:38:58,659 - ServerThread - DEBUG - Start all Hosts
+2011-08-04 14:38:58,660 - ServerThread - DEBUG - Starting Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:38:58,925 - ServerThread - INFO - Connected to Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:38:58,925 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:38:58,926 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:38:58,926 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:38:59,035 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:38:59,036 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:38:59,037 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:38:59,041 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:39:01,043 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:39:01,045 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:39:01,045 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:39:01,114 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:39:01,115 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:39:01,117 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:39:01,137 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:39:01,138 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:39:01,139 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:39:01,141 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:39:01,142 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:39:01,157 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:39:01,157 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:39:01,158 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:39:03,159 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:39:03,160 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:39:03,161 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:39:03,200 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:39:03,201 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:39:03,202 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:39:05,203 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:39:05,205 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:39:05,205 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:39:05,274 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:39:05,275 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:39:05,277 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:39:05,278 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:39:05,278 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:39:05,299 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:39:05,300 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:39:05,302 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:39:05,305 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:39:05,306 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:39:05,307 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:39:05,328 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:39:05,329 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:39:05,330 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:39:05,336 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:39:05,337 - robotcontrold - DEBUG - Creating WebServer
+2011-08-04 14:39:05,338 - WebServer - INFO - Creating WebServer on port 8000
+2011-08-04 14:39:05,339 - ServerThread - INFO - Starting ServerThread
+2011-08-04 14:39:05,340 - WebServer - DEBUG - Starting WebServer
+2011-08-04 14:39:05,340 - WebServer - DEBUG - Serve forever
+2011-08-04 14:53:04,719 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-08-04 14:53:04,719 - ServerThread - INFO - Stopping ServerThread
+2011-08-04 14:53:04,720 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:53:04,720 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:53:04,720 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:53:04,727 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:53:04,728 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:53:04,729 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:53:06,730 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:53:06,732 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:53:06,732 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:53:06,771 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:53:06,772 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:06,774 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:53:06,781 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:53:06,782 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:53:06,784 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:53:06,785 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:06,786 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:53:06,822 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:53:06,823 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:53:06,824 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:53:08,826 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:53:08,828 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:53:08,828 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:53:08,898 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:53:08,898 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:53:08,900 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:53:10,902 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:53:10,904 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:53:10,904 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:53:10,974 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:53:10,974 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:53:10,977 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:53:10,977 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:10,978 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:53:10,999 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:53:11,000 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:53:11,002 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:53:11,003 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:11,006 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:53:11,007 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:53:11,020 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:11,020 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:53:11,021 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:53:11,030 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:11,031 - ServerThread - INFO - Disconnecting all Hosts
+2011-08-04 14:53:11,032 - ServerThread - DEBUG - Closing ControlChannel
+2011-08-04 14:53:11,061 - ServerThread - INFO - Disconnected from Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:53:11,062 - ServerThread - DEBUG - Stopping Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:53:11,321 - WebServer - DEBUG - Stopping WebServer
+2011-08-04 14:53:34,149 - robotcontrold - DEBUG - Creating ServerThread
+2011-08-04 14:53:34,150 - ServerThread - INFO - Establishing Mysql Connection
+2011-08-04 14:53:34,182 - ServerThread - INFO - Reading Hosts
+2011-08-04 14:53:34,183 - ServerThread - DEBUG - Loading Hosts from database
+2011-08-04 14:53:34,184 - ServerThread - DEBUG - 1 rows fetched
+2011-08-04 14:53:34,195 - ServerThread - INFO - Reading Users
+2011-08-04 14:53:34,199 - ServerThread - DEBUG - Start all Hosts
+2011-08-04 14:53:34,199 - ServerThread - DEBUG - Starting Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:53:34,470 - ServerThread - INFO - Connected to Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:53:34,470 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:53:34,471 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:53:34,472 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:53:34,580 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:53:34,581 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:53:34,582 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:53:34,586 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:53:36,589 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:53:36,592 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:53:36,592 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:53:36,661 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:53:36,662 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:36,664 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:53:36,687 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:53:36,688 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:53:36,690 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:53:36,692 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:36,693 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:53:36,714 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:53:36,715 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:53:36,716 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:53:38,717 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:53:38,719 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:53:38,719 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:53:38,791 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:53:38,792 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:53:38,801 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:53:40,802 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:53:40,804 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:53:40,805 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:53:40,849 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:53:40,851 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:53:40,853 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:53:40,854 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:40,856 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:53:40,885 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:53:40,891 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:53:40,892 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:53:40,893 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:40,894 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:53:40,895 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:53:40,933 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:40,935 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:53:40,937 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:53:40,949 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:53:40,951 - robotcontrold - DEBUG - Creating WebServer
+2011-08-04 14:53:40,952 - WebServer - INFO - Creating WebServer on port 8000
+2011-08-04 14:53:40,953 - ServerThread - INFO - Starting ServerThread
+2011-08-04 14:53:40,964 - WebServer - DEBUG - Starting WebServer
+2011-08-04 14:53:40,972 - WebServer - DEBUG - Serve forever
+2011-08-04 14:53:47,190 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 377, in do_GET
+    requestUser.deleteComponent(args[1])
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/user.py", line 62, in deleteComponent
+    raise ValueError('User has no component with id "%d"' % compId)
+TypeError: %d format: a number is required, not str
+2011-08-04 14:54:19,011 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-08-04 14:54:19,011 - ServerThread - INFO - Stopping ServerThread
+2011-08-04 14:54:19,012 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:54:19,012 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:54:19,012 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:54:19,019 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:54:19,020 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:54:19,021 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:54:21,022 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:54:21,024 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:54:21,024 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:54:21,094 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:54:21,095 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:21,096 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:54:21,117 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:54:21,118 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:54:21,121 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:54:21,122 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:21,123 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:54:21,145 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:54:21,146 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:54:21,147 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:54:23,149 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:54:23,150 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:54:23,151 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:54:23,220 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:54:23,221 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:54:23,222 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:54:25,223 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:54:25,225 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:54:25,225 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:54:25,294 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:54:25,295 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:54:25,297 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:54:25,298 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:25,299 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:54:25,322 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:54:25,323 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:54:25,325 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:54:25,326 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:25,327 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:54:25,327 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:54:25,347 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:25,348 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:54:25,349 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:54:25,361 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:25,363 - ServerThread - INFO - Disconnecting all Hosts
+2011-08-04 14:54:25,364 - ServerThread - DEBUG - Closing ControlChannel
+2011-08-04 14:54:25,379 - ServerThread - INFO - Disconnected from Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:54:25,380 - ServerThread - DEBUG - Stopping Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:54:25,554 - WebServer - DEBUG - Stopping WebServer
+2011-08-04 14:54:26,213 - robotcontrold - DEBUG - Creating ServerThread
+2011-08-04 14:54:26,213 - ServerThread - INFO - Establishing Mysql Connection
+2011-08-04 14:54:26,244 - ServerThread - INFO - Reading Hosts
+2011-08-04 14:54:26,244 - ServerThread - DEBUG - Loading Hosts from database
+2011-08-04 14:54:26,245 - ServerThread - DEBUG - 1 rows fetched
+2011-08-04 14:54:26,253 - ServerThread - INFO - Reading Users
+2011-08-04 14:54:26,256 - ServerThread - DEBUG - Start all Hosts
+2011-08-04 14:54:26,257 - ServerThread - DEBUG - Starting Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:54:26,526 - ServerThread - INFO - Connected to Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:54:26,527 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:54:26,527 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:54:26,528 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:54:26,634 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:54:26,635 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:54:26,638 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:54:28,639 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:54:28,640 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:54:28,641 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:54:28,642 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:54:28,711 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:54:28,712 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:28,714 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:54:28,735 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:54:28,736 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:54:28,737 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:54:28,739 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:28,739 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:54:28,754 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:54:28,755 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:54:28,756 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:54:30,757 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:54:30,759 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:54:30,760 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:54:30,829 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:54:30,830 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:54:30,830 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:54:32,832 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:54:32,834 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:54:32,834 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:54:32,905 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:54:32,908 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:54:32,913 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:54:32,916 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:32,919 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:54:32,937 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:54:32,939 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:54:32,940 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:54:32,941 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:32,944 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:54:32,946 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:54:32,969 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:32,970 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:54:32,972 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:54:32,981 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:54:32,983 - robotcontrold - DEBUG - Creating WebServer
+2011-08-04 14:54:32,983 - WebServer - INFO - Creating WebServer on port 8000
+2011-08-04 14:54:32,985 - ServerThread - INFO - Starting ServerThread
+2011-08-04 14:54:32,986 - WebServer - DEBUG - Starting WebServer
+2011-08-04 14:54:32,987 - WebServer - DEBUG - Serve forever
+2011-08-04 14:55:24,840 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-08-04 14:55:24,840 - ServerThread - INFO - Stopping ServerThread
+2011-08-04 14:55:24,840 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:55:24,841 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:55:24,841 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:55:24,848 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:55:24,848 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:55:24,849 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:55:26,851 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:55:26,852 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:55:26,853 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:55:26,922 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:55:26,923 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:26,925 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:55:26,962 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:55:26,963 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:55:26,965 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:55:26,966 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:26,966 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:55:27,007 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:55:27,007 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:55:27,009 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:55:27,012 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:55:29,014 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:55:29,016 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:55:29,016 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:55:29,087 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:55:29,087 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:55:29,089 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:55:31,090 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:55:31,092 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:55:31,092 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:55:31,161 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:55:31,162 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:55:31,164 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:55:31,165 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:31,166 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:55:31,186 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:55:31,187 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:55:31,196 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:55:31,197 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:31,198 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:55:31,199 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:55:31,214 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:31,215 - ServerThread - INFO - Disconnecting all Hosts
+2011-08-04 14:55:31,216 - ServerThread - DEBUG - Closing ControlChannel
+2011-08-04 14:55:31,247 - ServerThread - INFO - Disconnected from Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:55:31,247 - ServerThread - DEBUG - Stopping Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:55:31,636 - WebServer - DEBUG - Stopping WebServer
+2011-08-04 14:55:33,263 - robotcontrold - DEBUG - Creating ServerThread
+2011-08-04 14:55:33,264 - ServerThread - INFO - Establishing Mysql Connection
+2011-08-04 14:55:33,293 - ServerThread - INFO - Reading Hosts
+2011-08-04 14:55:33,294 - ServerThread - DEBUG - Loading Hosts from database
+2011-08-04 14:55:33,295 - ServerThread - DEBUG - 1 rows fetched
+2011-08-04 14:55:33,303 - ServerThread - INFO - Reading Users
+2011-08-04 14:55:33,307 - ServerThread - DEBUG - Start all Hosts
+2011-08-04 14:55:33,307 - ServerThread - DEBUG - Starting Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:55:33,585 - ServerThread - INFO - Connected to Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:55:33,585 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:55:33,586 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:55:33,587 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:55:33,695 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:55:33,695 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:55:33,699 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:55:33,703 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:55:35,706 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:55:35,708 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:55:35,708 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:55:35,777 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:55:35,779 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:35,780 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:55:35,802 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:55:35,803 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:55:35,805 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:55:35,806 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:35,807 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:55:35,830 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:55:35,831 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:55:35,832 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:55:37,833 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:55:37,834 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:55:37,835 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:55:37,872 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:55:37,873 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:55:37,874 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:55:39,875 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:55:39,877 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:55:39,878 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:55:39,949 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:55:39,951 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:55:39,953 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:55:39,954 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:39,956 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:55:39,989 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:55:39,992 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:55:39,993 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:55:39,997 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:39,998 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:55:39,999 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:55:40,014 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:40,017 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:55:40,018 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:55:40,040 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:55:40,041 - robotcontrold - DEBUG - Creating WebServer
+2011-08-04 14:55:40,043 - WebServer - INFO - Creating WebServer on port 8000
+2011-08-04 14:55:40,045 - ServerThread - INFO - Starting ServerThread
+2011-08-04 14:55:40,045 - WebServer - DEBUG - Starting WebServer
+2011-08-04 14:55:40,046 - WebServer - DEBUG - Serve forever
+2011-08-04 14:57:48,828 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-08-04 14:57:48,828 - ServerThread - INFO - Stopping ServerThread
+2011-08-04 14:57:48,828 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:57:48,829 - ServerThread - INFO - Disconnecting all Hosts
+2011-08-04 14:57:48,829 - ServerThread - DEBUG - Closing ControlChannel
+2011-08-04 14:57:48,832 - ServerThread - INFO - Disconnected from Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:57:48,832 - ServerThread - DEBUG - Stopping Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:57:49,814 - WebServer - DEBUG - Stopping WebServer
+2011-08-04 14:57:52,496 - robotcontrold - DEBUG - Creating ServerThread
+2011-08-04 14:57:52,496 - ServerThread - INFO - Establishing Mysql Connection
+2011-08-04 14:57:52,527 - ServerThread - INFO - Reading Hosts
+2011-08-04 14:57:52,528 - ServerThread - DEBUG - Loading Hosts from database
+2011-08-04 14:57:52,529 - ServerThread - DEBUG - 1 rows fetched
+2011-08-04 14:57:52,541 - ServerThread - INFO - Reading Users
+2011-08-04 14:57:52,547 - ServerThread - DEBUG - Start all Hosts
+2011-08-04 14:57:52,547 - ServerThread - DEBUG - Starting Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:57:52,814 - ServerThread - INFO - Connected to Host [id=1, hostname=10.0.1.102, port=22, user=webportal]
+2011-08-04 14:57:52,815 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 14:57:52,815 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 14:57:52,816 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:57:52,922 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 14:57:52,923 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:57:52,926 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:57:52,929 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:57:54,932 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:57:54,934 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:57:54,935 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 14:57:55,005 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 14:57:55,006 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:57:55,008 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:57:55,030 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 14:57:55,032 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 14:57:55,033 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 14:57:55,041 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:57:55,041 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 14:57:55,062 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 14:57:55,063 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 14:57:55,064 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:57:57,065 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 14:57:57,067 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 14:57:57,067 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 14:57:57,137 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 14:57:57,137 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 14:57:57,138 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 14:57:59,139 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 14:57:59,140 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 14:57:59,141 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 14:57:59,186 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 14:57:59,187 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 14:57:59,189 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 14:57:59,190 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:57:59,191 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 14:57:59,212 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 14:57:59,215 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 14:57:59,216 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 14:57:59,217 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:57:59,217 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 14:57:59,218 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 14:57:59,241 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:57:59,243 - ServerThread - INFO - Cannot stop Action "Neu haha" (force=True), no commands found
+2011-08-04 14:57:59,243 - ServerThread - INFO - Killing Action "Neu haha" (force=True) "0" Commands found 
+2011-08-04 14:57:59,274 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 14:57:59,276 - robotcontrold - DEBUG - Creating WebServer
+2011-08-04 14:57:59,277 - WebServer - INFO - Creating WebServer on port 8000
+2011-08-04 14:57:59,278 - ServerThread - INFO - Starting ServerThread
+2011-08-04 14:57:59,278 - WebServer - DEBUG - Starting WebServer
+2011-08-04 14:57:59,279 - WebServer - DEBUG - Serve forever
+2011-08-04 14:59:01,210 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 368, in do_GET
+    idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+  File "/home/uhr-es/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 482, in storeComponent
+    hostId		= int(data['hostId'])
+TypeError: int() argument must be a string or a number, not 'NoneType'
+2011-08-04 15:04:23,601 - ServerThread - INFO - Preparing the Server for new user: 
+2011-08-04 15:04:23,601 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 15:04:23,602 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 15:04:23,602 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 15:04:23,609 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 15:04:23,609 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 15:04:23,610 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:04:25,611 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:04:25,612 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 15:04:25,613 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 15:04:25,650 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 15:04:25,651 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 15:04:25,653 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 15:04:25,677 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 15:04:25,678 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 15:04:25,680 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 15:04:25,682 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 15:04:25,683 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 15:04:25,707 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 15:04:25,708 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 15:04:25,709 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:04:25,711 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 15:04:27,714 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 15:04:27,716 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 15:04:27,717 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 15:04:27,793 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 15:04:27,794 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 15:04:27,796 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:04:27,798 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:04:29,798 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:04:29,800 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 15:04:29,800 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 15:04:29,842 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 15:04:29,843 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 15:04:29,845 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 15:04:29,846 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 15:04:29,846 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 15:04:29,871 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 15:04:29,872 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 15:04:29,875 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 15:04:29,876 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 15:04:29,878 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 15:04:29,878 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 15:04:29,901 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 15:04:29,901 - ServerThread - INFO - Stopping Action "Ich bin neu" (force=True). "1" Commands found
+2011-08-04 15:04:29,910 - ServerThread - DEBUG - Running stop command "screen -S Ich bin neu_525_589\n'$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "Ich bin neu"
+2011-08-04 15:04:29,911 - ServerThread - DEBUG - Starting screenReader for "Ich bin neu"
+2011-08-04 15:04:29,912 - ServerThread - DEBUG - Action "Ich bin neu"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:04:31,912 - ServerThread - DEBUG - ScreenReader received a new line for "Ich bin neu"
+2011-08-04 15:04:33,915 - ServerThread - DEBUG - ScreenReader received a new line for "Ich bin neu"
+2011-08-04 15:04:33,916 - ServerThread - DEBUG - ScreenReader "Ich bin neu" finished
+2011-08-04 15:04:33,917 - ServerThread - INFO - Killing Action "Ich bin neu" (force=True) "2" Commands found 
+2011-08-04 15:04:33,925 - ServerThread - DEBUG - Running kill command "screen -X -S Ich bin neu_525_764 kill" by Action "Ich bin neu"
+2011-08-04 15:04:33,926 - ServerThread - DEBUG - Running kill command "screen -X -S Ich bin neu_525_589 kill" by Action "Ich bin neu"
+2011-08-04 15:04:33,928 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 15:04:39,673 - ServerThread - INFO - Starting Action "roscore". "2" Commands / "1" dependencies found
+2011-08-04 15:04:39,674 - ServerThread - INFO - Action depends on: ['roscore>vnc']
+2011-08-04 15:04:39,674 - ServerThread - INFO - Starting Action "vnc". "2" Commands / "0" dependencies found
+2011-08-04 15:04:39,686 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 15:04:39,689 - ServerThread - DEBUG - Running start command "screen -S vnc_2_3\nvncserver :1 -fg -httpport 8081\nexit\n" by Action "vnc"
+2011-08-04 15:04:39,697 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 15:04:39,698 - ServerThread - DEBUG - Running start command "screen -S vnc_2_4\nwhile ! ps ax | grep -i "Xvnc :1" | grep -v grep; do sleep 2; done\nexit\n" by Action "vnc"
+2011-08-04 15:04:39,699 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:04:41,691 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:04:41,699 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:04:43,702 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:04:43,704 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 15:04:43,773 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 15:04:43,774 - ServerThread - DEBUG - Running start command "screen -S roscore_1_1\n$(rospack find cob_webportal_scripts)/roscore start\nexit\n" by Action "roscore"
+2011-08-04 15:04:43,782 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 15:04:43,783 - ServerThread - DEBUG - Running start command "screen -S roscore_1_10\n$(rospack find cob_webportal_scripts)/roscore waitToRun\nexit\n" by Action "roscore"
+2011-08-04 15:04:43,784 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:04:45,776 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 15:04:45,777 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 15:04:45,785 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 15:04:45,786 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 15:05:17,807 - ServerThread - INFO - Starting Action "dashboard". "1" Commands / "1" dependencies found
+2011-08-04 15:05:17,809 - ServerThread - INFO - Action depends on: ['dashboard>vnc']
+2011-08-04 15:05:17,809 - ServerThread - INFO - Starting Action "vnc". "2" Commands / "0" dependencies found
+2011-08-04 15:05:17,820 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 15:05:17,827 - ServerThread - DEBUG - Running start command "screen -S vnc_7_6\nvncserver :2 -fg -httpport 8082\nexit\n" by Action "vnc"
+2011-08-04 15:05:17,857 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 15:05:17,863 - ServerThread - DEBUG - Running start command "screen -S vnc_7_7\nwhile ! ps ax | grep -i "Xvnc :2" | grep -v grep; do sleep 2; done\nexit\n" by Action "vnc"
+2011-08-04 15:05:17,864 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:05:17,867 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:05:19,823 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:05:19,870 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:05:19,870 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:05:19,873 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 15:05:19,910 - ServerThread - DEBUG - Starting screenReader for "dashboard"
+2011-08-04 15:05:19,910 - ServerThread - DEBUG - Running start command "screen -S dashboard_6_9\nexport DISPLAY=:2\nroslaunch cob_dashboard dashboard.launch\nexit\n" by Action "dashboard"
+2011-08-04 15:05:21,911 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:05:21,912 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:05:21,912 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:05:21,913 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:05:21,914 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:05:21,915 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:05:25,920 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:06:49,998 - ServerThread - DEBUG - ScreenReader received a new line for "dashboard"
+2011-08-04 15:06:50,000 - ServerThread - DEBUG - ScreenReader "dashboard" finished
+2011-08-04 15:06:53,422 - ServerThread - INFO - Stopping Action "vnc" (force=False). "1" Commands found
+2011-08-04 15:06:53,432 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 15:06:53,433 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 15:06:53,446 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:06:55,438 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:06:55,439 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 15:06:55,440 - ServerThread - DEBUG - Action "vnc"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 15:06:55,901 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 15:06:55,903 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:04:00,875 - ServerThread - INFO - Logging current user out: simon
+2011-08-04 16:04:00,894 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 16:04:00,894 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 16:04:00,894 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 16:04:00,900 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 16:04:00,901 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:04:00,902 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:02,904 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:02,906 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:04:02,906 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 16:04:02,976 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 16:04:02,977 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:02,979 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 16:04:03,016 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 16:04:03,018 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 16:04:03,019 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 16:04:03,021 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:03,022 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 16:04:03,056 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 16:04:03,056 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 16:04:03,058 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:04:03,059 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:04,803 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:04:04,804 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 16:04:05,072 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:04:05,076 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 16:04:05,077 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 16:04:05,156 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 16:04:05,157 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:04:05,164 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:05,166 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:06,724 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:06,729 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:04:07,171 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:07,173 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:04:07,174 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 16:04:07,250 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 16:04:07,252 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 16:04:07,256 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 16:04:07,258 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:07,260 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 16:04:07,291 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 16:04:07,294 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 16:04:07,297 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 16:04:07,299 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:07,301 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 16:04:07,301 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 16:04:07,341 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:07,344 - ServerThread - INFO - Stopping Action "Ich bin neu" (force=True). "1" Commands found
+2011-08-04 16:04:07,376 - ServerThread - DEBUG - Running stop command "screen -S Ich bin neu_525_589\n'$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "Ich bin neu"
+2011-08-04 16:04:07,377 - ServerThread - DEBUG - Starting screenReader for "Ich bin neu"
+2011-08-04 16:04:07,379 - ServerThread - DEBUG - Action "Ich bin neu"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:07,381 - ServerThread - DEBUG - ScreenReader received a new line for "Ich bin neu"
+2011-08-04 16:04:09,383 - ServerThread - DEBUG - ScreenReader received a new line for "Ich bin neu"
+2011-08-04 16:04:11,384 - ServerThread - DEBUG - ScreenReader received a new line for "Ich bin neu"
+2011-08-04 16:04:11,387 - ServerThread - DEBUG - ScreenReader "Ich bin neu" finished
+2011-08-04 16:04:11,388 - ServerThread - INFO - Killing Action "Ich bin neu" (force=True) "2" Commands found 
+2011-08-04 16:04:11,461 - ServerThread - DEBUG - Running kill command "screen -X -S Ich bin neu_525_764 kill" by Action "Ich bin neu"
+2011-08-04 16:04:11,462 - ServerThread - DEBUG - Running kill command "screen -X -S Ich bin neu_525_589 kill" by Action "Ich bin neu"
+2011-08-04 16:04:11,465 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:41,488 - ServerThread - INFO - Preparing the Server for new user: 
+2011-08-04 16:04:41,488 - ServerThread - INFO - Force Terminating all components of every users
+2011-08-04 16:04:41,489 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-08-04 16:04:41,489 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 16:04:41,498 - ServerThread - DEBUG - Running stop command "screen -S vnc_7_8\nvncserver -kill :2\nexit\n" by Action "vnc"
+2011-08-04 16:04:41,499 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:04:41,500 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:41,502 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:43,505 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:43,506 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:04:43,507 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-08-04 16:04:43,576 - ServerThread - DEBUG - Running kill command "screen -X -S dashboard_6_9 kill" by Action "dashboard"
+2011-08-04 16:04:43,578 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:43,578 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 16:04:43,619 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_6 kill" by Action "vnc"
+2011-08-04 16:04:43,620 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_7 kill" by Action "vnc"
+2011-08-04 16:04:43,622 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_7_8 kill" by Action "vnc"
+2011-08-04 16:04:43,623 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:43,625 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-08-04 16:04:43,665 - ServerThread - DEBUG - Running stop command "screen -S roscore_1_2\n$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "roscore"
+2011-08-04 16:04:43,666 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 16:04:43,677 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:43,677 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:04:45,679 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:04:45,681 - ServerThread - DEBUG - ScreenReader "roscore" finished
+2011-08-04 16:04:45,682 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-08-04 16:04:45,758 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 16:04:45,759 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:04:45,760 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:45,761 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:47,763 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:04:47,765 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:04:47,765 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-08-04 16:04:47,808 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_1 kill" by Action "roscore"
+2011-08-04 16:04:47,809 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_10 kill" by Action "roscore"
+2011-08-04 16:04:47,815 - ServerThread - DEBUG - Running kill command "screen -X -S roscore_1_2 kill" by Action "roscore"
+2011-08-04 16:04:47,816 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:47,817 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-08-04 16:04:47,840 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_3 kill" by Action "vnc"
+2011-08-04 16:04:47,842 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_4 kill" by Action "vnc"
+2011-08-04 16:04:47,844 - ServerThread - DEBUG - Running kill command "screen -X -S vnc_2_5 kill" by Action "vnc"
+2011-08-04 16:04:47,845 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:47,846 - ServerThread - INFO - Cannot stop Action "hallo t" (force=True), no commands found
+2011-08-04 16:04:47,846 - ServerThread - INFO - Killing Action "hallo t" (force=True) "0" Commands found 
+2011-08-04 16:04:47,863 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:04:47,865 - ServerThread - INFO - Stopping Action "Ich bin neu" (force=True). "1" Commands found
+2011-08-04 16:04:47,874 - ServerThread - DEBUG - Running stop command "screen -S Ich bin neu_525_589\n'$(rospack find cob_webportal_scripts)/roscore stop\nexit\n" by Action "Ich bin neu"
+2011-08-04 16:04:47,874 - ServerThread - DEBUG - Starting screenReader for "Ich bin neu"
+2011-08-04 16:04:47,876 - ServerThread - DEBUG - Action "Ich bin neu"::stop joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:04:49,876 - ServerThread - DEBUG - ScreenReader received a new line for "Ich bin neu"
+2011-08-04 16:04:51,879 - ServerThread - DEBUG - ScreenReader received a new line for "Ich bin neu"
+2011-08-04 16:04:51,880 - ServerThread - DEBUG - ScreenReader "Ich bin neu" finished
+2011-08-04 16:04:51,881 - ServerThread - INFO - Killing Action "Ich bin neu" (force=True) "2" Commands found 
+2011-08-04 16:04:51,892 - ServerThread - DEBUG - Running kill command "screen -X -S Ich bin neu_525_764 kill" by Action "Ich bin neu"
+2011-08-04 16:04:51,894 - ServerThread - DEBUG - Running kill command "screen -X -S Ich bin neu_525_589 kill" by Action "Ich bin neu"
+2011-08-04 16:04:51,895 - ServerThread - DEBUG - Sending exit to close channel.
+2011-08-04 16:16:37,385 - ServerThread - INFO - Starting Action "vnc". "2" Commands / "0" dependencies found
+2011-08-04 16:16:37,396 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:16:37,397 - ServerThread - DEBUG - Running start command "screen -S vnc_2_3\nvncserver :1 -fg -httpport 8081\nexit\n" by Action "vnc"
+2011-08-04 16:16:37,404 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:37,410 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:16:37,413 - ServerThread - DEBUG - Running start command "screen -S vnc_2_4\nwhile ! ps ax | grep -i "Xvnc :1" | grep -v grep; do sleep 2; done\nexit\n" by Action "vnc"
+2011-08-04 16:16:37,415 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:16:37,415 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:39,407 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:39,416 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:41,419 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:41,422 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:16:44,840 - ServerThread - INFO - Stopping Action "vnc" (force=False). "1" Commands found
+2011-08-04 16:16:44,848 - ServerThread - DEBUG - Running stop command "screen -S vnc_2_5\nvncserver -kill :1\nexit\n" by Action "vnc"
+2011-08-04 16:16:44,848 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:16:44,850 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:44,851 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:16:45,412 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:45,415 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:16:46,852 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:16:46,854 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:27:28,665 - ServerThread - INFO - Starting Action "roscore". "2" Commands / "1" dependencies found
+2011-08-04 16:27:28,666 - ServerThread - INFO - Action depends on: ['roscore>vnc']
+2011-08-04 16:27:28,666 - ServerThread - INFO - Starting Action "vnc". "2" Commands / "0" dependencies found
+2011-08-04 16:27:28,677 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:27:28,678 - ServerThread - DEBUG - Running start command "screen -S vnc_2_3\nvncserver :1 -fg -httpport 8081\nexit\n" by Action "vnc"
+2011-08-04 16:27:28,682 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:27:28,703 - ServerThread - DEBUG - Starting screenReader for "vnc"
+2011-08-04 16:27:28,704 - ServerThread - DEBUG - Running start command "screen -S vnc_2_4\nwhile ! ps ax | grep -i "Xvnc :1" | grep -v grep; do sleep 2; done\nexit\n" by Action "vnc"
+2011-08-04 16:27:28,705 - ServerThread - DEBUG - Command requires blocking. Action "vnc" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:27:28,706 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:27:30,685 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:27:30,709 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:27:30,710 - ServerThread - DEBUG - ScreenReader received a new line for "vnc"
+2011-08-04 16:27:30,712 - ServerThread - DEBUG - ScreenReader "vnc" finished
+2011-08-04 16:27:30,783 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 16:27:30,784 - ServerThread - DEBUG - Running start command "screen -S roscore_1_1\n$(rospack find cob_webportal_scripts)/roscore start\nexit\n" by Action "roscore"
+2011-08-04 16:27:30,792 - ServerThread - DEBUG - Starting screenReader for "roscore"
+2011-08-04 16:27:30,793 - ServerThread - DEBUG - Running start command "screen -S roscore_1_10\n$(rospack find cob_webportal_scripts)/roscore waitToRun\nexit\n" by Action "roscore"
+2011-08-04 16:27:30,794 - ServerThread - DEBUG - Command requires blocking. Action "roscore" joined the screenReader Thread. Waiting for it to finish
+2011-08-04 16:27:32,786 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:27:32,787 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:27:32,795 - ServerThread - DEBUG - ScreenReader received a new line for "roscore"
+2011-08-04 16:27:32,799 - ServerThread - DEBUG - ScreenReader "roscore" finished

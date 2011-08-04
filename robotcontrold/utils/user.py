@@ -57,6 +57,15 @@ class User():
 	def hasComponent(self, compId):
 		return compId in self._components
 
+	def deleteComponent(self, compId):
+		compId = int(compId)
+		if not self.hasComponent(compId):
+			raise ValueError('User has no component with id "%d"' % compId)
+			
+		if self.getComponent(compId).isAlive():
+			raise ValueError('The passed component is still alive. Stop first [id="%d"]' % compId)
+
+		del self._components[compId]
 
 	# return all ids i.e. keys() of components
 	def getIDs(self):
