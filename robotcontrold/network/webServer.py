@@ -271,7 +271,7 @@ class MyHandler(BaseHTTPRequestHandler):
 					else:
 						raise ArgumentRequestError('Invalid Command "%s".' % command, self.path)
 
-					output = 'OK. Result: %s' % str(result)
+					output =  str(result)
 			
 			
 				# Reservations

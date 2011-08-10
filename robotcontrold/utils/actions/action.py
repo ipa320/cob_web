@@ -29,7 +29,7 @@ class Action():
 	def initializeUnpickableData(self, log):
 		if not hasattr(self, '_initialized'):
 			self._initialized = True
-			self.screenReaders = []
+			self.screenReaders = {'show':[], 'hide':[]}
 			self.startChannels = []
 			self.log = log
 			
@@ -45,9 +45,13 @@ class Action():
 			'component': self.component,
 			'dependencies': self.dependencies,
 			'description': self.description
-		}
+			}
 
 
+	def getUniqueCommandId(self):
+		maxStart = max(self._startCommands.keys()) if len(self._startCommands) > 0 else 0
+		maxStop  = max(self._stopCommands.keys())  if len(self._stopCommands) > 0 else 0
+		return max(maxStart, maxStop)+1
 
 	def __str__(self):
 		return 'Action [id=%d, name=%s, comp=%s]' % (self.id, self.name, self.component if self.component else 'None')
@@ -57,17 +61,17 @@ class Action():
 		self.component = component
 		
 	def isAlive(self):
-		for reader in self.screenReaders:
+		for reader in self.screenReaders['show'] + self.screenReaders['hide']:
 			if reader and reader.isAlive():
 				return True
 		return False
-		
+	
 	def canStart(self):
 		return len(self._startCommands)>0
-		
+	
 	def canStop(self):
 		return len(self._stopCommands)>0
-		
+	
 	def addStartCommand(self, cmd):
 		self._startCommands[cmd.id] = cmd
 	
@@ -77,15 +81,24 @@ class Action():
 	def screenReaderStopped(self, reader):
 		if not self.component:
 			raise AttributeError('Component is not set')
-			
+		
 		if not self.isAlive():
 			EventHistory.actionStopped(self, self.component)
+
+
+	# Careful: Function does not check whether readers are alive or dead
+	# Once delted, the connection will not be shut down properly
+	def clearScreenReaders(self):
+		self.screenReaders = {'show': [], 'hide': []}
+
 
 	def start(self):
 		if not self.component or not self.component.host:
 			raise AttributeError('Host is not set for %s' % str(self))
 
 		if not self.isAlive():
+			self.clearScreenReaders()
+
 			if not self.canStart():
 				self.log.info('Cannot start Action "%s", no commands found' % (self.name))
 				return
@@ -99,13 +112,14 @@ class Action():
 
 			for cmd in self._startCommands.values():
 				channel = self.component.host.invokeShell()
+				command = self.createScreenCmd(cmd)
+				hideLog = cmd.hideLog
 				self.startChannels.append(channel)
 
 				screenReader = ScreenReader(self.name, channel, self.log, notifyStop=self.screenReaderStopped)
-				self.screenReaders.append(screenReader)
+				self.screenReaders['hide' if hideLog else 'show'].append(screenReader)
 				screenReader.start()
 
-				command = self.createScreenCmd(cmd)
 				self.log.debug('Running start command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
 				channel.send(command)
 
@@ -118,9 +132,12 @@ class Action():
 			# notify EventHandler after all cmds run
 			if self.isAlive():
 				EventHistory.actionRun(self, self.component)
+			
+			return True
 
 		else:
 			self.log.debug('Could not start action "%s", Action still active' % self.name)
+			return False
 
 
 	def stop(self, force=False):
@@ -137,10 +154,12 @@ class Action():
 			for cmd in self._stopCommands.values():
 				channel = self.component.host.invokeShell()
 				command = self.createScreenCmd(cmd)
+				hideLog = cmd.hideLog
+				
 				self.log.debug('Running stop command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
 
 				screenReader = ScreenReader(self.name, channel, self.log, notifyStop=self.screenReaderStopped)
-				self.screenReaders.append(screenReader)
+				self.screenReaders['hide' if hideLog else 'show'].append(screenReader)
 				screenReader.start()
 			
 				channel.send(command)
@@ -152,10 +171,15 @@ class Action():
 
 
 			# Wait for all readers (start and stop) to finish
-			for reader in self.screenReaders:
+			for reader in self.screenReaders['hide']+self.screenReaders['show']:
 				if reader and reader.isAlive():
 					self.log.debug('Action "%s"::stop joined the screenReader Thread. Waiting for it to finish' % self.name)
 					reader.join()
+
+			return True
+
+		else:
+			return False
 
 
 
@@ -188,10 +212,14 @@ class Action():
 
 			# you cannot stop the screenReader. Wait for [screen is terminating] to be received
 			# wait for the screenReader to be finished
-			for reader in self.screenReaders:
+			for reader in self.screenReaders['show'] + self.screenReaders['hide']:
 				if reader and reader.isAlive():
 					self.log.debug('Action "%s"::kill joined the screenReader Thread. Waiting for it to finish' % self.name)
 					reader.join()
+
+			return True
+		else:
+			return False
 
 
 	def forceKill(self):
@@ -199,20 +227,22 @@ class Action():
 
 
 	def lostConnection(self):
-		self.screenReaders = []
+		self.clearScreenReaders()
 
 	
 	def status(self):
 		if not self.component or not self.component.host:
 			raise AttributeError('Host is not set for %s' % str(self))
 
-		text = 'PRINTING ALL READERS\n------------------------------------\n\n'
-		for reader in self.screenReaders:
-			text += 'Name: %s\n=============================\n' % reader.name
-			text += reader.getBuffer()
-		
-		return text
- 
+		text = ''
+		for reader in self.screenReaders['show']:
+			#			text += 'Name: <b>%s</b><hr />' % reader.name
+			text += reader.getBuffer().replace('\r\n', '<br />').replace('\n', '<br />')
+			text += '<hr />'
+
+		text = text.strip('<hr />')
+		return text if len(text) else 'No data available'
+	
 
 	def createScreenCmd(self, cmd):
 		return 'screen -S %s_%d_%d\n%s\nexit\n' % (self.name, self.id, cmd.id, cmd.command)
@@ -224,10 +254,10 @@ class Action():
 
 	def hasCommand(self, cmdId):
 		return self.hasStartCommand(cmdId) or self.hasStopCommand(cmdId)
-		
+	
 	def hasStartCommand(self, cmdId):
 		return cmdId in self._startCommands
-		
+	
 	def hasStopCommand(self, cmdId):
 		return cmdId in self._stopCommands
 	
@@ -238,6 +268,15 @@ class Action():
 			return self._stopCommands[cmdId]
 		else:
 			return None
+
+	def delteCommand(self, cmdId):
+		if self.hasStartCommand(self, cmdId):
+			del self._startCommands[cmdId]
+		elif self.hasStopCommand(self, cmdId):
+			del self._stopCommand[cmdId]
+		else:
+			raise ValueError('The given cmdId is not part of this action [cmdId="%s", actionId="%s"]' % (cmdId, self.id))
+		
 			
 	def getCommandIds(self):
 		return self._startCommands.keys() + self._stopCommands.keys()
@@ -251,6 +290,14 @@ class Action():
 	def appendDependency(self, action):
 		if not action in self.dependencies:
 			self.dependencies.append(action)
+
+	def deleteDependency(self, action):
+		if action in self.dependencies:
+			self.dependencies.remove(action)
+
+
+	def resetDependencies(self):
+		self.dependencies = []
 
 
 	

@@ -4,14 +4,14 @@ div#component {
 	padding: 0 40px;
 	
 }
-a.edit-finished-button {
+/*a.edit-finished-button {
 	float: right;
 	background: none;
 	border: 1px solid #FFFFFF;
 }
 a.edit-button:hover {
 	border: 1px solid #AAAAAA;
-}
+}*/
 input.ph_edit_comp-name {
 	font-size: 18px;
 	font-weight: bold;

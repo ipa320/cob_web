@@ -1,4 +1,3 @@
-
 $.fn.renderCalendarView = function(target)
 {
 	this.html('');
@@ -121,7 +120,7 @@ function add(start)
 function extend(e)
 {
 	try {
-		var end = new Date(start)
+	    //var end = new Date(start)
 		var start = e.start;
 		var end = e.end
 

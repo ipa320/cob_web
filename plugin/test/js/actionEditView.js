@@ -16,7 +16,7 @@ var actionEditViewCode = '<h3 class="actionEditView-name"><a href="#" class="ph_
 				</div>';
 
 
-$.fn.renderActionEditView = function(action, component, components, isMain, options) {
+$.fn.renderActionEditView = function(action, component, isMain, options) {
 	if (! (action instanceof Action))
 		throw new Error("Argument must be an instance of Action");
 		
@@ -69,21 +69,40 @@ $.fn.renderActionEditView = function(action, component, components, isMain, opti
 	}
 
 
-	// render dependencies
+	//  dependencies
 	var dep = this.find(".ph_action_edit-dep");
-	for (i in action.dependencies) {
+
+	// function to create a new dependency list
+	var onDependencyChange = function() {
+	    var list = []
+	    
+	    // get all inputs
+	    var inputs = dep.find('select');
+	    inputs.each(function(i, obj) {
+		var selected = $(this).find('option:selected')
+		var actionId = parseInt(selected.attr("actionId"));
+		if (actionId)
+		    list.push(actionId);
+	    });
+
+	    action.dependencies = list;
+	    console.log(list);
+	};
+
+	for (var i in action.dependencies) {
 		dependency = action.dependencies[i];
-		dep.append( dependencySelectCode( component, dependency ) );
+		var selectObj = $( dependencySelectCode( component, dependency ) );
+		selectObj.change(onDependencyChange);
+		dep.append(selectObj);
 		dep.append( '<br />' );
 	}
-	// remove the last <br />
-//	html = html.substring(0, html.length-6);
-//	dep.html(html)
+
 	// link to add new dependencies
 	$(document.createElement("a")).attr("href", "#").text("Append new dependency").appendTo(dep).click(function() { 
-		var depObj={'compId': null, 'actionId': null};
-		action.dependencies.push(depObj);
-		dep.find("a").before($(dependencySelectCode(component, depObj)));
+		var selectObj = $(dependencySelectCode(component));
+		selectObj.change(onDependencyChange);
+		
+		dep.find("a").before(selectObj);
 		return false;
 	});
 	
@@ -139,7 +158,7 @@ $.fn.renderActionEditView = function(action, component, components, isMain, opti
 	});
 };
 
-function dependencySelectCode(component, dep)
+function dependencySelectCode(component, depId)
 {
 	html = '<select size="1"><option label=" - "> - </option>';
 	html += '<optgroup label="' + component.name + '">';
@@ -147,7 +166,7 @@ function dependencySelectCode(component, dep)
 	for (j in component.actions) {
 		action = component.actions[j];
 		var selected = '';
-		if (action.id == dep)
+		if (action.id == depId)
 			selected = 'selected="selected"'
 		
 		html += '<option actionId="' + j + '" label="' + component.name + ' &raquo; ' + action.name + '" ' + selected + '>' + component.name + ' &raquo; ' + action.name + '</option>';
@@ -157,11 +176,6 @@ function dependencySelectCode(component, dep)
 	select = $(html);
 	select.addClass("test");
 	
-	select.change(function() {
-		var selected = $(this).find('option:selected')
-		dep.compId = parseInt(selected.attr("compId"));
-		dep.actionId = parseInt(selected.attr("actionId"));
-	});
 	return select;
 }
 

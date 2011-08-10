@@ -69,20 +69,7 @@
 			$(document).ready(function() {
 				var username="Simon";
 //				screenManager.init();
-/*
-				comp = new Component(1, "My Comp", null)
-				action1 = new Action(1, "#1");
-				action2 = new Action(2, "#2");
-				comp.addAction(action1);
-				comp.addAction(action2);
 
-
-				var i=0;
-//				$("#newAction").click(function() {
-					$('div#actions').append('<div></div>');
-					$('div#actions div:first').componentView(comp);
-//				});
-*/
 				try {
 					var view = new LoadingDialogView('Please Wait...', 'Please wait while remote data is fetched from the server')
 					screenManager.lockDisplay(view);

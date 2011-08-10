@@ -1,5 +1,4 @@
 from utils.component import Component
-import memcache
 
 class User():
 	_users = {}
@@ -31,6 +30,19 @@ class User():
 	def __str__(self):
 		return 'User [name=%s]' % self.name
 
+
+	def getUniqueComponentId(self):
+		return (max(self._components.keys()) if len(self._components) > 0 else 0)+1
+
+	def delete(self, comp):
+		if not isinstance(comp, Component):
+			raise ValueError('Comp must be an instance of Component')
+
+		if not self.hasComponent(comp.id):
+			raise ValueError('Given component does not belong to the user [compId="%s"]' % str(comp.id))
+
+		del self._components[comp.id]
+			
 
 	def append(self, comp):
 		if not isinstance(comp, Component):

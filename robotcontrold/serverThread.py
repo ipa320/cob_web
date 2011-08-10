@@ -1,4 +1,4 @@
-import threading, time, MySQLdb, datetime
+import threading, time, MySQLdb, datetime, pickle
 from utils.host import Host
 from utils.actions.action import Action
 from utils.actions.shellCommand import ShellCommand
@@ -6,8 +6,6 @@ from myExceptions.databaseExceptions import CorruptDatabaseError
 from utils.component import Component
 from utils.user import User
 from utils.eventHistory import EventHistory
-
-import memcache, pickle
 
 
 class ServerThread(threading.Thread):
@@ -24,7 +22,6 @@ class ServerThread(threading.Thread):
 
 		self.users = {}
 		self.activeUser = None
-		self.reservations = {}#None
 
 
 		# Establish connection to the database
@@ -32,20 +29,12 @@ class ServerThread(threading.Thread):
 
 		# Read Hosts
 		self.readHosts()
-		#for host in self.hosts.values():
-		#	sql = "UPDATE `hosts` SET `pickledData`=%s WHERE `id`=%s"
-		#	self.cursor.execute(sql, [pickle.dumps(host), host.id])
-
 
 		# Read Users
 		self.readUsers()
 		
-
-#		# Read components
-#		self.readComponents()
-#		for user in self.users.values():
-#			sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s"
-#			self.cursor.execute(sql, [pickle.dumps(user), user.name])
+		# Read reservations
+		self.readReservations()
 
 		# Connect to Hosts
 		self.startAllHosts()
@@ -54,11 +43,6 @@ class ServerThread(threading.Thread):
 		self.forceTerminateAllComponents()
 	
 	
-		# store all userse in mc
-#		for username in  self.users.keys():
-#			self.mc.set(username, self.users[username])
-#			print 'STORED: %s' % username
-
 
 	# self.stop should be called anyway, but just be be sure
 	def __del__(self):
@@ -150,154 +134,23 @@ class ServerThread(threading.Thread):
 			user.initializeUnpickableData(self.hosts, self.log)
 			self.users[row[0]] = user
 
-#	def readComponents(self):
-#		self.log.info('Reading Components')
-#		
-#		sql = "SELECT `user_name`, `host_id`, `parent_id`, `pickledData` FROM `components`"
-#		self.cursor.execute(sql)
-#		rows = self.cursor.fetchall()
 		
-	#	# first collect all the componoent data
-#		compsData = {}
-#		for row in rows:
-#			user = self.getUserCreateIfNotExistent(row[0])
-#			comp = pickle.loads(row[2])
-#			host_id = int(row[1])
-#			parent_id = int(row[2])
-#			
-#			compData[comp.id] = {'comp': comp, 'host_id': host_id, 'parent_id': parent_id, 'children': children}
-#			
-#			
-#		# now iterate through the data again to initialize the components
-#		# with the correct host / parent / children 
-#		for compData in compsData.values():
-#			comp = compData['comp']
-#			host_id = compData['host_id']
-#			parent_id = compData['parent_id']
-#			
-#			if not host_id in self.hosts:
-#				raise CorruptDatabaseError('The host [id="%d"] associated to the component [id="%d"] could not be found' % (host_id, comp.id))
-#			host = self.hosts[host_id]
-#				
-#			if not parent_id in compsData:
-#				raise CorruptDatabaseError('The parent [id="%d"] associated to the component [id="%d"] could not be found' % (parent_id, comp.id))
-#			parent = compsData[parent_id]['comp']
-#			
-#			# initialize the component with the parent
-#			comp.initializeUnpickableData(self.hosts[compData['hostId']], 
+	def readReservations(self):
+		self.log.info('Reading reservations')
 		
+		self.reservations = {}
 		
-	def readComponents(self):
-		self.log.info('Reading Components')
-		
-		sql = "SELECT `id`, `user_name`, `mainAction_id`, `host_id`, `parent_id` FROM `components`"
-		self.cursor.execute(sql)
-		componentsData = self.cursor.fetchall()
-		
-		# create the components objects
-		components = {}
-		parents = {}
-		for row in componentsData:
-			id 				= int(row[0])
-			user_name		= row[1]
-			mainAction_id	= int(row[2])
-			host_id			= int(row[3]) if row[3] else None
-			parent_id		= int(row[4]) if row[4] else None
-			
-			# fetch all actions assigned to this component
-			sql = "SELECT `id`, `name`, `dependencies`, `description`, `url` FROM `componentActions` WHERE `comp_id`=%s"
-			self.cursor.execute(sql, [id])
-			actionsData = self.cursor.fetchall()
-			
-			# create the actions objects
-			actions = {}
-			dependencies = {}
-			for row in actionsData:
-				actionId 		= int(row[0])
-				name			= row[1]
-				dependencyIds	= list(int(s) for s in str(row[2]).split(';')) if row[2] else []
-				description		= row[3]
-				url				= row[4]
-				
-				
-				# fetch all shell commands assigned to this action
-				sql = "SELECT `id`, `type`, `command`, `blocking`, `hideLog` FROM `shellCommands` WHERE `action_id`=%s"
-				self.cursor.execute(sql, [actionId])
-				commandsData = self.cursor.fetchall()
-				
-				# create the start/stopCommand dicts
-				startCommands = {}
-				stopCommands = {}
-				for row in commandsData:
-					commandId 	= int(row[0])
-					type		= row[1]
-					command		= row[2]
-					blocking	= row[3] == 'Y'
-					hideLog		= row[4] == 'Y'
-					
-					if type == 'start':
-						startCommands[commandId] = ShellCommand(commandId, command, blocking, hideLog)
-					else:
-						stopCommands[commandId] = ShellCommand(commandId, command, blocking, hideLog)
-						
-				
-				# Important: do not care about dependencies yet, we'll do that at the end
-				# for now, only store the dependencyIds assigend to the action id
-				dependencies[actionId] = dependencyIds
-						
-				# create the action object.
-				action = Action(actionId, name, startCommands, stopCommands, description, url, self.log)
-				actions[actionId] = action
-				
-				
-			# now check for the dependencys. Note that dependencys can only be set within noe component
-			for actionId in dependencies.keys():
-				dependencyIds = dependencies[actionId]
-				
-				for depId in dependencyIds:
-					if not depId in actions:
-						raise CorruptDatabaseError('The given dependency id "%d" for the action "%d" was not found' % (depId, actionId))
-					actions[actionId].appendDependency(actions[depId])
-			
-			# Check for the mainAction
-			if not mainAction_id in actions:
-				raise CorruptDatabaseError('The main action "%d" was not found for the component "%d"' % (mainAction_id, id))
-			mainAction = actions[mainAction_id]
-			
-			# Check for the host
-			if host_id and host_id not in self.hosts:
-				raise CorruptDatabaseError('The host "%d" declared for the component "%d" was not found' % (host_id, id))
-			host = self.hosts[host_id] if host_id else None
-				
+		# prepare the query
+		query = 'SELECT `id`, `user`, `start`, `end` FROM `reservations`'
+		self.cursor.execute(query)
+		results = self.cursor.fetchall()
 
-			# Note, parent must be set at the end. Just store the parentId assigend to the component id for now
-			if parent_id:
-				parents[id] = parent_id
-			
-			# Create the component object
-			component = Component(id, user_name, host, mainAction, actions, self.log)
-			components[id] = component
-			
-			
-			# add the component to the user's components
-			self.getUserCreateIfNotExistent(user_name).append(component)
+		for row in results:
+			user = self.getUserCreateIfNotExistent(row[1])
+			self.reservations[row[0]] = {'user': user, 'start': row[2], 'end': row[3]}
+
 		
-		
-		# Now that all components are created, set the parents
-		for id in parents.keys():
-			parent_id = parents[id]
-		
-			# check whether parent_id is valid
-			if not parent_id in components:
-				raise CorruptDatabaseError('The given parent_id "%d" for component "%d" was not found' % (parent_id, id))
-			
-			# set parent / child
-			component = components[id]
-			parent = components[parent_id]
-		
-			component.setParent(parent)
-			parent.appendChild(component)
-		
+
 
 	def startAllHosts(self):
 		self.log.debug('Start all Hosts')
@@ -421,17 +274,27 @@ class ServerThread(threading.Thread):
 		if not isinstance(start_date, datetime.datetime):
 			raise ValueError('Start Parameter is not an instance of datetime')
 		
-		id = len(self.reservations)
+		id = max(self.reservations.keys())+1
 		self.reservations[id] = {'user': user, 'start': start_date, 'end':end_date}
+
+		# update the database
+		query = "INSERT INTO `reservations` (`id`, `user`, `start`, `end`) VALUES(%s, %s, %s, %s)"
+		self.cursor.execute(query, [id, user.name, start_date, end_date])
 		return id
 		
+
 	def killReservation(self, id, user):
 		if not id in self.reservations or not self.reservations[id]:
 			raise ValueError('Invalid id passed "%s"' % str(id))
 		if not self.reservations[id]['user'] == user:
 			raise ValueError('Unauthorized')
 			
-		self.reservations[id] = None
+		del self.reservations[id]
+
+		# update the database
+		query = "DELETE FROM `reservations` WHERE `id`=%s"
+		self.cursor.execute(query, [id])
+
 		
 	def extendReservation(self, id, end_date, user):
 		if not isinstance(end_date, datetime.datetime):
@@ -442,6 +305,10 @@ class ServerThread(threading.Thread):
 			raise ValueError('Unauthorized')
 		
 		self.reservations[id]['end'] = end_date
+
+		# update the database
+		query = "UPDATE `reservations` SET `end`=%s WHERE id=%s"
+		self.cursor.execute(query, [end_date, id])
 		
 	def getActiveReservation(self):
 		now = datetime.datetime.now()
@@ -480,7 +347,7 @@ class ServerThread(threading.Thread):
 		id			= int(data['id'])  #negativ for new ones
 		parentId	= int(data['parentId']) if data['parentId'] else None #might be None
 		hostId		= int(data['hostId'])
-		actions		= data['actions']
+		actionsData	= data['actions']
 		
 		# check if it's a valid hostId and parentId
 		if not hostId in self.hosts:
@@ -498,15 +365,12 @@ class ServerThread(threading.Thread):
 		# if id is negative, create a new component
 		if id < 0:
 			host = self.hosts[hostId] if hostId in self.hosts else None
-			component = Component(0, user.name, host, None, [], self.log)
+
+			# get a new unique id for this component from the user object
+			autoId = user.getUniqueComponentId()
+			component = Component(autoId, user.name, host, None, [], self.log)
 			
-			# Note: use None / 0 for main action id. Updating later 
-			#sql = "INSERT INTO `components` (`user_name`, `host_id`, `mainAction_id`, `parent_id`) VALUES(%s,%s,%s,%s)"
-			#self.cursor.execute(sql, [user.name, host.id if host else None, 0, parent.id if parent else None])
-			#autoId = self.cursor.lastrowid
-			autoId = int(random.random()*1000)
-			
-			component.id = autoId
+			# remap the temporary id to the new id
 			idMap[id] = autoId
 			
 			user.append(component)
@@ -528,23 +392,19 @@ class ServerThread(threading.Thread):
 			component.host = self.hosts[hostId]
 			component.parent = parent
 			
-			# Update the database
-			#sql = "UPDATE `components` SET `host_id`=%s, `parent_id`=%s WHERE `id`=%s"
-			#self.cursor.execute(sql, [hostId, parentId, component.id])
-			
 			
 		# Now create / update the actions
 		# We have to loop through every action first to create and update all actions. We cannot 
 		# update the dependency field yet, as we have no valid ids so far. Therefore we need to
 		# create the new actions first and map the temporary ids (negative ones) to the actual ids
 		# returned by the database
-		for action in actions:
-			aId 			= int(action['id']) #new actions have a negativ id
-			aName			= action['name']
-			description		= action['description']
-			url				= action['url']
-			startCommands	= action['startCommands']
-			stopCommands	= action['stopCommands']
+		for actionData in actionsData:
+			aId 		= int(actionData['id']) #new actions have a negativ id
+			aName		= actionData['name']
+			description	= actionData['description']
+			url		= actionData['url']
+			startCommands	= actionData['startCommands']
+			stopCommands	= actionData['stopCommands']
 			# compId field is ignored as the action must be part of this component
 			
 			
@@ -553,98 +413,104 @@ class ServerThread(threading.Thread):
 				raise ValueError('The given actionId is not a valid id for the component [compId=%d, actionId=%d]' % (component.id, aId))
 
 			if aId < 0:
-				action = Action(0, aName, {}, {}, description, url, self.log)
-				action.setComponent(component)
+				# only process this action if the id is valid, i.e. the name is set
+				# if not set, skip this action entirely. We don't need to delete
+				# the action as its newly created (aId <0). Continue with the next action.
+				if not aName.strip():
+					continue
+
+				# get a new unique id for this action from the component object
+				autoId = component.getUniqueActionId()
 				
-				#sql = "INSERT INTO `componentActions` (`name`, `comp_id`, `description`) VALUES(%s,%s,%s)"
-				#self.cursor.execute(sql, [action.name, component.id, action.description])
-				#autoId = self.cursor.lastrowid
-				autoId = int(random.random()*1000)
+				action = Action(autoId, aName, {}, {}, description, url, self.log)
+				action.setComponent(component)
 				
 				# remap 
 				idMap[aId] = autoId
 				
-				# set the id and append the action to the component
-				action.id = autoId
+				# append the action to the component
 				component.appendAction(action)
 				
 				
 			else:
+				# if the action name is invalid (empty) but it's old action (aId > 0),
+				# delete the action and continue with the other actions afterwards
+				if not aName.strip():
+					component.deleteAction(aId)
+					continue
+				
 				action = component.getAction(aId)
 				action.name = aName
 				action.description = description
 				
-				#sql = "UPDATE `componentActions` SET `name`=%s, `description`=%s, `dependencies`=%s WHERE `id`=%s"
-				#self.cursor.execute(sql, [action.name, action.description, None, action.id])
 				
+
+			# Reset all dependencies, those will be set later
+			action.resetDependencies()
+			
 
 			# If we created a new component, mainAction_id is None for that component. 
 			# Set this action (first action) as the main action
 			if component.mainAction == None:
 				component.mainAction = action
 				
-				# update the database
-				#sql = "UPDATE `components` SET `mainAction_id`=%s WHERE `id`=%s"
-				#self.cursor.execute(sql, [action.id, component.id])
-				
+
 
 			# parse the commands
 			for cmd in startCommands+stopCommands:
 				isStartCommand = cmd in startCommands
 				
- 				cId			= int(cmd['id']) # new start commands have a negative index
-				commandStr	= cmd['command']
-				blocking	= cmd['blocking']
-				hideLog		= cmd['hideLog']
-				
-				# if the command is empty, remove it from the databse
-				if not commandStr.strip():
-					# if the command is new (temporary id < 0), do nothing, as the command was not
-					# stored yet anyway
-					#if cId > 0:
-					#	sql = "DELETE FROM `shellCommands` WHERE `id`=%s"
-					#	self.cursor.execute(sql, [cId])
-					pass
+ 				cId         = int(cmd['id']) # new start commands have a negative index
+				commandStr  = cmd['command']
+				blocking    = cmd['blocking']
+				hideLog	    = cmd['hideLog']
 				
 				# if it's a valid new command, store it now
-				elif cId < 0:
-					#sql = 'INSERT INTO `shellCommands` (`command`, `action_id`, `blocking`, `hideLog`, `type`) VALUES(%s, %s, %s, %s)'
-					#self.cursor.execute(sql, [commandStr, action.id, 'Y' if blocking else 'N', 'Y' if hideLog else 'N', 'start' if isStartCommand else 'stop'])
+				if cId < 0:
+					# only proceed if the command name is not empty. Otherwise
+					# if the name is empty (indicating the user deleted the command) and it's not yet
+					# created (teporary id, < 0), just skip this component
+					if commandStr.strip():
+						autoId = action.getUniqueCommandId()
+						idMap[cId] = autoId
 					
-					#autoId = self.cursor.lastrowid
-					autoId = int(random.random()*1000)
-					idMap[cId] = autoId
-					
-					if isStartCommand:
-						action.addStartCommand(ShellCommand(autoId, commandStr, blocking, hideLog))
-					else:
-						action.addStopCommand(ShellCommand(autoId, commandStr, blocking, hideLog))
-					pass
+						if isStartCommand:
+							action.addStartCommand(ShellCommand(autoId, commandStr, blocking, hideLog))
+						else:
+							action.addStopCommand(ShellCommand(autoId, commandStr, blocking, hideLog))
+
 				
 				# else update the existing one
 				else:
 					if not action.hasCommand(cId):
 						raise ValueError('Command specified a parent-action id that doesn\'t match [compId=%d, actionId=%d, commandId=%d]' % (component.id, action.id, cId))
+
+					# if the name is empty indicating that the user wants to delete the command), delete
+					# it permanently from the component
+					if not commandStr.strip():
+						action.deleteCommand(cId)
+
+					# in case it has a valid name, update the action
+					else:
+						command = action.getCommand(cId)
+						command.setCommand(commandStr)
+						command.blocking = blocking
+						command.hideLog = hideLog
 					
-					command = action.getCommand(cId)
-					command.command = commandStr
-					command.blocking = blocking
-					command.hideLog = hideLog
-					
-					#sql = "UPDATE `shellCommands` SET `command`=%s, `blocking`=%s, `hideLog`=%s WHERE `id`=%s"
-					#self.cursor.execute(sql, [commandStr, 'Y' if blocking else 'N', 'Y' if hideLog else 'N', cId])
 			
-			
-			
+		# Delete the component if it doesn't have a main action
+		if not component.mainAction:
+			user.delete(component)
+			raise ValueError('The passed component does not declare a main component')
 
 
 		# Now we cann loop through the dependencies and check whether they are all valid
-		for action in actions:
-			dependencies	= action['dependencies']
+		for actionData in actionsData:
+			actionId      = int(actionData['id'])
+			dependencies  = actionData['dependencies']
+			action = component.getAction(actionId)
 			
 			# make sure every dependency is valid and create the string (ids joined by semicolons)
-			depString = ''
-			depArray = []
 			for dep in dependencies:
 				depId = int(dep) 
 				
@@ -655,23 +521,24 @@ class ServerThread(threading.Thread):
 					depId = idMaps[depId]
 					
 				
-				# if the action Id could not be found
+				# if the action Id could not be found simply ignore the action, it might
+				# belong to an action that was deleted previsously
+				# TODO: add some kind of feedback to the user to show a warning etc.
 				if not component.hasAction(depId):
-					raise ValueError('Invalid Dependency specified [actionId=%d]' % depId)
+					self.log.warn('The action has an invalid dependency [actionId="%d", depId="%d"]' % (actionId, depId))
+					pass
+#					raise ValueError('Invalid Dependency specified [actionId=%d]' % depId)
 				
-				#TODO	
-				#action.appendDependency(component.getActiondepId))
+
+				# if the component has this action
+				else:
+					action.appendDependency(component.getAction(depId))
 				
-				#depString += str(actionId) + ';'
-				#depArray.append(dep)
+
+		# Now that everything worked out, update the database
+		sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s"
+		self.cursor.execute(sql, [pickle.dumps(user), user.name])
 			
-			# remove trailing ;
-			#depString = depString.strip(';') or None
-			
-			
-			# Now that we've checked the dependencies, udpate the database again
-			#sql = 'UPDATE `componentActions` SET `dependencies`=%s WHERE `id`=%s'
-			#self.cursor.execute(sql, [depString, action['id']])
 			
 		return idMap
 

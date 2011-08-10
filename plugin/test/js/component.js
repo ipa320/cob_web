@@ -57,13 +57,11 @@ var Component = function(id, hostId, name, parentId, actions) {
 		return false;
 	}
 	
-/*	this.actions = []
 	this.addAction = function(action) {
-		if (! action instanceof Action)
-			throw new Error("Action is of a wrong type");
-		this.actions.push(action);
+	    if (! (action instanceof Action))
+		throw new Error("Action is of a wrong type");
+	    this.actions[action.id] = action;
 	}
-*/
 
 	this.createJSONObject = function()
 	{

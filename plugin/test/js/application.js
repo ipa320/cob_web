@@ -190,11 +190,11 @@ var application = new (function() {
 					actionId = parseInt(actionId);
 					action = comp.actions[actionId];
 					// check whether all required fields are set. description might be null
-					if (!actionId || isNaN(actionId) || !action || !action.name || !action.dependencies || !(action.dependencies instanceof Object) || !(action.startCmds instanceof Object) || !(action.stopCmds instanceof Object)) {
+					if (!actionId || isNaN(actionId) || !action ||/* !action.name ||*/ !action.dependencies || !(action.dependencies instanceof Object) || !(action.startCmds instanceof Object) || !(action.stopCmds instanceof Object)) {
 						console.log(action);
 						throw new Error('Invalid Action-Object received')
 					}
-					
+
 					actions[actionId] = new Action(actionId, action.name, id, action.desc, action.url, action.dependencies, action.startCmds, action.stopCmds)
 				}
 
@@ -252,7 +252,7 @@ var application = new (function() {
 			// load event history data next
 			this.loadEventHistoryData(handler);
 		}
-		catch (err) {
+ 		catch (err) {
 			handler.error('Error occured while parsing component data:\n' + err);
 		}
 	}
@@ -334,7 +334,7 @@ var application = new (function() {
 		try {
 			// selectId must be either null or a number
 			if (selectId != null && typeof(selectId) != 'number')
-				throw new Error('Parameter for select must be either null or a number.');
+				throw Error('Parameter for select must be either null or a number.');
 			
 			// if the location is locked, do not allow to change location
 			if (screenManager.isLockedLocation())
@@ -805,7 +805,7 @@ var application = new (function() {
 			
 			else {
 				// clone the current component, to avoid changes being made to the actual component
-				this.componentView.renderComponentEditView(this.selectedComponent.clone(), this.components);
+				this.componentView.renderComponentEditView(this.selectedComponent.clone());
 
 				// no more component selected
 				this.selectedComponent = null;
@@ -872,40 +872,35 @@ var application = new (function() {
 				id = parseInt(id);
 				var action = component.actions[id];
 				
-				// ignore empty actions
-				if (action.name.trim()) {
-					
-					// update the action's id. If the id was remapped, store it in a 
-					// newly created array with the remapped id as key value.
-					if (id < 0) {
-						action.id = idMap[id];
-						newActions[idMap[id]] = action;
-					}
-					else
-						newActions[id] = action;
-					
-					// set the compId (dont bother to check if it's negative, since it
-					// must be the same as the component's in any case)
-					action.compId = component.id
+				// update the action's id. If the id was remapped, store it in a 
+				// newly created array with the remapped id as key value.
+				if (id < 0) {
+					action.id = idMap[id];
+					newActions[idMap[id]] = action;
+				}
+				else
+					newActions[id] = action;
 				
+				// set the compId (dont bother to check if it's negative, since it
+				// must be the same as the component's in any case)
+				action.compId = component.id
+									
+				// remap the shellCommands
+				for (i in action.startCommands) {
+					id = action.startCommands[i].id;
 					
-					// remap the shellCommands
-					for (i in action.startCommands) {
-						id = action.startCommands[i].id;
-						
-						// skip the command if it's empty
-						if (!action.startCommands[i].command.trim())
-							action.startCommands.splice(i, 1);
-						else if (id < 0)
-							action.startCommands[i].id = idMap[id];
-					}
-					for (i in action.stopCommands) {
-						id = action.stopCommands[i].id;
-						if (!action.stopCommands[i].command.trim())
-							action.stopCommands.splice(i, 1);
-						else if (id < 0)
-							action.stopCommands[i].id = idMap[id];
-					}
+					// skip the command if it's empty
+					if (!action.startCommands[i].command.trim())
+						action.startCommands.splice(i, 1);
+					else if (id < 0)
+						action.startCommands[i].id = idMap[id];
+				}
+				for (i in action.stopCommands) {
+					id = action.stopCommands[i].id;
+					if (!action.stopCommands[i].command.trim())
+						action.stopCommands.splice(i, 1);
+					else if (id < 0)
+						action.stopCommands[i].id = idMap[id];
 				}
 			}
 			component.actions = newActions;

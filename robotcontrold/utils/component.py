@@ -71,7 +71,11 @@ class Component():
 			'_host_id': self.host.id
 		}
 		
-		
+
+	def getUniqueActionId(self):
+		return (max(self.actions.keys()) if len(self.actions) > 0 else 0)+1
+
+
 	def getName(self):
 		return self.mainAction.name
 
@@ -159,6 +163,14 @@ class Component():
 	# 
 	def hasAction(self, actionId):
 		return actionId in self.actions
+
+
+	def deleteAction(self, actionId):
+		if not self.hasAction(actionId):
+			raise ValueError('The Action passed does not belong to this component [actionId="%s"]' % str(actionId))
+
+		del self.actions[actionId]
+
 		
 	def appendAction(self, action):
 		self.actions[action.id] = action

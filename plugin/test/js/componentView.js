@@ -11,7 +11,7 @@ var componentViewCode = '\<h1>Component "<span class="ph_comp-name"></span>"</h1
 			<div><table class="componentView-summary" cellspacing="0" cellpadding="0">\
 			</table></div>\
 		</div>\
-		<div class="logView">testtest</div>\
+		<div class="logView"></div>\
 	</div>';
 //<a href="javascript:application.editComponent()" class="edit-button">Edit</a><h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView">
 
@@ -21,7 +21,6 @@ $.fn.renderComponentView = function(component, components, options) {
 
 	// Every component must have a main action
 	var mainAction = component.getMainAction();
-	
 
 	// clear the html
 	this.addClass("componentView");
@@ -66,7 +65,6 @@ $.fn.renderComponentView = function(component, components, options) {
 			
 			logView.show();
 			logView.renderLogView(component, function(id) { application.loadLog(id, setTextCallback); });
-			application.loadLog(component.getMainAction().id, setTextCallback);
 		}
 		else {
 			logView.hide();
@@ -90,8 +88,10 @@ $.fn.updateComponentView = function(component, components, options) {
 	table.html('');
 	
 	
-	// Render Description / Dependencies
+	// Render Description
 	var descriptions = {}
+
+	// Dependency-Array contains a list of object / target relations
 	var dependencies = []
 	
 	// update all the actions
@@ -101,9 +101,6 @@ $.fn.updateComponentView = function(component, components, options) {
 		if (action.description)
 			descriptions[action.name] = action.description;
 		
-		if (action.dependencies.length > 0)
-			$.merge(dependencies, action.dependencies.slice(0));
-			
 		// update buttons
 		var startButtons = this.find("#action-buttons-" + id + " .start-buttons");
 		var stopButtons  = this.find("#action-buttons-" + id + " .stop-buttons");
@@ -123,6 +120,11 @@ $.fn.updateComponentView = function(component, components, options) {
 				stopButtons.hide()
 			}
 		}
+
+		// append all dependencies to the array
+		for (j in action.dependencies)
+		    dependencies.push({'object': action.id, 'target': action.dependencies[j]});
+
 		
 		// disable the start buton if either the option is set or the action cannot be started at all
 		startButtons.find("a").button({'disabled': !action.canStart() || options['disabled']});
@@ -132,12 +134,17 @@ $.fn.updateComponentView = function(component, components, options) {
 	}
 	// those buttons do not depend on any action
 	this.find(".kill-button").button({'disabled': options['disabled']});
-	this.find(".log-buttons a").button({'disabled': options['disabled']});
+	this.find(".log-buttons input").button({'disabled': options['disabled']});
 	
 	renderDescription(table, descriptions);
 	renderDependencies(table, dependencies, component);
 	
 	renderFrames(this, component.actions);
+
+	// update the logview if visible
+	var logView = this.find(".logView");
+	if (logView.is(':visible'))
+	    logView.updateLogView(component);
 };
 
 function renderDescription(container, descriptions)
@@ -174,16 +181,25 @@ function renderDependencies(container, dependencies, component)
 		for (i in dependencies) {
 			html += '<div>';
 			
-			dependency = dependencies[i];
-			if (!component.hasAction(dependency))
-				throw new Error('[ComponentView] Dependency-Action "' + dependency.actionId + '" not found');
-			a = component.getAction(dependency);
-			
-			if(a.isActive()) 
-				html += '<span class="ui-icon ui-icon-component-action-on"></span><a href="#" class="running">' + component.name + " &raquo; " + a.name + '</a>';
-			else
-				html += '<span class="ui-icon ui-icon-component-action-off"></span><a href="#" class="notRunning">' + component.name + " &raquo; " + a.name + '</a>';
-			html += '</div>'
+			var objectId = dependencies[i].object;
+			var targetId = dependencies[i].target;
+			if (!component.hasAction(objectId) || !component.hasAction(targetId))
+				throw new Error('[ComponentView] Dependency-Object "' + objectId + '" or target "' + targetId  + '" not found');
+			object = component.getAction(objectId);
+			target = component.getAction(targetId);
+
+			var spanClass="ui-icon ui-icon-component ";
+			var aClass="";
+			if(target.isActive()) {
+			    spanClass += "ui-icon-component-action-on";
+			    aClass = "running";
+			}
+			else {
+			    spanClass += "ui-icon-component-action-off";
+			    aClass = "notRunning";
+			}
+
+			html += '<span class="' + spanClass + '"></span><a href="#" class="' + aClass + '">' + object.name + " &raquo; " + target.name + '</a></div>';
 		}
 		
 		tr.append('<th>Dependencies:</th><td class="ph_action-dep">' + html + '</td>')
