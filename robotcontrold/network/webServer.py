@@ -2,6 +2,7 @@ import threading, time, base64, datetime, urllib, json
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from utils.eventHistory import EventHistory
 from myExceptions.webServerExceptions import *
+from myExceptions.networkExceptions import *
 
 
 class WebServer(threading.Thread):
@@ -108,8 +109,8 @@ class MyHandler(BaseHTTPRequestHandler):
 				# if no auth was sent, return an 401 Unauthorized
 				if not auth:
 					raise UnauthorizedRequestError('No Auth-Token received', self.path)
-					
-					
+				
+				
 				# get the request user
 				requestUser = serverThread.getUserCreateIfNotExistent(auth['user'])
 				
@@ -176,8 +177,8 @@ class MyHandler(BaseHTTPRequestHandler):
 						output += 'user: %s<br>' % auth['user']
 						output += 'pass: %s<br>' % auth['pass']
 					output += '<br>'
-						
-							
+					
+					
 					
 				# Request host / component data
 				elif action == 'data':
@@ -214,7 +215,7 @@ class MyHandler(BaseHTTPRequestHandler):
 						
 						if not args[2].isdigit():
 							raise ArgumentRequestError('Invalid argument for timestamp "%s". timestamp must be numerical.' % args[2], self.path)
-							
+						
 						timestamp = int(args[2])
 						data = EventHistory.getEventData(timestamp)
 						#TODO: use json dump
@@ -278,7 +279,7 @@ class MyHandler(BaseHTTPRequestHandler):
 				elif action == 'reservations':
 					if len(args) < 2:
 						raise ArgumentRequestError('At least 2 Parameters expected. Received: %s' % str(args), self.path)
-						
+					
 					if args[1] == 'get':
 						output = '{'
 						data = serverThread.reservations
@@ -325,12 +326,12 @@ class MyHandler(BaseHTTPRequestHandler):
 							id = int(args[2])
 						except ValueError, e:
 							raise ArgumentRequestError('Invalid Reservation id passed', self.path)
-							
+						
 						try:
 							serverThread.extendReservation(id, end_date, requestUser)
 						except ValueError,e:
 							raise ArgumentRequestError(str(e), self.path)
-							
+						
 						output = "OK"
 						
 						
@@ -343,7 +344,7 @@ class MyHandler(BaseHTTPRequestHandler):
 							id = int(args[2])
 						except ValueError, e:
 							raise ArgumentRequestError('Invalid Reservation id passed', self.path)
-							
+						
 						try:
 							serverThread.killReservation(id, requestUser)
 						except ValueError,e:
@@ -360,11 +361,31 @@ class MyHandler(BaseHTTPRequestHandler):
 					
 				# store a component when changed
 				elif action == 'store':
-					if not 'json' in options:
-						raise ArgumentRequestError('json parameter not received. Received options: %s' % str(options), self.path)
-						
-					idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
-					output = json.dumps(idMap)
+					if len(args) < 2:
+						raise ArgumentRequestError('At least 2 arguments expected. Received: %s' % str(args), self.path)
+
+					if args[1] == 'component':
+						if not 'json' in options:
+							raise ArgumentRequestError('json parameter not received. Received options: %s' % str(options), self.path)
+					
+						idMap = serverThread.storeComponent(json.loads(options['json']), requestUser)
+						output = json.dumps(idMap)
+
+
+					if args[1] == 'host':
+						if len(args) != 7:
+							raise ArgumentRequestError('7 arguments expected. Received: %s' % str(args), self.path)
+
+						if not auth['status'] == WebServer.SERVER_IN_CHARGE:
+							raise UnauthorizedRequestError('You are not in charge.', self.path)
+
+
+						id = args[2]
+						hostname = args[3]
+						username = args[4]
+						password = args[5]
+						port = args[6]
+						output = json.dumps(serverThread.storeHost(id, hostname, username, password, port))
 					
 
 				# delete a component
@@ -373,19 +394,24 @@ class MyHandler(BaseHTTPRequestHandler):
 						raise ArgumentRequestError('No componentId passed as argument', self.path)
 					
 					requestUser.deleteComponent(args[1])
+					serverThread.saveUser(requestUser)
 					output = '{"success": true}'
-						
+					
 					
 
 				else:
 					raise UnknownRequestError('Unknown request. Args: %s.' % str(args), self.path)
-					
 				
-					
+				
+				
 				# if output was not set, raise an error	
 				if not output:
 					raise UnknownRequestError('The request did not produce any output. Args: %s' % str(args), self.path)
 
+			except NoConnectionToHostException as e:
+				# host is not connected
+				responseCode = 404
+				output = '404 Host is not connected'
 
 			except ArgumentRequestError as e:
 				# statusCode 400 Bad Request
@@ -426,7 +452,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
 	# Logging produces too much output
 	def log_request(self, code='-', size='-'):
-#    	self.server.log.debug('Request: "%s" %s %s' % (self.requestline, str(code), str(size)))
+		#    	self.server.log.debug('Request: "%s" %s %s' % (self.requestline, str(code), str(size)))
 		pass
 
 	def log_error(self, format, *args):

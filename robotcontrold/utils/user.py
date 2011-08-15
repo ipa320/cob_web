@@ -2,20 +2,6 @@ from utils.component import Component
 
 class User():
 	_users = {}
-	def getUser(name, log):
-		if name in User._users:
-			user = User._users[name]
-		else:
-			mc = memcache.Client(['127.0.0.1:21201'])
-			user = mc.get(name)
-			if not user:
-				user = User(name)
-				mc.set(name, user)
-			# some initialization requred after unpickling
-			else:
-				user.initializeUnpickledData(log)
-		return user
-		
 	def __init__(self, name):
 		# important: always process the name in lowercase
 		self.name = name.lower()
@@ -41,6 +27,18 @@ class User():
 		if not self.hasComponent(comp.id):
 			raise ValueError('Given component does not belong to the user [compId="%s"]' % str(comp.id))
 
+		component = self._components[comp.id]
+		# check if the component has children
+		if len(component.children):
+			parent = component.parent
+			# set all child's parent to this component's parent
+			for child in component.children:
+				child.parent = parent
+				# parent might be None, so check first before
+				# appending the child to the parent's children
+				if parent:
+					parent.children.append(child)
+					
 		del self._components[comp.id]
 			
 

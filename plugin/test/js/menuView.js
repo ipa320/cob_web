@@ -27,7 +27,6 @@ function renderMenuElements(parentId, level, components, options, i, size)
 			btnClass = 'btn-middle'
 			if (i == 0) btnClass = 'btn-top';
 			if (i == size - 1) btnClass = 'btn-bottom'
-			console.log(i + " - " + size  + " - " + (i==size-1));
 			i++;
 
 			checked = '';

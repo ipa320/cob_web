@@ -1,0 +1,3 @@
+TODO:
+ - Remove the children array. Potenially dangerous
+ - Move saveComponent to user

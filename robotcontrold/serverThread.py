@@ -76,6 +76,10 @@ class ServerThread(threading.Thread):
 		return self.alive
 
 
+	def getUniqueHostId(self):
+		return max(self.hosts.keys())+1
+
+
 
 	def establishDatabaseConnection(self, args=[]):
 		if not 'mysqlDb' in args:
@@ -217,40 +221,58 @@ class ServerThread(threading.Thread):
 
 	# It would be enough to stop the components of the active user only, but 
 	# let's stop them all, to be sure
-	def stopAllComponents(self):
+	def stopAllComponents(self, user=None):
 		self.log.info('Stopping all components')
 
-		for user in self.users.values():
+		# if None is passed for user, stop all components
+		# of every user
+		if not user:
+			users = self.users.values()
+		# if a user is passed, only stop his components
+		else:
+			users = [user]
+
+		for user in users:
 			for comp in user.components():
 				if comp.host and comp.host.isConnected():
 					comp.stop()
 				else:
-					self.log.debug('Skipping component "%s", Host is down' % comp.name)
+					self.log.debug('Skipping component "%s", Host is down' % comp.getName())
 
 
-	def forceStopAllComponents(self):
+	def forceStopAllComponents(self, user=None):
 		self.log.info('Force Stopping all components of every users')
 
-		for user in self.users.values():
+		if not user:
+			users = self.users.values()
+		else:
+			users = [user]
+			
+		for user in users:
 			for comp in user.components():
 				if comp.host:
 					if comp.host.isConnected():
 						comp.forceStop()
 					else:
-						self.log.debug('Skipping component "%s", Host is down' % comp.name)
+						self.log.debug('Skipping component "%s", Host is down' % comp.getName())
 
 
 	# Terminate: stop first and kill afterwards
-	def terminateAllComponents(self):
+	def terminateAllComponents(self, user=None):
 		self.log.info('Terminating all components of every user')
 
-		for user in self.users.values():
+		if not user:
+			users = self.users.values()
+		else:
+			users = [user]
+			
+		for user in users:
 			for comp in user.components():
 				if comp.host:
 					if comp.host.isConnected():
 						comp.terminate()
 					else:
-						self.log.debug('Skipping component "%s", Host is down' % comp.name)
+						self.log.debug('Skipping component "%s", Host is down' % comp.getName())
 		
 
 	# Terminate: stop first and kill afterwards
@@ -263,7 +285,7 @@ class ServerThread(threading.Thread):
 					if comp.host.isConnected():
 						comp.forceTerminate()
 					else:
-						self.log.debug('Skipping component "%s", Host is down' % comp.name)
+						self.log.debug('Skipping component "%s", Host is down' % comp.getName())
 
 
 
@@ -337,17 +359,17 @@ class ServerThread(threading.Thread):
 		
 		self.stop()
 
-	#TODO: check for valid mainActino_id !!	
+	#TODO: check for valid mainActino_id !!
+	#TODO: put this function into the user class
 	# stores a component based on an object given
 	def storeComponent(self, data, user):
-		import random
 		#maps temporary ids (negativ ones) to the actual new ids returned by the database
-		idMap		= {}
+		idMap = {}
 		
-		id			= int(data['id'])  #negativ for new ones
-		parentId	= int(data['parentId']) if data['parentId'] else None #might be None
-		hostId		= int(data['hostId'])
-		actionsData	= data['actions']
+		id          = int(data['id'])  #negativ for new ones
+		parentId    = int(data['parentId']) if data['parentId'] else None #might be None
+		hostId      = int(data['hostId'])
+		actionsData = data['actions']
 		
 		# check if it's a valid hostId and parentId
 		if not hostId in self.hosts:
@@ -390,7 +412,11 @@ class ServerThread(threading.Thread):
 				
 			# update the component
 			component.host = self.hosts[hostId]
-			component.parent = parent
+
+		# update the parent
+		component.parent = parent
+		if parent and component not in parent.children:
+			parent.children.append(component)
 			
 			
 		# Now create / update the actions
@@ -442,6 +468,8 @@ class ServerThread(threading.Thread):
 				action = component.getAction(aId)
 				action.name = aName
 				action.description = description
+				action.url = url
+
 				
 				
 
@@ -533,12 +561,64 @@ class ServerThread(threading.Thread):
 				# if the component has this action
 				else:
 					action.appendDependency(component.getAction(depId))
-				
 
-		# Now that everything worked out, update the database
-		sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s"
-		self.cursor.execute(sql, [pickle.dumps(user), user.name])
-			
-			
+		# save the user
+		self.saveUser(user)
 		return idMap
 
+
+	def saveUser(self, user):
+		# Now that everything worked out, update the database
+		sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s"
+		return self.cursor.execute(sql, [pickle.dumps(user), user.name])
+			
+
+	def storeHost(self, id, hostname, username, password, port):
+		id = int(id)
+		port = int(port)
+		
+		# negative id indicates a new host to create
+		if id < 0:
+			id = self.getUniqueHostId()
+			host = Host(id, hostname, port, username, password, self.log)
+			host.start()
+			self.hosts[id] = host
+
+			# update the database
+			sql = "INSERT INTO `hosts` (`id`, `pickledData`) VALUES (%s, %s)"
+			print self.cursor.execute(sql, [host.id, pickle.dumps(host)])
+
+
+			return host.createJSONObj();
+		
+
+		else:
+			if not id in self.hosts:
+				raise ValueError('Unknown host passed [id="%d"]' % id)
+
+			host = self.hosts[id]
+
+			# go through all components of this user and make sure
+			# that no component assigned to that host is running
+			for comp in self.activeUser.components():
+				if comp.host == host and comp.isAlive():
+					raise ValueError('Cannot change host data for running host [id="%d"]' % id)
+
+
+
+			# change the host's data first, then reconnect. If we disconnect
+			# before changing the data, the thread loop would automatically
+			# reconnect
+			host.hostname = hostname
+			host.port = port
+			host.user = username
+			host.pw = password
+			host.disconnect()
+
+			# Update the database
+			sql = "UPDATE `hosts` SET `pickledData`=%s WHERE `id`=%s"
+			self.cursor.execute(sql, [pickle.dumps(host), host.id])
+
+			
+			return host.createJSONObj()
+			

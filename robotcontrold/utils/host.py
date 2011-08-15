@@ -14,6 +14,7 @@ class Host(Thread):
 		self.id = int(rId)
 		self.hostname = hostname
 		self.port = int(port)
+		# username
 		self.user = user
 		self.pw = pw
 
@@ -166,8 +167,10 @@ class Host(Thread):
 	# Used for the webserver to send infomration to the client
 	def createJSONObj(self):
 		return {
-			'hostname':	self.hostname,
-			'user':		self.user,
-			'port':		self.port
+			'id':       self.id,
+			'hostname': self.hostname,
+			'user':	    self.user,
+			'port':	    self.port
 		}
 	
+

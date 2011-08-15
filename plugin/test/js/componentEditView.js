@@ -1,6 +1,6 @@
 var componentEditViewCode = '<h1>Component "<span class="ph_edit_comp-name"></span>"</h1><div class="actionEditsView"></div><a href="#" class="edit-finished-button">Done</a><a class="actionEditCreateNewAction" href="#">Create new action</a>';
 
-$.fn.renderComponentEditView = function(component, options) {
+$.fn.renderComponentEditView = function(component, components, options) {
 	if (!(component instanceof Component))
 		throw new Error("Argument must be an instance of Component");
 
@@ -18,7 +18,7 @@ $.fn.renderComponentEditView = function(component, options) {
 
 		actionEditsView.append(div);
 		div.attr("id", "actionEdit-" + action.id);		
-		div.renderActionEditView(action, component, isMain);
+		div.renderActionEditView(action, component, components, isMain);
 	    }
 	}
 	updateView();
