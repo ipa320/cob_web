@@ -137,6 +137,7 @@ class ServerThread(threading.Thread):
 			user = pickle.loads(row[1])
 			user.initializeUnpickableData(self.hosts, self.log)
 			self.users[row[0]] = user
+			self.log.info('User "%s" with components %s loaded' % (user.name, user.getIDs()))
 
 		
 	def readReservations(self):
@@ -390,6 +391,7 @@ class ServerThread(threading.Thread):
 
 			# get a new unique id for this component from the user object
 			autoId = user.getUniqueComponentId()
+			self.log.debug('Creating a new component with id "%d"' % autoId)
 			component = Component(autoId, user.name, host, None, [], self.log)
 			
 			# remap the temporary id to the new id
@@ -405,6 +407,7 @@ class ServerThread(threading.Thread):
 				raise ValueError('The passed componentId (%d) is unknown' % id)
 			
 			component = user.get(id)
+			self.log.debug('Updating %s' % str(component))
 			
 			# cannot update a running component
 			if component.isAlive():
@@ -562,12 +565,16 @@ class ServerThread(threading.Thread):
 				else:
 					action.appendDependency(component.getAction(depId))
 
+		# Log
+		self.log.debug('Successfully updated: %s' % str(component))
+					
 		# save the user
 		self.saveUser(user)
 		return idMap
 
 
 	def saveUser(self, user):
+		self.log.debug('Saving the user with components %s' % user.getIDs())
 		# Now that everything worked out, update the database
 		sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s"
 		return self.cursor.execute(sql, [pickle.dumps(user), user.name])

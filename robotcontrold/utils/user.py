@@ -13,6 +13,12 @@ class User():
 			component.initializeUnpickableData(hosts, log)
 	
 
+	def __getstate__(self):
+		return {
+			'name': self.name,
+			'_components': self._components
+			}
+		
 	def __str__(self):
 		return 'User [name=%s]' % self.name
 
@@ -72,8 +78,21 @@ class User():
 		if not self.hasComponent(compId):
 			raise ValueError('User has no component with id "%d"' % compId)
 			
-		if self.getComponent(compId).isAlive():
+		component = self.getComponent(compId)
+
+		if component.isAlive():
 			raise ValueError('The passed component is still alive. Stop first [id="%d"]' % compId)
+
+		# check whether the component has a parentId. If so, remove
+		# it from the child list of that component
+		if component.parent:
+			del component.parent.children[component.parent.children.index(component)]
+
+		# if the component has children, set this parentId as the parentId
+		# for all children
+		for child in component.children:
+			child.parent = component.parent
+						 
 
 		del self._components[compId]
 
@@ -90,5 +109,3 @@ class User():
 	# get all items
 	def components(self):
 		return self._components.values()
-
-

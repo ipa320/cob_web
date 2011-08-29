@@ -40,6 +40,8 @@ class Component():
 			# directly by init) or it must be a dict (id/host pairs)
 			# In the latter case, the attribute _host_id must be key
 			# of the dict
+			# usually the host is directly passed by the constructor and
+			# the dict is passed when loaded from the database
 			if isinstance(hostObj, Host):
 				self.host = hostObj
 			elif isinstance(hostObj, dict):
@@ -58,18 +60,23 @@ class Component():
 	
 	# used for pickle in memcached. Exclude certain attributes such as log etc
 	def __getstate__(self):
-		return {
-			'id': self.id,
-			'actions': self.actions,
-			'mainAction': self.mainAction,
-			'parent': self.parent,
-			'children': self.children,
-			# the following field is added because the host cannot be 
-			# pickled with the component. we will remove this field 
-			# in the initializeUnpickableData, as soon as we can 
-			# get a reference to the actual host using this attribute
-			'_host_id': self.host.id
-		}
+		try:
+			return {
+				'id': self.id,
+				'actions': self.actions,
+				'mainAction': self.mainAction,
+				'parent': self.parent,
+				'children': self.children,
+				# the following field is added because the host cannot be 
+				# pickled with the component. we will remove this field 
+				# in the initializeUnpickableData, as soon as we can 
+				# get a reference to the actual host using this attribute
+				'_host_id': self.host.id
+				}
+		except Exception as e:
+			print "EXCEPTION for %s %s" % (str(self.id), self.mainAction.name)
+			print "HOST: %s" % str(hasattr(self, 'host'))
+			raise e
 		
 
 	def getUniqueActionId(self):

@@ -35,10 +35,13 @@ class ScreenReader(Thread):
 	def run(self):
 		regex1 = re.compile('\x1b\[1m((?:.(?!\x1b))*.)\x1b\[0m', re.DOTALL)
 		regex2 = re.compile('\x1b\]2;(.*)\x07')
+		# red
 		regex3 = re.compile('\x1b\[31m((?:.(?!\x1b))*.)\x1b\[0m', re.DOTALL)
-		regex4 = re.compile('\x00', re.DOTALL)
-		regex5 = re.compile('\x1b[^\s\.]*')
-
+		# yellow
+		regex4 = re.compile('\x1b\[33m((?:.(?!\x1b))*.)\x1b\[0m', re.DOTALL)
+		regex5 = re.compile('\x00', re.DOTALL)
+		regex6 = re.compile('\x1b[^\s\.]*')
+		
 		try:
 			while self._alive:
 				if self.channel.recv_ready():
@@ -59,8 +62,9 @@ class ScreenReader(Thread):
 					self._buffer = re.sub(regex1, '<b>\\1</b>', self._buffer)
 					self._buffer = re.sub(regex2, '', self._buffer, re.DOTALL)
 					self._buffer = re.sub(regex3, '<font color="red"><b>\\1</b></font>', self._buffer)
-					self._buffer = re.sub(regex4, '', self._buffer)
+					self._buffer = re.sub(regex4, '<font color="yellow"><b>\\1</b></font>', self._buffer);
 					self._buffer = re.sub(regex5, '', self._buffer)
+					self._buffer = re.sub(regex6, '', self._buffer)
 
 
 				else:
