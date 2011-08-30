@@ -1,18 +1,18 @@
 import MySQLdb, pickle
 
-def getConn():
+def getCursor():
     conn = MySQLdb.connect("webportal", "root", "rc4", "cob-sim1")
     return conn.cursor()
 
 def user():
-    c = getConn()
+    c = getCursor()
     c.execute("SELECT pickledData from users")
     r = c.fetchone()
     c.close()
     return r[0]
 
 def host():
-    c = getConn()
+    c = getCursor()
     c.execute("SELECT pickledData from hosts")
     result = c.fetchall()
     hosts = {}

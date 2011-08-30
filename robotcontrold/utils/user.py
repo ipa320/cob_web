@@ -1,4 +1,5 @@
 from utils.component import Component
+from utils import privileges
 
 class User():
 	_users = {}
@@ -6,6 +7,7 @@ class User():
 		# important: always process the name in lowercase
 		self.name = name.lower()
 		self._components = {}
+		self._privileges = []
 		
 		
 	def initializeUnpickableData(self, hosts, log):
@@ -16,7 +18,8 @@ class User():
 	def __getstate__(self):
 		return {
 			'name': self.name,
-			'_components': self._components
+			'_components': self._components,
+			'_privileges': self._privileges
 			}
 		
 	def __str__(self):
@@ -25,6 +28,12 @@ class User():
 
 	def getUniqueComponentId(self):
 		return (max(self._components.keys()) if len(self._components) > 0 else 0)+1
+
+	def getPrivileges(self):
+		return self._privileges
+	def hasPrivilege(self, privilege):
+		return True
+		return ( self._privileges & privilege ) > 0
 
 	def delete(self, comp):
 		if not isinstance(comp, Component):

@@ -94,7 +94,7 @@ var ServerPreparesReservation = function() {
 	this.container.attr('title', 'Server prepares your reservation');
 	this.container.addClass('dialogView');
 	this.container.addClass('loadingDialogView');
-	this.container.html('<img src="images/ajax-loader-trans.gif" class="loader"/><p class="msg">The Server prepares your reservation. Please wait this might take a minute. You\'ll be redirected automatically.</p>');
+	this.container.html('<img src="images/ajax-loader-trans.gif" class="loader"/><p class="msg">The Server prepares your reservation. Please wait this might take a minute. <b>You\'ll be redirected automatically.</b></p>');
 	this.ul = this.container.find('ul'); 
     }
     this.destroy = function() {

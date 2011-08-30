@@ -1,6 +1,7 @@
 import threading, time, base64, datetime, urllib, json
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from utils.eventHistory import EventHistory
+from utils import privileges
 from myExceptions.webServerExceptions import *
 from myExceptions.networkExceptions import *
 
@@ -136,11 +137,6 @@ class MyHandler(BaseHTTPRequestHandler):
 					output = '{"status": %d}' % auth['status']
 					
 					
-				
-				# if the action is 'status', just pass, output was created already
-				if action == 'status':
-					pass
-				
 				elif action == 'info':
 					output  = '[Args]<br>%s<br>' % str(args)
 					output += '<br>'
@@ -178,7 +174,11 @@ class MyHandler(BaseHTTPRequestHandler):
 						output += 'pass: %s<br>' % auth['pass']
 					output += '<br>'
 					
-					
+
+
+				# privileges
+				elif action == 'privileges':
+					output = str(requestUser.getPrivileges())
 					
 				# Request host / component data
 				elif action == 'data':
@@ -260,14 +260,29 @@ class MyHandler(BaseHTTPRequestHandler):
 
 
 					if command == 'start':
+						# check privileges
+						if not requestUser.hasPrivilege(privileges.ACTION_RUN):
+							raise UnauthorizedRequestError('You have no privileges to run an action', self.path)
 						result = action.start()
 					elif command == 'stop':
+						# check privileges
+						if not requestUser.hasPrivilege(privileges.ACTION_STOP):
+							raise UnauthorizedRequestError('You have no privileges to stop an action', self.path)
 						result = action.stop()
+						
 					elif command == 'kill':
+						# check privileges
+						if not requestUser.hasPrivilege(privileges.ACTION_STOP):
+							raise UnauthorizedRequestError('You have no privileges to kill an action', self.path)
 						result = action.kill()
+						
 					elif command == 'isAlive':
 						result = action.isAlive()
+
 					elif command == 'status':
+						# check privileges
+						if not requestUser.hasPrivilege(privileges.ACTION_STATUS):
+							raise UnauthorizedRequestError('You have no privileges to show the status of an action', self.path)
 						result = action.status()
 					else:
 						raise ArgumentRequestError('Invalid Command "%s".' % command, self.path)
@@ -364,7 +379,13 @@ class MyHandler(BaseHTTPRequestHandler):
 					if len(args) < 2:
 						raise ArgumentRequestError('At least 2 arguments expected. Received: %s' % str(args), self.path)
 
+
 					if args[1] == 'component':
+						# You need COMP_ADMIN rights to perform this action
+						if not requestUser.hasPrivilege(privileges.COMP_ADMIN):
+							raise UnauthorizedRequestError('You have no privileges to change a component', self.path)
+
+
 						if not 'json' in options:
 							raise ArgumentRequestError('json parameter not received. Received options: %s' % str(options), self.path)
 					
@@ -373,6 +394,12 @@ class MyHandler(BaseHTTPRequestHandler):
 
 
 					if args[1] == 'host':
+						# You need HOST_ADMIN rights to perform this action
+						if not requestUser.hasPrivilege(privileges.HOST_ADMIN):
+							raise UnauthorizedRequestError('You have no privileges to change a host', self.path)
+
+
+						
 						if len(args) != 7:
 							raise ArgumentRequestError('7 arguments expected. Received: %s' % str(args), self.path)
 
@@ -390,6 +417,11 @@ class MyHandler(BaseHTTPRequestHandler):
 
 				# delete a component
 				elif action == 'delete':
+					# You need COMP_ADMIN rights to perform this action
+					if not requestUser.hasPrivilege(privileges.COMP_ADMIN):
+						raise UnauthorizedRequestError('You have no privileges to delete a component', self.path)
+
+					
 					if len(args) != 2:
 						raise ArgumentRequestError('No componentId passed as argument', self.path)
 					

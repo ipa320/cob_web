@@ -50,6 +50,7 @@ div.nav-button span.menu-icon-expandable:hover, div.nav-button span.menu-icon-cl
 div.nav-button span.menu-item-name {
     float: left;
     cursor: pointer;
+    padding-top: 1px;
 }
 div.nav-button span.menu-item-name:hover {
     color: #000000;

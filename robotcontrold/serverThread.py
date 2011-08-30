@@ -539,6 +539,14 @@ class ServerThread(threading.Thread):
 		for actionData in actionsData:
 			actionId      = int(actionData['id'])
 			dependencies  = actionData['dependencies']
+
+			if actionId < 0:
+				if not actionId in idMap:
+					raise ValueError('Action id is negative, but no mapping entry exists [actionId=%s]'  % str(actionId))
+				actionId = idMap[actionId]
+
+			if not component.hasAction(actionId):
+				raise ValueError('Specified action is not a part of the component [actionId=%s]' % actionId)
 			action = component.getAction(actionId)
 			
 			# make sure every dependency is valid and create the string (ids joined by semicolons)
@@ -547,9 +555,9 @@ class ServerThread(threading.Thread):
 				
 				# if the action id is negative (i.e. newly created), try to remap
 				if depId < 0:
-					if not depId in idMaps:
-						raise ValueError('Action id is negative, but no mapping entry found. [depId=%d]' % depId)
-					depId = idMaps[depId]
+					if not depId in idMap:
+						raise ValueError('Action Dependency id is negative, but no mapping entry found. [depId=%d]' % depId)
+					depId = idMap[depId]
 					
 				
 				# if the action Id could not be found simply ignore the action, it might
