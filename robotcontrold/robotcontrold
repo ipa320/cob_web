@@ -48,10 +48,10 @@ class Main():
 
 		# Was a logLevel passed (optional) and is it valid?
 		if 'logLevel' in args:
-			if args['logLevel'] not in self.LOG_LEVELS:
-				sys.stderr.write ('Invalid LogLevel passed: %s\n' % args['logLevel'])
+			if args['logLevel'].lower() not in self.LOG_LEVELS:
+				sys.stderr.write ('Invalid LogLevel passed: %s\nChose one of the following: %s\n' % (args['logLevel'], str(self.LOG_LEVELS.keys())))
 				sys.exit(1)
-			self.logLevel = self.LOG_LEVELS[args['logLevel']]
+			self.logLevel = self.LOG_LEVELS[args['logLevel'].lower()]
 
 		
 		# WebPort is numerical ?
@@ -91,7 +91,7 @@ class Main():
 			sys.stderr.write ('Critical.\n')
 			sys.exit(1)
 		except Exception as e:
-			self.log.exception ('An unexpected error occured while creating the webServer')
+			self.log.exception ('An unexpected error occured while creating the webServer') 
 			self.stop()
 			sys.stderr.write ('Critical.\n')
 			sys.exit(1)
@@ -147,8 +147,8 @@ class Main():
 			raise getopt.GetoptError('Invalid argument(s) passed: %s' % str(args))
 
 		# Check whether all required names are give
-		# take only the key and remove -- at the beginning [2:]
-		names = (i[0][2:] for i in optlist)
+		# take only the key and remove -- at the beginning
+		names = list(i[0].strip("--") for i in optlist)
 		for req in self.REQUIRED_ARGUMENTS:
 			# be careful to remove = at the end if given
 			if req.strip('=') not in names:
@@ -159,7 +159,7 @@ class Main():
 		args = {}
 		for key,value in optlist:
 			# remove -- at the beginning of key
-			args[key[2:]] = value
+			args[key.strip("--")] = value
 		
 		return args
 		

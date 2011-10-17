@@ -146,13 +146,15 @@ class ServerThread(threading.Thread):
 		self.reservations = {}
 		
 		# prepare the query
-		query = 'SELECT `id`, `user`, `start`, `end` FROM `reservations`'
+		query = 'SELECT `id`, `user`, `start`, `end` FROM  `reservations`'
 		self.cursor.execute(query)
 		results = self.cursor.fetchall()
 
 		for row in results:
 			user = self.getUserCreateIfNotExistent(row[1])
 			self.reservations[row[0]] = {'user': user, 'start': row[2], 'end': row[3]}
+			
+		self.log.debug('%d Reservations fetched' % len(self.reservations))
 
 		
 
@@ -341,6 +343,7 @@ class ServerThread(threading.Thread):
 		return None
 		
 	def run(self):
+		self.log.info('ServerThread is running')
 		activeReservation = None
 		while self.alive:
 			try:
