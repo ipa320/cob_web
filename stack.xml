@@ -1,0 +1,10 @@
+<stack>
+  <description brief="cob_web">cob_web</description>
+  <author>Maintained by Ulrich Reiser</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/cob_web</url>
+  <depend stack="robot_model" /> <!-- robot_state_publisher -->
+  <depend stack="ros" />
+
+</stack>
