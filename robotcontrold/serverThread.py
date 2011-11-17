@@ -180,6 +180,11 @@ class ServerThread(threading.Thread):
 		if not name in self.users:
 			user = User(name)
 			self.users[name] = user
+			
+			# update the database
+			self.log.debug("Storing new User '%s'" % name)
+			sql = "INSERT INTO `users` (`user_name`, `pickledData`) VALUES (%s,%s)"
+			self.cursor.execute(sql, [name, pickle.dumps(user)])
 		else:
 			user = self.users[name]
 		return user
@@ -582,6 +587,12 @@ class ServerThread(threading.Thread):
 		# save the user
 		self.saveUser(user)
 		return idMap
+		
+	def allUsersPermission(self):
+		privileges = {}
+		for (username, user) in self.users.iteritems():
+			privileges[username] = user.getPrivileges()
+		return privileges
 
 
 	def saveUser(self, user):
@@ -640,3 +651,10 @@ class ServerThread(threading.Thread):
 			
 			return host.createJSONObj()
 			
+			
+	def savePermissions(self, options):
+		# assume every item in the options is a user
+		for username in options:
+			user = self.getUserCreateIfNotExistent(username)
+			user.setPrivileges(int(options[username]))
+			self.saveUser(user)

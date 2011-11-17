@@ -171,14 +171,45 @@ class MyHandler(BaseHTTPRequestHandler):
 					else:
 						output += 'token: %s<br>' % auth['token']
 						output += 'user: %s<br>' % auth['user']
-						output += 'pass: %s<br>' % auth['pass']
 					output += '<br>'
+					
+					output += '[Permission]<br>'
+					output += "Bitmask:       %s<br>" % str(requestUser.getPrivileges())
+					output += "ACTION_RUN:    %s<br>" % str(requestUser.hasPrivilege(privileges.ACTION_RUN))
+					output += "ACTION_STOP:   %s<br>" % str(requestUser.hasPrivilege(privileges.ACTION_STOP))
+					output += "ACTION_STATUS: %s<br>" % str(requestUser.hasPrivilege(privileges.ACTION_STATUS))
+					output += "COMP_ADMIN:    %s<br>" % str(requestUser.hasPrivilege(privileges.COMP_ADMIN))
+					output += "HOST_ADMIN:    %s<br>" % str(requestUser.hasPrivilege(privileges.HOST_ADMIN))
+					output += "START_SERVER:  %s<br>" % str(requestUser.hasPrivilege(privileges.START_SERVER))
+					output += "PRIV_ADMIN:    %s<br>" % str(requestUser.hasPrivilege(privileges.PRIV_ADMIN))
 					
 
 
 				# privileges
 				elif action == 'privileges':
-					output = str(requestUser.getPrivileges())
+					if len(args) < 2:
+						raise ArgumentRequestError('Wrong argument count for "privileges". %s found, at least 2 Required.' % str(args), self.path)
+						
+					if args[1] == 'my':
+						output = str(requestUser.getPrivileges()) 
+						
+					elif args[1] == 'all':
+						#if not requestUser.hasPrivilege(privileges.PRIV_ADMIN):
+						#	raise UnauthorizedRequestError('Insufficient rights.', self.path)
+						allUsersPermission = serverThread.allUsersPermission();
+						output = json.dumps({'labels': privileges.dict(), 'users': allUsersPermission})
+						
+					elif args[1] == 'submit':
+						#if not requestUser.hasPrivilege(privileges.PRIV_ADMIN):
+						#	raise UnauthorizedRequestError('Insufficient rights.', self.path)
+						serverThread.savePermissions(options)
+						output = "Ok."
+						
+					else:
+						raise ArgumentRequestError('Invalid Argument for privileges "%s". ' % str(args[1]), self.path)
+						
+						
+					
 					
 				# Request host / component data
 				elif action == 'data':

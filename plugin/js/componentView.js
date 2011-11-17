@@ -21,7 +21,7 @@ var componentViewCode = '\<h1>Component "<span class="ph_comp-name"></span>"</h1
 
 $.fn.renderComponentView = function(component, components, options) {
     if (!(component instanceof Component))
-	throw new Error("Argument must be an instance of Component");
+	throw new Error("Render: Argument must be an instance of Component");
 
     // Every component must have a main action
     var mainAction = component.getMainAction();
@@ -98,7 +98,7 @@ $.fn.renderComponentView = function(component, components, options) {
 $.fn.updateComponentView = function(component, components, options) {
 
     if (!(component instanceof Component))
-	throw new Error("Argument must be an instance of Component");
+	throw new Error("Update: Argument must be an instance of Component");
 
     
     var defaultOptions = {'disabled': screenManager.isLockedLocation()};

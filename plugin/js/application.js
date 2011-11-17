@@ -877,7 +877,8 @@ var application = new (function() {
 	    // lock the interface
 	    this.select(component.id > 0 ? component.id : null);
 	    screenManager.lockLocation();
-	    this.componentView.updateComponentView(this.selectedComponent, this.components);
+	    if (this.selectedComponent)
+		    this.componentView.updateComponentView(this.selectedComponent, this.components);
 	    this.menuView.renderMenuView(this.components);
 	    
 	    $.ajax({
@@ -888,6 +889,7 @@ var application = new (function() {
 	}
 	catch (err) {
 	    alert ("Error occured trying to save component: \n" + err);
+	    console.log(err);
 	}
     }
     
@@ -895,8 +897,12 @@ var application = new (function() {
     {
 	try {
 	    // if nothing was passed for selectId, use the current id
-	    if (selectId === undefined)
-		selectId = this.selectedComponent.id;
+	    if (selectId === undefined) {
+	    	if (this.selectedComponent)
+			selectId = this.selectedComponent.id;
+		else
+			selectId = null;
+	    }
 	    
 	    // reload all components
 	    var compDataSuccess = function(data) {
@@ -912,10 +918,11 @@ var application = new (function() {
 	}
 	catch (err) {
 	    alert("Error occured updating the component: \n" + err);
+	    console.log(err);
 	}
     }
     this.saveComponentError = function(data) {
-	alert('Component could not be updated [' + data.status + '; ' + data.responseText + ']');
+		alert('Component could not be updated [' + data.status + '; ' + data.responseText + ']');
     }
     this.reloadComponentsSuccess = function(selectId) {
 	screenManager.unlockLocation();
@@ -1033,4 +1040,50 @@ var application = new (function() {
     {
 	alert('Remote Host could not be updated [' + data.status + '; ' + data.responseText + ']');
     }
+    
+    // User management 
+    this.userManager = function()
+    {
+	try {
+	    // if the location is locked, do not allow to change location
+	    if (screenManager.isLockedLocation())
+		return;
+	    
+	    	    
+	    // send a request to the server
+	    var view = this.componentView;
+	    $.ajax({
+		url: this.urlPrefix + '/privileges/all',
+		success: function(data) { view.renderUserManagerView(data); },
+		error:   function(data) { alert('User Privileges could not be loaded [' + data.status + '; ' + data.responseText + ']'); }
+	    });
+	}
+	catch (err) {
+	    alert("Error occured trying to manage the users:\n" + err);
+	}
+    }
+    this.submitPrivileges = function(bitmasks)
+    {
+	$.ajax({
+	    url: this.urlPrefix + '/privileges/submit',
+	    data: bitmasks,
+	    dataType: 'text',
+	    success: function(data) { application.submitPrivilegesSuccess(data); },
+	    error:   function(data) { application.submitPrivilegesError(data); }
+	});
+    }
+    this.submitPrivilegesSuccess = function(data)
+    {
+	try {
+	    this.select(null);
+	}
+	catch (err) {
+	    alert('Error occured to go home. Error:\n' + err);
+	}
+    }
+    this.submitPrivilegesError = function(data)
+    {
+	alert('Remote Privileges could not be updated [' + data.status + '; ' + data.responseText + ']');
+    }
+
 })();

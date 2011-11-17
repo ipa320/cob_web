@@ -7,7 +7,7 @@ class User():
 		# important: always process the name in lowercase
 		self.name = name.lower()
 		self._components = {}
-		self._privileges = []
+		self._privileges = 0
 		
 		
 	def initializeUnpickableData(self, hosts, log):
@@ -29,11 +29,13 @@ class User():
 	def getUniqueComponentId(self):
 		return (max(self._components.keys()) if len(self._components) > 0 else 0)+1
 
+	def setPrivileges(self, privileges):
+		self._privileges = privileges
+
 	def getPrivileges(self):
 		return self._privileges
 	def hasPrivilege(self, privilege):
-		return True
-		return ( self._privileges & privilege ) > 0
+		return ( self._privileges & privilege ) == privilege
 
 	def delete(self, comp):
 		if not isinstance(comp, Component):

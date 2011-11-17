@@ -245,11 +245,11 @@ class Action():
 	
 
 	def createScreenCmd(self, cmd):
-		return 'screen -S %s_%d_%d\n%s\nexit\n' % (self.name, self.id, cmd.id, cmd.command)
+		return 'screen -S "%s_%d_%d"\n%s\nexit\n' % (self.name, self.id, cmd.id, cmd.command)
 
 
 	def createKillCmd(self, cmd):
-		return 'screen -X -S %s_%d_%d kill\n' % (self.name, self.id, cmd.id)
+		return 'screen -X -S "%s_%d_%d" kill\n' % (self.name, self.id, cmd.id)
 
 
 	def hasCommand(self, cmdId):
