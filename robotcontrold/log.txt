@@ -1,76 +1,46 @@
-2011-11-17 12:34:33,428 - ServerThread - INFO - Establishing Mysql Connection
-2011-11-17 12:34:33,453 - ServerThread - INFO - Reading Hosts
-2011-11-17 12:34:33,458 - ServerThread - INFO - Reading Users
-2011-11-17 12:34:33,462 - ServerThread - INFO - User "simon" with components [1, 2, 27, 28, 29] loaded
-2011-11-17 12:34:33,463 - ServerThread - INFO - User "test" with components [] loaded
-2011-11-17 12:34:33,463 - ServerThread - INFO - Reading reservations
-2011-11-17 12:34:33,725 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
-2011-11-17 12:34:35,729 - ServerThread - INFO - Force Terminating all components of every users
-2011-11-17 12:34:35,729 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
-2011-11-17 12:34:35,730 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
-2011-11-17 12:34:37,742 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
-2011-11-17 12:34:37,812 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
-2011-11-17 12:34:37,882 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
-2011-11-17 12:34:39,922 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
-2011-11-17 12:34:39,992 - ServerThread - INFO - Cannot stop Action "Simulation" (force=True), no commands found
-2011-11-17 12:34:39,992 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-17 12:34:42,017 - ServerThread - INFO - Killing Action "Simulation" (force=True) "1" Commands found 
-2011-11-17 12:34:42,086 - ServerThread - INFO - Killing Action "VNC" (force=True) "3" Commands found 
-2011-11-17 12:34:42,124 - ServerThread - INFO - Cannot stop Action "Navigation" (force=True), no commands found
-2011-11-17 12:34:42,124 - ServerThread - INFO - Killing Action "Navigation" (force=True) "1" Commands found 
-2011-11-17 12:34:42,161 - ServerThread - INFO - Cannot stop Action "roscore" (force=True), no commands found
-2011-11-17 12:34:42,162 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-17 12:34:44,184 - ServerThread - INFO - Killing Action "roscore" (force=True) "1" Commands found 
-2011-11-17 12:34:44,222 - ServerThread - INFO - Killing Action "VNC" (force=True) "2" Commands found 
-2011-11-17 12:34:44,244 - WebServer - INFO - Creating WebServer on port 81
-2011-11-17 12:34:44,245 - ServerThread - INFO - Starting ServerThread
-2011-11-17 12:34:44,245 - ServerThread - INFO - ServerThread is running
-2011-11-17 12:34:44,245 - ServerThread - INFO - Preparing the Server for new user: 
-2011-11-17 12:34:44,246 - ServerThread - INFO - Force Terminating all components of every users
-2011-11-17 12:34:44,246 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
-2011-11-17 12:34:44,246 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
-2011-11-17 12:34:46,262 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
-2011-11-17 12:34:46,300 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
-2011-11-17 12:34:46,322 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
-2011-11-17 12:34:48,345 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
-2011-11-17 12:34:48,416 - ServerThread - INFO - Cannot stop Action "Simulation" (force=True), no commands found
-2011-11-17 12:34:48,417 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-17 12:34:50,457 - ServerThread - INFO - Killing Action "Simulation" (force=True) "1" Commands found 
-2011-11-17 12:34:50,527 - ServerThread - INFO - Killing Action "VNC" (force=True) "3" Commands found 
-2011-11-17 12:34:50,565 - ServerThread - INFO - Cannot stop Action "Navigation" (force=True), no commands found
-2011-11-17 12:34:50,565 - ServerThread - INFO - Killing Action "Navigation" (force=True) "1" Commands found 
-2011-11-17 12:34:50,603 - ServerThread - INFO - Cannot stop Action "roscore" (force=True), no commands found
-2011-11-17 12:34:50,603 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-17 12:34:52,627 - ServerThread - INFO - Killing Action "roscore" (force=True) "1" Commands found 
-2011-11-17 12:34:52,696 - ServerThread - INFO - Killing Action "VNC" (force=True) "2" Commands found 
-2011-11-17 13:15:01,113 - ServerThread - INFO - Logging current user out: test
-2011-11-17 13:15:01,113 - ServerThread - INFO - Force Terminating all components of every users
-2011-11-17 13:15:01,114 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
-2011-11-17 13:15:01,114 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
-2011-11-17 13:15:01,120 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
-2011-11-17 13:15:01,120 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
-2011-11-17 13:15:03,131 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
-2011-11-17 13:15:03,168 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
-2011-11-17 13:15:03,191 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
-2011-11-17 13:15:05,231 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
-2011-11-17 13:15:05,269 - ServerThread - INFO - Cannot stop Action "Simulation" (force=True), no commands found
-2011-11-17 13:15:05,270 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-17 13:15:07,293 - ServerThread - INFO - Killing Action "Simulation" (force=True) "1" Commands found 
-2011-11-17 13:15:07,363 - ServerThread - INFO - Killing Action "VNC" (force=True) "3" Commands found 
-2011-11-17 13:15:07,401 - ServerThread - INFO - Cannot stop Action "Navigation" (force=True), no commands found
-2011-11-17 13:15:07,402 - ServerThread - INFO - Killing Action "Navigation" (force=True) "1" Commands found 
-2011-11-17 13:15:07,422 - ServerThread - INFO - Cannot stop Action "roscore" (force=True), no commands found
-2011-11-17 13:15:07,423 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-17 13:15:09,432 - ServerThread - INFO - Killing Action "roscore" (force=True) "1" Commands found 
-2011-11-17 13:15:09,440 - ServerThread - INFO - Killing Action "VNC" (force=True) "2" Commands found 
-2011-11-17 14:34:09,235 - WebServer - ERROR - An error occured parsing the request
-Traceback (most recent call last):
-  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 116, in do_GET
-    requestUser = serverThread.getUserCreateIfNotExistent(auth['user'])
-  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 187, in getUserCreateIfNotExistent
-    self.cursor.execute(sql, [name, pickle.dumps(user)])
-  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
-    self.errorhandler(self, exc, value)
-  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
-    raise errorclass, errorvalue
-IntegrityError: (1062, "Duplicate entry '0' for key 'PRIMARY'")
+2011-11-21 15:05:28,578 - ServerThread - INFO - Establishing Mysql Connection
+2011-11-21 15:05:28,619 - ServerThread - INFO - Reading Hosts
+2011-11-21 15:05:28,656 - ServerThread - INFO - Reading Users
+2011-11-21 15:05:28,660 - ServerThread - INFO - User "simon" with components [1, 2, 27, 28, 29] loaded
+2011-11-21 15:05:28,661 - ServerThread - INFO - User "test" with components [1] loaded
+2011-11-21 15:05:28,662 - ServerThread - INFO - Reading reservations
+2011-11-21 15:05:28,922 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2011-11-21 15:05:30,925 - ServerThread - INFO - Force Terminating all components of every users
+2011-11-21 15:05:30,925 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2011-11-21 15:05:30,926 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
+2011-11-21 15:05:30,933 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-11-21 15:05:30,933 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-11-21 15:05:32,945 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-11-21 15:05:32,982 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-11-21 15:05:33,020 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
+2011-11-21 15:05:35,059 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
+2011-11-21 15:05:35,130 - ServerThread - INFO - Cannot stop Action "Simulation" (force=True), no commands found
+2011-11-21 15:05:35,130 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
+2011-11-21 15:05:37,154 - ServerThread - INFO - Killing Action "Simulation" (force=True) "1" Commands found 
+2011-11-21 15:05:37,192 - ServerThread - INFO - Killing Action "VNC" (force=True) "3" Commands found 
+2011-11-21 15:05:37,214 - ServerThread - INFO - Cannot stop Action "Navigation" (force=True), no commands found
+2011-11-21 15:05:37,215 - ServerThread - INFO - Killing Action "Navigation" (force=True) "1" Commands found 
+2011-11-21 15:05:37,235 - ServerThread - INFO - Cannot stop Action "roscore" (force=True), no commands found
+2011-11-21 15:05:37,236 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
+2011-11-21 15:05:39,259 - ServerThread - INFO - Killing Action "roscore" (force=True) "1" Commands found 
+2011-11-21 15:05:39,329 - ServerThread - INFO - Killing Action "VNC" (force=True) "2" Commands found 
+2011-11-21 15:05:39,351 - WebServer - INFO - Creating WebServer on port 81
+2011-11-21 15:05:39,352 - ServerThread - INFO - Starting ServerThread
+2011-11-21 15:05:39,353 - ServerThread - INFO - ServerThread is running
+2011-11-21 17:54:26,101 - robotcontrold - INFO - SIGNAL received > Shutting down
+2011-11-21 17:54:26,101 - ServerThread - INFO - Stopping ServerThread
+2011-11-21 17:54:26,101 - ServerThread - INFO - Force Terminating all components of every users
+2011-11-21 17:54:26,101 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2011-11-21 17:54:26,102 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
+2011-11-21 17:54:26,109 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
+2011-11-21 17:54:26,109 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
+2011-11-21 17:54:28,119 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
+2011-11-21 17:54:28,156 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
+2011-11-21 17:54:28,178 - ServerThread - INFO - Cannot stop Action "Simulation" (force=True), no commands found
+2011-11-21 17:54:28,178 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
+2011-11-21 17:54:30,201 - ServerThread - INFO - Killing Action "Simulation" (force=True) "1" Commands found 
+2011-11-21 17:54:30,270 - ServerThread - INFO - Killing Action "VNC" (force=True) "3" Commands found 
+2011-11-21 17:54:30,309 - ServerThread - INFO - Cannot stop Action "Navigation" (force=True), no commands found
+2011-11-21 17:54:30,309 - ServerThread - INFO - Killing Action "Navigation" (force=True) "1" Commands found 
+2011-11-21 17:54:30,330 - ServerThread - INFO - Disconnecting all Hosts
+2011-11-21 17:54:30,333 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
