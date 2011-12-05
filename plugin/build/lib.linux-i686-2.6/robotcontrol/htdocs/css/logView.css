@@ -1,0 +1,50 @@
+.logView {
+	margin-top: 30px;
+}
+.logView .logNavigation {
+	border-bottom: 1px dashed #CCCCCC;
+	height: 35px;
+}
+.logView .logNavigation ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+.logView .logNavigation li {
+	padding: 0 18px 0px 13px;
+	float: left;
+	height: 100%;
+}
+.logView .logNavigation li:hover {
+	background-color: #E0E0E0;
+	cursor: pointer;
+}
+.logView .logNavigation li span.ui-icon {
+	float: left;
+	margin-top: 10px;
+}
+.logView .logNavigation li span.actionName {
+	margin-top: 12px;
+	display: block;
+	float: right;
+}
+.logView .logNavigation li.actionSelected span.actionName {
+	font-weight: bold;
+}
+.logView .logContent {
+	height: 400px;
+	margin: 0px;
+	overflow: auto;
+	padding: 15px 20px;
+	margin: 0px;
+	font: 11px "courier new"
+}
+.logView .logContent hr {
+    border: 0;
+    border-top: 1px solid #CCC;
+    margin: 30px 0;
+}
+.logView .logContent pre {
+	font-size: 11px;
+}

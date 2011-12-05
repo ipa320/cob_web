@@ -1,0 +1,35 @@
+#adminBox {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    border: 1px solid #CCCCCC;
+    margin-top: 15px;
+    padding: 5px;
+    width: 140px;
+    color: #4F4F4F;
+}
+
+#adminBox ul 
+{
+    /*
+      list-style-type: square;
+      padding: 0 0 0 25px;
+      */
+    list-style-type: none;
+    padding: 0 0 0 10px;
+
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+#adminBox ul li
+{
+    margin: 10px 0;
+}
+
+#adminBox ul li a {
+    text-decoration: none;
+    color: #4F4F4F;
+}
+#adminBox ul li a:hover {
+    color: #000000;
+}
