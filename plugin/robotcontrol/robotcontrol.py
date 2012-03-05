@@ -24,8 +24,8 @@ class RobotcontrolPlugin(Component):
 
     # IRequestHandler methods
     def match_request(self, req):
-    	# make sure the request doesn't end with a forward slash, otherwise
-    	# problems occur when creating the forms
+        # make sure the request doesn't end with a forward slash, otherwise
+        # problems occur when creating the forms
         return req.path_info.startswith( '/robotcontrol' ) and \
             req.path_info[-1] != '/'
 
@@ -86,13 +86,13 @@ class RobotcontrolPlugin(Component):
 
         import privileges
         myPrivileges = self.loadPrivileges(req)
-        options = { \
+        options = {
             'COMP_ADMIN': self.hasPrivilege(myPrivileges, privileges.COMP_ADMIN),
             'HOST_ADMIN': self.hasPrivilege(myPrivileges, privileges.HOST_ADMIN),
             'PRIV_ADMIN': self.hasPrivilege(myPrivileges, privileges.PRIV_ADMIN)
         }
 
-		
+        
     
         # default action
         # Markup to avoid escaping of the xml data

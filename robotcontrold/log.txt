@@ -1,46 +1,83 @@
-2011-11-21 15:05:28,578 - ServerThread - INFO - Establishing Mysql Connection
-2011-11-21 15:05:28,619 - ServerThread - INFO - Reading Hosts
-2011-11-21 15:05:28,656 - ServerThread - INFO - Reading Users
-2011-11-21 15:05:28,660 - ServerThread - INFO - User "simon" with components [1, 2, 27, 28, 29] loaded
-2011-11-21 15:05:28,661 - ServerThread - INFO - User "test" with components [1] loaded
-2011-11-21 15:05:28,662 - ServerThread - INFO - Reading reservations
-2011-11-21 15:05:28,922 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
-2011-11-21 15:05:30,925 - ServerThread - INFO - Force Terminating all components of every users
-2011-11-21 15:05:30,925 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
-2011-11-21 15:05:30,926 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
-2011-11-21 15:05:30,933 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
-2011-11-21 15:05:30,933 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
-2011-11-21 15:05:32,945 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
-2011-11-21 15:05:32,982 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
-2011-11-21 15:05:33,020 - ServerThread - INFO - Stopping Action "roscore" (force=True). "1" Commands found
-2011-11-21 15:05:35,059 - ServerThread - INFO - Killing Action "roscore" (force=True) "3" Commands found 
-2011-11-21 15:05:35,130 - ServerThread - INFO - Cannot stop Action "Simulation" (force=True), no commands found
-2011-11-21 15:05:35,130 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-21 15:05:37,154 - ServerThread - INFO - Killing Action "Simulation" (force=True) "1" Commands found 
-2011-11-21 15:05:37,192 - ServerThread - INFO - Killing Action "VNC" (force=True) "3" Commands found 
-2011-11-21 15:05:37,214 - ServerThread - INFO - Cannot stop Action "Navigation" (force=True), no commands found
-2011-11-21 15:05:37,215 - ServerThread - INFO - Killing Action "Navigation" (force=True) "1" Commands found 
-2011-11-21 15:05:37,235 - ServerThread - INFO - Cannot stop Action "roscore" (force=True), no commands found
-2011-11-21 15:05:37,236 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-21 15:05:39,259 - ServerThread - INFO - Killing Action "roscore" (force=True) "1" Commands found 
-2011-11-21 15:05:39,329 - ServerThread - INFO - Killing Action "VNC" (force=True) "2" Commands found 
-2011-11-21 15:05:39,351 - WebServer - INFO - Creating WebServer on port 81
-2011-11-21 15:05:39,352 - ServerThread - INFO - Starting ServerThread
-2011-11-21 15:05:39,353 - ServerThread - INFO - ServerThread is running
-2011-11-21 17:54:26,101 - robotcontrold - INFO - SIGNAL received > Shutting down
-2011-11-21 17:54:26,101 - ServerThread - INFO - Stopping ServerThread
-2011-11-21 17:54:26,101 - ServerThread - INFO - Force Terminating all components of every users
-2011-11-21 17:54:26,101 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
-2011-11-21 17:54:26,102 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
-2011-11-21 17:54:26,109 - ServerThread - INFO - Cannot stop Action "dashboard" (force=True), no commands found
-2011-11-21 17:54:26,109 - ServerThread - INFO - Stopping Action "vnc" (force=True). "1" Commands found
-2011-11-21 17:54:28,119 - ServerThread - INFO - Killing Action "dashboard" (force=True) "1" Commands found 
-2011-11-21 17:54:28,156 - ServerThread - INFO - Killing Action "vnc" (force=True) "3" Commands found 
-2011-11-21 17:54:28,178 - ServerThread - INFO - Cannot stop Action "Simulation" (force=True), no commands found
-2011-11-21 17:54:28,178 - ServerThread - INFO - Stopping Action "VNC" (force=True). "1" Commands found
-2011-11-21 17:54:30,201 - ServerThread - INFO - Killing Action "Simulation" (force=True) "1" Commands found 
-2011-11-21 17:54:30,270 - ServerThread - INFO - Killing Action "VNC" (force=True) "3" Commands found 
-2011-11-21 17:54:30,309 - ServerThread - INFO - Cannot stop Action "Navigation" (force=True), no commands found
-2011-11-21 17:54:30,309 - ServerThread - INFO - Killing Action "Navigation" (force=True) "1" Commands found 
-2011-11-21 17:54:30,330 - ServerThread - INFO - Disconnecting all Hosts
-2011-11-21 17:54:30,333 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-02-10 13:21:10,510 - robotcontrold - DEBUG - Creating ServerThread
+2012-02-10 13:21:10,511 - ServerThread - INFO - Establishing Mysql Connection
+2012-02-10 13:21:10,535 - ServerThread - INFO - Reading Hosts
+2012-02-10 13:21:10,535 - ServerThread - DEBUG - Loading Hosts from database
+2012-02-10 13:21:10,536 - ServerThread - DEBUG - 2 rows fetched
+2012-02-10 13:21:10,542 - ServerThread - INFO - Reading Users
+2012-02-10 13:21:10,544 - ServerThread - INFO - User "simon" with components [1] loaded
+2012-02-10 13:21:10,544 - ServerThread - INFO - User "test" with components [1] loaded
+2012-02-10 13:21:10,545 - ServerThread - INFO - Reading reservations
+2012-02-10 13:21:10,545 - ServerThread - DEBUG - 1 Reservations fetched
+2012-02-10 13:21:10,545 - ServerThread - DEBUG - Start all Hosts
+2012-02-10 13:21:10,546 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-02-10 13:21:10,796 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-02-10 13:21:10,797 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim1, port=22, user=webportal]
+2012-02-10 13:21:11,057 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim1, port=22, user=webportal]
+2012-02-10 13:21:11,058 - ServerThread - INFO - Force Terminating all components of every users
+2012-02-10 13:21:11,059 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2012-02-10 13:21:11,059 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
+2012-02-10 13:21:11,066 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:21:11,066 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:14" (force=True), no commands found
+2012-02-10 13:21:11,067 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:14" (force=True) "0" Commands found 
+2012-02-10 13:21:11,072 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:21:11,073 - robotcontrold - DEBUG - Creating WebServer
+2012-02-10 13:21:11,073 - WebServer - INFO - Creating WebServer on port 81
+2012-02-10 13:21:11,074 - ServerThread - INFO - Starting ServerThread
+2012-02-10 13:21:11,074 - ServerThread - INFO - ServerThread is running
+2012-02-10 13:21:11,075 - ServerThread - INFO - Preparing the Server for new user: 
+2012-02-10 13:21:11,075 - ServerThread - INFO - Force Terminating all components of every users
+2012-02-10 13:21:11,075 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2012-02-10 13:21:11,075 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
+2012-02-10 13:21:11,076 - WebServer - DEBUG - Starting WebServer
+2012-02-10 13:21:11,077 - WebServer - DEBUG - Serve forever
+2012-02-10 13:21:11,082 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:21:11,083 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:14" (force=True), no commands found
+2012-02-10 13:21:11,083 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:14" (force=True) "0" Commands found 
+2012-02-10 13:21:11,089 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:21:15,450 - ServerThread - DEBUG - Creating a new component with id "2"
+2012-02-10 13:21:15,450 - ServerThread - DEBUG - Successfully updated: Component [id=2, host_id=1, name=Deployment 02/10/12 13:21, parent_id=None]
+2012-02-10 13:21:15,451 - ServerThread - DEBUG - Saving the user with components [1, 2]
+2012-02-10 13:21:15,457 - ServerThread - INFO - Installing package Node 2 on host cob-sim1
+2012-02-10 13:21:15,463 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-02-10 13:21:17,468 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:21:21,472 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:21:29,480 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:21:29,482 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-02-10 13:23:10,163 - ServerThread - INFO - Installing package Node 2 on host cob-sim1
+2012-02-10 13:23:10,169 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-02-10 13:23:12,172 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:23:16,176 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:23:22,183 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:23:22,184 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-02-10 13:23:48,597 - ServerThread - DEBUG - Creating a new component with id "3"
+2012-02-10 13:23:48,598 - ServerThread - DEBUG - Successfully updated: Component [id=3, host_id=1, name=Deployment 02/10/12 13:23, parent_id=None]
+2012-02-10 13:23:48,598 - ServerThread - DEBUG - Saving the user with components [1, 2, 3]
+2012-02-10 13:23:48,605 - ServerThread - INFO - Installing package Node 2 on host cob-sim1
+2012-02-10 13:23:48,612 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-02-10 13:23:50,614 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:23:54,619 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:23:56,621 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-02-10 13:23:56,623 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-02-10 13:24:37,582 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-02-10 13:24:37,582 - ServerThread - INFO - Stopping ServerThread
+2012-02-10 13:24:37,583 - ServerThread - INFO - Force Terminating all components of every users
+2012-02-10 13:24:37,583 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2012-02-10 13:24:37,583 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
+2012-02-10 13:24:37,590 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:24:37,590 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:14" (force=True), no commands found
+2012-02-10 13:24:37,591 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:14" (force=True) "0" Commands found 
+2012-02-10 13:24:37,597 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:24:37,597 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:21" (force=True), no commands found
+2012-02-10 13:24:37,598 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:21" (force=True) "0" Commands found 
+2012-02-10 13:24:37,604 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:24:37,605 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:23" (force=True), no commands found
+2012-02-10 13:24:37,605 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:23" (force=True) "0" Commands found 
+2012-02-10 13:24:37,612 - ServerThread - DEBUG - Sending exit to close channel.
+2012-02-10 13:24:37,613 - ServerThread - INFO - Disconnecting all Hosts
+2012-02-10 13:24:37,613 - ServerThread - DEBUG - Closing ControlChannel
+2012-02-10 13:24:37,618 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-02-10 13:24:37,618 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-02-10 13:24:38,226 - ServerThread - DEBUG - Closing ControlChannel
+2012-02-10 13:24:38,264 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim1, port=22, user=webportal]
+2012-02-10 13:24:38,264 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim1, port=22, user=webportal]
+2012-02-10 13:24:38,426 - WebServer - DEBUG - Stopping WebServer
