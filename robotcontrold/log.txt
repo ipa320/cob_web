@@ -1,83 +1,389 @@
-2012-02-10 13:21:10,510 - robotcontrold - DEBUG - Creating ServerThread
-2012-02-10 13:21:10,511 - ServerThread - INFO - Establishing Mysql Connection
-2012-02-10 13:21:10,535 - ServerThread - INFO - Reading Hosts
-2012-02-10 13:21:10,535 - ServerThread - DEBUG - Loading Hosts from database
-2012-02-10 13:21:10,536 - ServerThread - DEBUG - 2 rows fetched
-2012-02-10 13:21:10,542 - ServerThread - INFO - Reading Users
-2012-02-10 13:21:10,544 - ServerThread - INFO - User "simon" with components [1] loaded
-2012-02-10 13:21:10,544 - ServerThread - INFO - User "test" with components [1] loaded
-2012-02-10 13:21:10,545 - ServerThread - INFO - Reading reservations
-2012-02-10 13:21:10,545 - ServerThread - DEBUG - 1 Reservations fetched
-2012-02-10 13:21:10,545 - ServerThread - DEBUG - Start all Hosts
-2012-02-10 13:21:10,546 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
-2012-02-10 13:21:10,796 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
-2012-02-10 13:21:10,797 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim1, port=22, user=webportal]
-2012-02-10 13:21:11,057 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim1, port=22, user=webportal]
-2012-02-10 13:21:11,058 - ServerThread - INFO - Force Terminating all components of every users
-2012-02-10 13:21:11,059 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
-2012-02-10 13:21:11,059 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
-2012-02-10 13:21:11,066 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:21:11,066 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:14" (force=True), no commands found
-2012-02-10 13:21:11,067 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:14" (force=True) "0" Commands found 
-2012-02-10 13:21:11,072 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:21:11,073 - robotcontrold - DEBUG - Creating WebServer
-2012-02-10 13:21:11,073 - WebServer - INFO - Creating WebServer on port 81
-2012-02-10 13:21:11,074 - ServerThread - INFO - Starting ServerThread
-2012-02-10 13:21:11,074 - ServerThread - INFO - ServerThread is running
-2012-02-10 13:21:11,075 - ServerThread - INFO - Preparing the Server for new user: 
-2012-02-10 13:21:11,075 - ServerThread - INFO - Force Terminating all components of every users
-2012-02-10 13:21:11,075 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
-2012-02-10 13:21:11,075 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
-2012-02-10 13:21:11,076 - WebServer - DEBUG - Starting WebServer
-2012-02-10 13:21:11,077 - WebServer - DEBUG - Serve forever
-2012-02-10 13:21:11,082 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:21:11,083 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:14" (force=True), no commands found
-2012-02-10 13:21:11,083 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:14" (force=True) "0" Commands found 
-2012-02-10 13:21:11,089 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:21:15,450 - ServerThread - DEBUG - Creating a new component with id "2"
-2012-02-10 13:21:15,450 - ServerThread - DEBUG - Successfully updated: Component [id=2, host_id=1, name=Deployment 02/10/12 13:21, parent_id=None]
-2012-02-10 13:21:15,451 - ServerThread - DEBUG - Saving the user with components [1, 2]
-2012-02-10 13:21:15,457 - ServerThread - INFO - Installing package Node 2 on host cob-sim1
-2012-02-10 13:21:15,463 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
-2012-02-10 13:21:17,468 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:21:21,472 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:21:29,480 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:21:29,482 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
-2012-02-10 13:23:10,163 - ServerThread - INFO - Installing package Node 2 on host cob-sim1
-2012-02-10 13:23:10,169 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
-2012-02-10 13:23:12,172 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:23:16,176 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:23:22,183 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:23:22,184 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
-2012-02-10 13:23:48,597 - ServerThread - DEBUG - Creating a new component with id "3"
-2012-02-10 13:23:48,598 - ServerThread - DEBUG - Successfully updated: Component [id=3, host_id=1, name=Deployment 02/10/12 13:23, parent_id=None]
-2012-02-10 13:23:48,598 - ServerThread - DEBUG - Saving the user with components [1, 2, 3]
-2012-02-10 13:23:48,605 - ServerThread - INFO - Installing package Node 2 on host cob-sim1
-2012-02-10 13:23:48,612 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
-2012-02-10 13:23:50,614 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:23:54,619 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:23:56,621 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
-2012-02-10 13:23:56,623 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
-2012-02-10 13:24:37,582 - robotcontrold - INFO - SIGNAL received > Shutting down
-2012-02-10 13:24:37,582 - ServerThread - INFO - Stopping ServerThread
-2012-02-10 13:24:37,583 - ServerThread - INFO - Force Terminating all components of every users
-2012-02-10 13:24:37,583 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
-2012-02-10 13:24:37,583 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
-2012-02-10 13:24:37,590 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:24:37,590 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:14" (force=True), no commands found
-2012-02-10 13:24:37,591 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:14" (force=True) "0" Commands found 
-2012-02-10 13:24:37,597 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:24:37,597 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:21" (force=True), no commands found
-2012-02-10 13:24:37,598 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:21" (force=True) "0" Commands found 
-2012-02-10 13:24:37,604 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:24:37,605 - ServerThread - INFO - Cannot stop Action "Deployment 02/10/12 13:23" (force=True), no commands found
-2012-02-10 13:24:37,605 - ServerThread - INFO - Killing Action "Deployment 02/10/12 13:23" (force=True) "0" Commands found 
-2012-02-10 13:24:37,612 - ServerThread - DEBUG - Sending exit to close channel.
-2012-02-10 13:24:37,613 - ServerThread - INFO - Disconnecting all Hosts
-2012-02-10 13:24:37,613 - ServerThread - DEBUG - Closing ControlChannel
-2012-02-10 13:24:37,618 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
-2012-02-10 13:24:37,618 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim2, port=22, user=webportal]
-2012-02-10 13:24:38,226 - ServerThread - DEBUG - Closing ControlChannel
-2012-02-10 13:24:38,264 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim1, port=22, user=webportal]
-2012-02-10 13:24:38,264 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim1, port=22, user=webportal]
-2012-02-10 13:24:38,426 - WebServer - DEBUG - Stopping WebServer
+2012-03-09 18:12:47,294 - robotcontrold - DEBUG - Creating ServerThread
+2012-03-09 18:12:47,295 - ServerThread - INFO - Establishing Mysql Connection
+2012-03-09 18:12:47,320 - ServerThread - INFO - Reading Hosts
+2012-03-09 18:12:47,320 - ServerThread - DEBUG - Loading Hosts from database
+2012-03-09 18:12:47,321 - ServerThread - DEBUG - 2 rows fetched
+2012-03-09 18:12:47,326 - ServerThread - INFO - Reading Users
+2012-03-09 18:12:47,331 - ServerThread - INFO - User "simon" with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] loaded
+2012-03-09 18:12:47,332 - ServerThread - INFO - User "test" with components [1] loaded
+2012-03-09 18:12:47,332 - ServerThread - INFO - Reading reservations
+2012-03-09 18:12:47,332 - ServerThread - DEBUG - 1 Reservations fetched
+2012-03-09 18:12:47,333 - ServerThread - DEBUG - Start all Hosts
+2012-03-09 18:12:47,333 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-03-09 18:12:47,594 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-03-09 18:12:47,595 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim1, port=22, user=webportal]
+2012-03-09 18:12:47,855 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim1, port=22, user=webportal]
+2012-03-09 18:12:47,856 - ServerThread - INFO - Force Terminating all components of every users
+2012-03-09 18:12:47,857 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2012-03-09 18:12:47,857 - ServerThread - INFO - Killing Action "New Component" (force=True) "0" Commands found 
+2012-03-09 18:12:47,863 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,864 - ServerThread - INFO - Cannot stop Action "Deployment 03/09/12 16:21" (force=True), no commands found
+2012-03-09 18:12:47,865 - ServerThread - INFO - Killing Action "Deployment 03/09/12 16:21" (force=True) "0" Commands found 
+2012-03-09 18:12:47,870 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,871 - ServerThread - INFO - Cannot stop Action "python" (force=True), no commands found
+2012-03-09 18:12:47,871 - ServerThread - INFO - Killing Action "python" (force=True) "0" Commands found 
+2012-03-09 18:12:47,878 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,879 - ServerThread - INFO - Cannot stop Action "gedit" (force=True), no commands found
+2012-03-09 18:12:47,879 - ServerThread - INFO - Killing Action "gedit" (force=True) "0" Commands found 
+2012-03-09 18:12:47,887 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,888 - ServerThread - INFO - Cannot stop Action "apache2" (force=True), no commands found
+2012-03-09 18:12:47,888 - ServerThread - INFO - Killing Action "apache2" (force=True) "0" Commands found 
+2012-03-09 18:12:47,895 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,895 - ServerThread - INFO - Cannot stop Action "Deployment 03/09/12 16:22" (force=True), no commands found
+2012-03-09 18:12:47,896 - ServerThread - INFO - Killing Action "Deployment 03/09/12 16:22" (force=True) "0" Commands found 
+2012-03-09 18:12:47,901 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,903 - ServerThread - INFO - Cannot stop Action "python" (force=True), no commands found
+2012-03-09 18:12:47,903 - ServerThread - INFO - Killing Action "python" (force=True) "0" Commands found 
+2012-03-09 18:12:47,909 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,910 - ServerThread - INFO - Cannot stop Action "zlibc" (force=True), no commands found
+2012-03-09 18:12:47,910 - ServerThread - INFO - Killing Action "zlibc" (force=True) "0" Commands found 
+2012-03-09 18:12:47,931 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,932 - ServerThread - INFO - Cannot stop Action "apache2" (force=True), no commands found
+2012-03-09 18:12:47,933 - ServerThread - INFO - Killing Action "apache2" (force=True) "0" Commands found 
+2012-03-09 18:12:47,938 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,939 - ServerThread - INFO - Cannot stop Action "Deployment 03/09/12 16:23" (force=True), no commands found
+2012-03-09 18:12:47,939 - ServerThread - INFO - Killing Action "Deployment 03/09/12 16:23" (force=True) "0" Commands found 
+2012-03-09 18:12:47,964 - ServerThread - DEBUG - Sending exit to close channel.
+2012-03-09 18:12:47,965 - ServerThread - INFO - Cannot stop Action "python" (force=True), no commands found
+2012-03-09 18:12:47,965 - ServerThread - INFO - Killing Action "python" (force=True) "0" Commands found 
+2012-03-09 18:12:47,968 - ServerThread - ERROR - Exception occured trying to forceKill: Component [id=10, host_id=1, name=python, parent_id=9]
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/component.py", line 142, in forceKill
+    action.forceKill()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/actions/action.py", line 226, in forceKill
+    return self.kill(force=True)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/actions/action.py", line 203, in kill
+    channel = self.component.host.invokeShell()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/host.py", line 88, in invokeShell
+    return self.ssh.invokeShell()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/ssh.py", line 56, in invokeShell
+    channel = self.client.invoke_shell()
+  File "/usr/lib/pymodules/python2.6/paramiko/client.py", line 378, in invoke_shell
+    chan = self._transport.open_session()
+  File "/usr/lib/pymodules/python2.6/paramiko/transport.py", line 655, in open_session
+    return self.open_channel('session')
+  File "/usr/lib/pymodules/python2.6/paramiko/transport.py", line 754, in open_channel
+    raise e
+ChannelException: Administratively prohibited
+2012-03-09 18:12:47,970 - ServerThread - INFO - Cannot stop Action "zlibc" (force=True), no commands found
+2012-03-09 18:12:47,971 - ServerThread - INFO - Killing Action "zlibc" (force=True) "0" Commands found 
+2012-03-09 18:12:47,973 - ServerThread - ERROR - Exception occured trying to forceKill: Component [id=11, host_id=1, name=zlibc, parent_id=9]
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/component.py", line 142, in forceKill
+    action.forceKill()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/actions/action.py", line 226, in forceKill
+    return self.kill(force=True)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/actions/action.py", line 203, in kill
+    channel = self.component.host.invokeShell()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/host.py", line 88, in invokeShell
+    return self.ssh.invokeShell()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/ssh.py", line 56, in invokeShell
+    channel = self.client.invoke_shell()
+  File "/usr/lib/pymodules/python2.6/paramiko/client.py", line 378, in invoke_shell
+    chan = self._transport.open_session()
+  File "/usr/lib/pymodules/python2.6/paramiko/transport.py", line 655, in open_session
+    return self.open_channel('session')
+  File "/usr/lib/pymodules/python2.6/paramiko/transport.py", line 754, in open_channel
+    raise e
+ChannelException: Administratively prohibited
+2012-03-09 18:12:47,974 - ServerThread - INFO - Cannot stop Action "apache2" (force=True), no commands found
+2012-03-09 18:12:47,974 - ServerThread - INFO - Killing Action "apache2" (force=True) "0" Commands found 
+2012-03-09 18:12:47,976 - ServerThread - ERROR - Exception occured trying to forceKill: Component [id=12, host_id=1, name=apache2, parent_id=9]
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/component.py", line 142, in forceKill
+    action.forceKill()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/actions/action.py", line 226, in forceKill
+    return self.kill(force=True)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/actions/action.py", line 203, in kill
+    channel = self.component.host.invokeShell()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/host.py", line 88, in invokeShell
+    return self.ssh.invokeShell()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/ssh.py", line 56, in invokeShell
+    channel = self.client.invoke_shell()
+  File "/usr/lib/pymodules/python2.6/paramiko/client.py", line 378, in invoke_shell
+    chan = self._transport.open_session()
+  File "/usr/lib/pymodules/python2.6/paramiko/transport.py", line 655, in open_session
+    return self.open_channel('session')
+  File "/usr/lib/pymodules/python2.6/paramiko/transport.py", line 754, in open_channel
+    raise e
+ChannelException: Administratively prohibited
+2012-03-09 18:12:47,977 - robotcontrold - DEBUG - Creating WebServer
+2012-03-09 18:12:47,977 - WebServer - INFO - Creating WebServer on port 81
+2012-03-09 18:12:47,978 - ServerThread - INFO - Starting ServerThread
+2012-03-09 18:12:47,978 - ServerThread - INFO - ServerThread is running
+2012-03-09 18:12:47,979 - WebServer - DEBUG - Starting WebServer
+2012-03-09 18:12:47,979 - WebServer - DEBUG - Serve forever
+2012-03-09 18:12:59,353 - ServerThread - INFO - Installing package libjs-flot on host cob-sim2
+2012-03-09 18:12:59,360 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:13:01,364 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:13:01,365 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:13:01,366 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:13:10,549 - ServerThread - DEBUG - Creating a new component with id "13"
+2012-03-09 18:13:10,550 - ServerThread - DEBUG - Successfully updated: Component [id=13, host_id=1, name=Deployment 03/09/12 18:13, parent_id=None]
+2012-03-09 18:13:10,550 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+2012-03-09 18:13:10,561 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:13:10,567 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:13:12,569 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:13:12,570 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:13:12,571 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:14:10,027 - ServerThread - DEBUG - Creating a new component with id "14"
+2012-03-09 18:14:10,028 - ServerThread - DEBUG - Successfully updated: Component [id=14, host_id=1, name=Deployment 03/09/12 18:14, parent_id=None]
+2012-03-09 18:14:10,028 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+2012-03-09 18:14:10,039 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:14:10,045 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:14:10,046 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:14:12,048 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:14:12,049 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:14:12,051 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:17:36,618 - ServerThread - DEBUG - Creating a new component with id "15"
+2012-03-09 18:17:36,618 - ServerThread - DEBUG - Successfully updated: Component [id=15, host_id=1, name=Deployment 03/09/12 18:17, parent_id=None]
+2012-03-09 18:17:36,619 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+2012-03-09 18:17:36,630 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:17:36,636 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:17:38,639 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:17:38,639 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:17:38,641 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:18:39,072 - ServerThread - DEBUG - Creating a new component with id "16"
+2012-03-09 18:18:39,073 - ServerThread - DEBUG - Successfully updated: Component [id=16, host_id=1, name=Deployment 03/09/12 18:18, parent_id=None]
+2012-03-09 18:18:39,073 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+2012-03-09 18:18:39,085 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:18:39,091 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:18:41,094 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:18:41,094 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:18:41,096 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:19:37,475 - ServerThread - DEBUG - Creating a new component with id "17"
+2012-03-09 18:19:37,476 - ServerThread - DEBUG - Successfully updated: Component [id=17, host_id=1, name=Deployment 03/09/12 18:19, parent_id=None]
+2012-03-09 18:19:37,476 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+2012-03-09 18:19:37,488 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:19:37,495 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:19:39,498 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:19:39,498 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:19:39,500 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:20:03,861 - ServerThread - DEBUG - Creating a new component with id "18"
+2012-03-09 18:20:03,861 - ServerThread - DEBUG - Successfully updated: Component [id=18, host_id=1, name=Deployment 03/09/12 18:20, parent_id=None]
+2012-03-09 18:20:03,862 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+2012-03-09 18:20:03,874 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:20:03,880 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:20:05,882 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:20:05,883 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:20:05,884 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:23:10,314 - ServerThread - DEBUG - Creating a new component with id "19"
+2012-03-09 18:23:10,314 - ServerThread - DEBUG - Successfully updated: Component [id=19, host_id=1, name=Deployment 03/09/12 18:23, parent_id=None]
+2012-03-09 18:23:10,314 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+2012-03-09 18:23:10,327 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:23:10,333 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:23:12,335 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:23:12,336 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:23:12,338 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:23:33,798 - ServerThread - DEBUG - Creating a new component with id "20"
+2012-03-09 18:23:33,799 - ServerThread - DEBUG - Successfully updated: Component [id=20, host_id=1, name=Deployment 03/09/12 18:23, parent_id=None]
+2012-03-09 18:23:33,799 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+2012-03-09 18:23:33,811 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:23:33,817 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:23:35,820 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:23:35,821 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:23:35,822 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:24:09,267 - ServerThread - DEBUG - Creating a new component with id "21"
+2012-03-09 18:24:09,267 - ServerThread - DEBUG - Successfully updated: Component [id=21, host_id=1, name=Deployment 03/09/12 18:24, parent_id=None]
+2012-03-09 18:24:09,267 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+2012-03-09 18:24:09,280 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:24:09,286 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:24:11,289 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:24:11,290 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:24:11,291 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:24:36,159 - ServerThread - DEBUG - Creating a new component with id "22"
+2012-03-09 18:24:36,160 - ServerThread - DEBUG - Successfully updated: Component [id=22, host_id=1, name=Deployment 03/09/12 18:24, parent_id=None]
+2012-03-09 18:24:36,160 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+2012-03-09 18:24:36,173 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:24:36,180 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:24:38,182 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:24:38,183 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:24:38,184 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:27:32,994 - ServerThread - DEBUG - Creating a new component with id "23"
+2012-03-09 18:27:32,994 - ServerThread - DEBUG - Successfully updated: Component [id=23, host_id=1, name=Deployment 03/09/12 18:27, parent_id=None]
+2012-03-09 18:27:32,995 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+2012-03-09 18:27:33,009 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:27:33,017 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:27:35,019 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:27:35,020 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:27:35,021 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:27:35,027 - ServerThread - DEBUG - Creating a new component with id "24"
+2012-03-09 18:27:35,028 - ServerThread - DEBUG - Successfully updated: Component [id=24, host_id=1, name=python, parent_id=23]
+2012-03-09 18:27:35,028 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+2012-03-09 18:27:35,041 - ServerThread - INFO - Installing package zlibc on host cob-sim2
+2012-03-09 18:27:35,078 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:27:37,081 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:27:37,081 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:27:37,083 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:27:37,088 - ServerThread - DEBUG - Creating a new component with id "25"
+2012-03-09 18:27:37,088 - ServerThread - DEBUG - Successfully updated: Component [id=25, host_id=1, name=zlibc, parent_id=23]
+2012-03-09 18:27:37,088 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+2012-03-09 18:27:37,102 - ServerThread - INFO - Installing package apache2 on host cob-sim1
+2012-03-09 18:27:37,108 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:27:39,109 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:27:39,110 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:27:39,111 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:27:39,117 - ServerThread - DEBUG - Creating a new component with id "26"
+2012-03-09 18:27:39,117 - ServerThread - DEBUG - Successfully updated: Component [id=26, host_id=1, name=apache2, parent_id=23]
+2012-03-09 18:27:39,118 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+2012-03-09 18:28:51,499 - ServerThread - DEBUG - Creating a new component with id "27"
+2012-03-09 18:28:51,500 - ServerThread - DEBUG - Successfully updated: Component [id=27, host_id=1, name=Deployment 03/09/12 18:28, parent_id=None]
+2012-03-09 18:28:51,500 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+2012-03-09 18:28:51,515 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 18:28:51,521 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:28:53,523 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:28:53,524 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:28:53,526 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:28:53,532 - ServerThread - DEBUG - Creating a new component with id "28"
+2012-03-09 18:28:53,532 - ServerThread - DEBUG - Successfully updated: Component [id=28, host_id=1, name=python, parent_id=27]
+2012-03-09 18:28:53,532 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+2012-03-09 18:28:53,547 - ServerThread - INFO - Installing package libjs-cropper on host cob-sim2
+2012-03-09 18:28:53,567 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:28:55,570 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:28:55,570 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:28:55,571 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:28:57,573 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:28:57,573 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:28:59,576 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:29:01,578 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:29:01,580 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:29:01,587 - ServerThread - DEBUG - Creating a new component with id "29"
+2012-03-09 18:29:01,587 - ServerThread - DEBUG - Successfully updated: Component [id=29, host_id=1, name=libjs-cropper, parent_id=27]
+2012-03-09 18:29:01,587 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+2012-03-09 18:29:01,601 - ServerThread - INFO - Installing package apache2 on host cob-sim1
+2012-03-09 18:29:01,607 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:29:03,609 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:29:03,610 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:29:03,611 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 18:29:03,617 - ServerThread - DEBUG - Creating a new component with id "30"
+2012-03-09 18:29:03,617 - ServerThread - DEBUG - Successfully updated: Component [id=30, host_id=1, name=apache2, parent_id=27]
+2012-03-09 18:29:03,618 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+2012-03-09 18:58:42,522 - ServerThread - INFO - Installing package libjs-flot on host cob-sim2
+2012-03-09 18:58:42,529 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 18:58:44,531 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:58:44,532 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 18:58:44,533 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 19:55:51,997 - ServerThread - DEBUG - Creating a new component with id "31"
+2012-03-09 19:55:51,997 - ServerThread - DEBUG - Successfully updated: Component [id=31, host_id=1, name=Deployment 03/09/12 19:55, parent_id=None]
+2012-03-09 19:55:51,997 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+2012-03-09 19:55:52,013 - ServerThread - INFO - Installing package Node 2 on host cob-sim2
+2012-03-09 19:55:52,020 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 19:55:54,022 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:55:54,023 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:55:54,024 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 19:58:04,999 - ServerThread - DEBUG - Creating a new component with id "32"
+2012-03-09 19:58:04,999 - ServerThread - DEBUG - Successfully updated: Component [id=32, host_id=1, name=Deployment 03/09/12 19:58, parent_id=None]
+2012-03-09 19:58:04,999 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+2012-03-09 19:58:05,016 - ServerThread - INFO - Installing package Node 2 on host cob-sim2
+2012-03-09 19:58:05,023 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 19:58:07,026 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:58:07,026 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:58:07,027 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 19:58:07,034 - ServerThread - DEBUG - Creating a new component with id "33"
+2012-03-09 19:58:07,034 - ServerThread - DEBUG - Successfully updated: Component [id=33, host_id=1, name=Node 2, parent_id=32]
+2012-03-09 19:58:07,035 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+2012-03-09 19:58:07,051 - ServerThread - INFO - Installing package Node 3 on host cob-sim2
+2012-03-09 19:58:07,072 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 19:58:09,074 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:58:09,075 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:58:09,076 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 19:58:09,082 - ServerThread - DEBUG - Creating a new component with id "34"
+2012-03-09 19:58:09,083 - ServerThread - DEBUG - Successfully updated: Component [id=34, host_id=1, name=Node 3, parent_id=32]
+2012-03-09 19:58:09,083 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34]
+2012-03-09 19:58:09,099 - ServerThread - INFO - Installing package Node 1 on host cob-sim2
+2012-03-09 19:58:09,135 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 19:58:11,138 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:58:11,138 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:58:11,140 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 19:58:11,146 - ServerThread - DEBUG - Creating a new component with id "35"
+2012-03-09 19:58:11,147 - ServerThread - DEBUG - Successfully updated: Component [id=35, host_id=1, name=Node 1, parent_id=32]
+2012-03-09 19:58:11,147 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+2012-03-09 19:58:58,833 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 432, in do_GET
+    idMap = serverThread.storeComponent(jsonObject, requestUser)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 398, in storeComponent
+    raise ValueError('The passed hostId (%s) is unknown' % hostId)
+ValueError: The passed hostId (webportal) is unknown
+2012-03-09 19:59:57,689 - ServerThread - DEBUG - Creating a new component with id "36"
+2012-03-09 19:59:57,689 - ServerThread - DEBUG - Successfully updated: Component [id=36, host_id=1, name=Deployment 03/09/12 19:59, parent_id=None]
+2012-03-09 19:59:57,689 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+2012-03-09 19:59:57,707 - ServerThread - INFO - Installing package Node 2 on host cob-sim2
+2012-03-09 19:59:57,713 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 19:59:57,714 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:59:59,716 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:59:59,717 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 19:59:59,718 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 19:59:59,724 - ServerThread - DEBUG - Creating a new component with id "37"
+2012-03-09 19:59:59,725 - ServerThread - DEBUG - Successfully updated: Component [id=37, host_id=1, name=Node 2, parent_id=36]
+2012-03-09 19:59:59,725 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
+2012-03-09 19:59:59,742 - ServerThread - INFO - Installing package Node 3 on host cob-sim2
+2012-03-09 19:59:59,762 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:00:01,764 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:01,765 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:01,766 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:00:01,772 - ServerThread - DEBUG - Creating a new component with id "38"
+2012-03-09 20:00:01,772 - ServerThread - DEBUG - Successfully updated: Component [id=38, host_id=1, name=Node 3, parent_id=36]
+2012-03-09 20:00:01,772 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]
+2012-03-09 20:00:01,789 - ServerThread - INFO - Installing package Node 1 on host cob-sim2
+2012-03-09 20:00:01,811 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:00:03,813 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:03,814 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:03,815 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:00:03,822 - ServerThread - DEBUG - Creating a new component with id "39"
+2012-03-09 20:00:03,822 - ServerThread - DEBUG - Successfully updated: Component [id=39, host_id=1, name=Node 1, parent_id=36]
+2012-03-09 20:00:03,822 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+2012-03-09 20:00:44,547 - ServerThread - DEBUG - Creating a new component with id "40"
+2012-03-09 20:00:44,547 - ServerThread - DEBUG - Successfully updated: Component [id=40, host_id=1, name=Deployment 03/09/12 20:00, parent_id=None]
+2012-03-09 20:00:44,548 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
+2012-03-09 20:00:44,565 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 20:00:44,572 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:00:46,575 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:46,575 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:46,576 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:00:46,582 - ServerThread - DEBUG - Creating a new component with id "41"
+2012-03-09 20:00:46,582 - ServerThread - DEBUG - Successfully updated: Component [id=41, host_id=1, name=python, parent_id=40]
+2012-03-09 20:00:46,582 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+2012-03-09 20:00:46,600 - ServerThread - INFO - Installing package Node 2 on host cob-sim2
+2012-03-09 20:00:46,613 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:00:48,616 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:48,616 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:48,618 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:00:48,623 - ServerThread - DEBUG - Creating a new component with id "42"
+2012-03-09 20:00:48,623 - ServerThread - DEBUG - Successfully updated: Component [id=42, host_id=1, name=Node 2, parent_id=40]
+2012-03-09 20:00:48,623 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+2012-03-09 20:00:48,641 - ServerThread - INFO - Installing package Node 3 on host cob-sim2
+2012-03-09 20:00:48,662 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:00:50,665 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:50,666 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:00:50,667 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:00:50,673 - ServerThread - DEBUG - Creating a new component with id "43"
+2012-03-09 20:00:50,673 - ServerThread - DEBUG - Successfully updated: Component [id=43, host_id=1, name=Node 3, parent_id=40]
+2012-03-09 20:00:50,673 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
+2012-03-09 20:09:01,162 - ServerThread - DEBUG - Creating a new component with id "44"
+2012-03-09 20:09:01,163 - ServerThread - DEBUG - Successfully updated: Component [id=44, host_id=1, name=Deployment 03/09/12 20:09, parent_id=None]
+2012-03-09 20:09:01,163 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44]
+2012-03-09 20:09:01,183 - ServerThread - INFO - Installing package python on host cob-sim2
+2012-03-09 20:09:01,189 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:09:03,191 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:09:03,192 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:09:03,194 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:09:03,200 - ServerThread - DEBUG - Creating a new component with id "45"
+2012-03-09 20:09:03,200 - ServerThread - DEBUG - Successfully updated: Component [id=45, host_id=1, name=python, parent_id=44]
+2012-03-09 20:09:03,201 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45]
+2012-03-09 20:09:03,220 - ServerThread - INFO - Installing package Node 2 on host cob-sim2
+2012-03-09 20:09:03,240 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:09:05,242 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:09:05,242 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:09:05,244 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:09:05,251 - ServerThread - DEBUG - Creating a new component with id "46"
+2012-03-09 20:09:05,252 - ServerThread - DEBUG - Successfully updated: Component [id=46, host_id=1, name=Node 2, parent_id=44]
+2012-03-09 20:09:05,252 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
+2012-03-09 20:09:05,271 - ServerThread - INFO - Installing package Node 3 on host cob-sim2
+2012-03-09 20:09:05,284 - ServerThread - DEBUG - Starting screenReader for "Thread-1"
+2012-03-09 20:09:07,287 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:09:07,288 - ServerThread - DEBUG - ScreenReader received a new line for "Thread-1"
+2012-03-09 20:09:07,289 - ServerThread - DEBUG - ScreenReader "Thread-1" finished
+2012-03-09 20:09:07,294 - ServerThread - DEBUG - Creating a new component with id "47"
+2012-03-09 20:09:07,295 - ServerThread - DEBUG - Successfully updated: Component [id=47, host_id=1, name=Node 3, parent_id=44]
+2012-03-09 20:09:07,295 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]

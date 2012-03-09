@@ -437,8 +437,6 @@ class MyHandler(BaseHTTPRequestHandler):
                         # You need HOST_ADMIN rights to perform this action
                         if not requestUser.hasPrivilege(privileges.HOST_ADMIN):
                             raise UnauthorizedRequestError('You have no privileges to change a host', self.path)
-
-
                         
                         if len(args) != 7:
                             raise ArgumentRequestError('7 arguments expected. Received: %s' % str(args), self.path)
@@ -466,7 +464,7 @@ class MyHandler(BaseHTTPRequestHandler):
                         raise ArgumentRequestError( 'No Host specified', self.path )
                     
                     log = serverThread.installPackage( options['pkg'], options['host'] )
-                    output = '{"success": true, "log": "%s"}' % log
+                    output = json.dumps({"success": True, "log": log})
 
 
                 # delete a component

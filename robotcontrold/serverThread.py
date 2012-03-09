@@ -689,7 +689,7 @@ class ServerThread(threading.Thread):
         
         self.log.info('Installing package %s on host %s' %( package, host.hostname ))
         channel = host.invokeShell()
-        command = 'screen -S "install"\nsleep 8\napt-get install %s\nexit\n' % package
+        command = 'screen -S "install" sudo apt-get -y install "%s"\r\nexit\r\n' % package
 
         screenReader = ScreenReader(self.name, channel, self.log)
         screenReader.start()
