@@ -7,6 +7,7 @@ from utils.component import Component
 from utils.user import User
 from utils.eventHistory import EventHistory
 from network.screenReader import ScreenReader
+from utils import privileges
 
 
 class ServerThread(threading.Thread):
@@ -78,7 +79,7 @@ class ServerThread(threading.Thread):
 
 
     def getUniqueHostId(self):
-        return max(self.hosts.keys())+1
+        return max(self.hosts.keys())+1 if len( self.hosts ) else 1
 
 
 
@@ -181,6 +182,11 @@ class ServerThread(threading.Thread):
         if not name in self.users:
             user = User(name)
             self.users[name] = user
+
+            if name == 'admin':
+                allPrivileges = privileges.ACTION_ALL | privileges.COMP_ADMIN | \
+			privileges.HOST_ADMIN | privileges.PRIV_ADMIN | privileges.START_SERVER
+                user.setPrivileges( allPrivileges )
             
             # update the database
             self.log.debug("Storing new User '%s'" % name)
@@ -385,9 +391,9 @@ class ServerThread(threading.Thread):
         # the name. In the latter case, try to find the host by its
         # name
         hostId = data['hostId']
-        if hostId.isdigit():
+	try:
             hostId = int(hostId)
-        else:
+        except ValueError,e:
             for host in self.hosts.values():
                 if hostId == host.hostname:
                     hostId = host.id

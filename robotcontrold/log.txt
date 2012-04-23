@@ -387,3 +387,736 @@ ValueError: The passed hostId (webportal) is unknown
 2012-03-09 20:09:07,294 - ServerThread - DEBUG - Creating a new component with id "47"
 2012-03-09 20:09:07,295 - ServerThread - DEBUG - Successfully updated: Component [id=47, host_id=1, name=Node 3, parent_id=44]
 2012-03-09 20:09:07,295 - ServerThread - DEBUG - Saving the user with components [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+2012-04-13 16:20:58,853 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:20:58,896 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 29, in __init__
+    self.establishDatabaseConnection(args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 103, in establishDatabaseConnection
+    self.conn = MySQLdb.connect (host=mysqlHost, user=mysqlUser, passwd=mysqlPasswd, db=mysqlDb)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/__init__.py", line 81, in Connect
+    return Connection(*args, **kwargs)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 170, in __init__
+    super(Connection, self).__init__(*args, **kwargs2)
+OperationalError: (1045, "Access denied for user 'root'@'localhost' (using password: NO)")
+2012-04-13 16:21:13,533 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:21:13,534 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:21:13,558 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 29, in __init__
+    self.establishDatabaseConnection(args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 103, in establishDatabaseConnection
+    self.conn = MySQLdb.connect (host=mysqlHost, user=mysqlUser, passwd=mysqlPasswd, db=mysqlDb)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/__init__.py", line 81, in Connect
+    return Connection(*args, **kwargs)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 170, in __init__
+    super(Connection, self).__init__(*args, **kwargs2)
+OperationalError: (1045, "Access denied for user 'root'@'localhost' (using password: NO)")
+2012-04-13 16:21:36,553 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:21:36,554 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:21:36,578 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:21:36,579 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:21:36,579 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 32, in __init__
+    self.readHosts()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 114, in readHosts
+    rows = self.cursor.execute(sql)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+ProgrammingError: (1146, "Table 'webportal.hosts' doesn't exist")
+2012-04-13 16:21:46,714 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:21:46,715 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:21:46,740 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:21:46,740 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:21:46,740 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 32, in __init__
+    self.readHosts()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 114, in readHosts
+    rows = self.cursor.execute(sql)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+ProgrammingError: (1146, "Table 'webportal.hosts' doesn't exist")
+2012-04-13 16:23:07,797 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:23:07,798 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:23:07,823 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:23:07,823 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:23:07,824 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 32, in __init__
+    self.readHosts()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 114, in readHosts
+    rows = self.cursor.execute(sql)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+OperationalError: (1054, "Unknown column 'pickledData' in 'field list'")
+2012-04-13 16:23:16,965 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:23:16,965 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:23:16,990 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:23:16,991 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:23:16,991 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:23:16,992 - ServerThread - INFO - Reading Users
+2012-04-13 16:23:16,992 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 35, in __init__
+    self.readUsers()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 132, in readUsers
+    self.cursor.execute(sql)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+ProgrammingError: (1146, "Table 'webportal.users' doesn't exist")
+2012-04-13 16:23:45,006 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:23:45,007 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:23:45,032 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:23:45,032 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:23:45,033 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:23:45,033 - ServerThread - INFO - Reading Users
+2012-04-13 16:23:45,034 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 35, in __init__
+    self.readUsers()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 132, in readUsers
+    self.cursor.execute(sql)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+OperationalError: (1054, "Unknown column 'user_name' in 'field list'")
+2012-04-13 16:24:03,585 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:24:03,586 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:24:03,610 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:24:03,611 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:24:03,611 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:24:03,612 - ServerThread - INFO - Reading Users
+2012-04-13 16:24:03,612 - ServerThread - INFO - Reading reservations
+2012-04-13 16:24:03,613 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 38, in __init__
+    self.readReservations()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 151, in readReservations
+    self.cursor.execute(query)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+ProgrammingError: (1146, "Table 'webportal.reservations' doesn't exist")
+2012-04-13 16:24:27,521 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:24:27,522 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:24:27,547 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:24:27,547 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:24:27,548 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:24:27,548 - ServerThread - INFO - Reading Users
+2012-04-13 16:24:27,548 - ServerThread - INFO - Reading reservations
+2012-04-13 16:24:27,549 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 38, in __init__
+    self.readReservations()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 151, in readReservations
+    self.cursor.execute(query)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+OperationalError: (1054, "Unknown column 'user' in 'field list'")
+2012-04-13 16:24:43,062 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:24:43,063 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:24:43,088 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:24:43,088 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:24:43,089 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:24:43,089 - ServerThread - INFO - Reading Users
+2012-04-13 16:24:43,089 - ServerThread - INFO - Reading reservations
+2012-04-13 16:24:43,090 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 38, in __init__
+    self.readReservations()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 151, in readReservations
+    self.cursor.execute(query)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+OperationalError: (1054, "Unknown column 'start' in 'field list'")
+2012-04-13 16:24:55,749 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:24:55,750 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:24:55,775 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:24:55,775 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:24:55,776 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:24:55,776 - ServerThread - INFO - Reading Users
+2012-04-13 16:24:55,776 - ServerThread - INFO - Reading reservations
+2012-04-13 16:24:55,777 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 38, in __init__
+    self.readReservations()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 151, in readReservations
+    self.cursor.execute(query)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/cursors.py", line 166, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/pymodules/python2.6/MySQLdb/connections.py", line 35, in defaulterrorhandler
+    raise errorclass, errorvalue
+OperationalError: (1054, "Unknown column 'end' in 'field list'")
+2012-04-13 16:25:03,337 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:25:03,338 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:25:03,363 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:25:03,364 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:25:03,364 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:25:03,364 - ServerThread - INFO - Reading Users
+2012-04-13 16:25:03,365 - ServerThread - INFO - Reading reservations
+2012-04-13 16:25:03,365 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 16:25:03,366 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 16:25:03,366 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:25:03,366 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 16:25:03,366 - WebServer - INFO - Creating WebServer on port 3000
+2012-04-13 16:25:03,367 - ServerThread - INFO - Starting ServerThread
+2012-04-13 16:25:03,368 - ServerThread - INFO - ServerThread is running
+2012-04-13 16:25:03,368 - WebServer - DEBUG - Starting WebServer
+2012-04-13 16:25:03,369 - WebServer - DEBUG - Serve forever
+2012-04-13 16:25:31,169 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 16:25:31,169 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 16:25:31,170 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:25:31,170 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 16:25:31,170 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 16:39:50,857 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:39:50,858 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:39:50,884 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:39:50,884 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:39:50,884 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:39:50,885 - ServerThread - INFO - Reading Users
+2012-04-13 16:39:50,885 - ServerThread - INFO - Reading reservations
+2012-04-13 16:39:50,885 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 16:39:50,886 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 16:39:50,886 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:39:50,886 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 16:39:50,887 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 16:39:50,887 - ServerThread - INFO - Starting ServerThread
+2012-04-13 16:39:50,888 - ServerThread - INFO - ServerThread is running
+2012-04-13 16:39:50,888 - WebServer - DEBUG - Starting WebServer
+2012-04-13 16:39:50,889 - WebServer - DEBUG - Serve forever
+2012-04-13 16:40:14,832 - WebServer - WARNING - Invalid Authorization Header: None
+2012-04-13 16:44:30,086 - ServerThread - DEBUG - Storing new User 'simon'
+2012-04-13 16:46:36,053 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 16:46:36,054 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 16:46:36,055 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:46:36,055 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 16:46:36,055 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 16:48:25,305 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:48:25,306 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:48:25,331 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:48:25,331 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:48:25,332 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:48:25,332 - ServerThread - INFO - Reading Users
+2012-04-13 16:48:25,347 - ServerThread - INFO - User "simon" with components [] loaded
+2012-04-13 16:48:25,347 - ServerThread - INFO - Reading reservations
+2012-04-13 16:48:25,348 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 16:48:25,348 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 16:48:25,348 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:48:25,348 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 16:48:25,349 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 16:48:25,350 - ServerThread - INFO - Starting ServerThread
+2012-04-13 16:48:25,350 - ServerThread - INFO - ServerThread is running
+2012-04-13 16:48:25,350 - WebServer - DEBUG - Starting WebServer
+2012-04-13 16:48:25,351 - WebServer - DEBUG - Serve forever
+2012-04-13 16:51:01,969 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 16:51:01,969 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 16:51:01,970 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:51:01,970 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 16:51:01,970 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 16:52:33,870 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:52:33,870 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:52:33,896 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:52:33,896 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:52:33,897 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:52:33,897 - ServerThread - INFO - Reading Users
+2012-04-13 16:52:33,898 - ServerThread - INFO - User "simon" with components [] loaded
+2012-04-13 16:52:33,898 - ServerThread - INFO - Reading reservations
+2012-04-13 16:52:33,899 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 16:52:33,899 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 16:52:33,899 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:52:33,899 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 16:52:33,900 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 16:52:33,901 - ServerThread - INFO - Starting ServerThread
+2012-04-13 16:52:33,901 - ServerThread - INFO - ServerThread is running
+2012-04-13 16:52:33,902 - WebServer - DEBUG - Starting WebServer
+2012-04-13 16:52:33,902 - WebServer - DEBUG - Serve forever
+2012-04-13 16:55:00,997 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 116, in do_GET
+    requestUser = serverThread.getUserCreateIfNotExistent(auth['user'])
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 187, in getUserCreateIfNotExistent
+    allPrivileges = ACTION_ALL | COMP_ADMIN | HOST_ADMIN | PRIV_ADMIN | START_SERVER
+NameError: global name 'ACTION_ALL' is not defined
+2012-04-13 16:55:49,909 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 16:55:49,909 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 16:55:49,910 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:55:49,910 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 16:55:49,910 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 16:56:49,843 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:56:49,843 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:56:49,869 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:56:49,869 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:56:49,869 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:56:49,870 - ServerThread - INFO - Reading Users
+2012-04-13 16:56:49,871 - ServerThread - INFO - User "simon" with components [] loaded
+2012-04-13 16:56:49,871 - ServerThread - INFO - Reading reservations
+2012-04-13 16:56:49,872 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 16:56:49,872 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 16:56:49,872 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:56:49,872 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 16:56:49,873 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 16:56:49,874 - ServerThread - INFO - Starting ServerThread
+2012-04-13 16:56:49,874 - ServerThread - INFO - ServerThread is running
+2012-04-13 16:56:49,874 - WebServer - DEBUG - Starting WebServer
+2012-04-13 16:56:49,875 - WebServer - DEBUG - Serve forever
+2012-04-13 16:57:19,247 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 116, in do_GET
+    requestUser = serverThread.getUserCreateIfNotExistent(auth['user'])
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 188, in getUserCreateIfNotExistent
+    privileges.HOST_ADMIN | privileges.PRIV_ADMIN | privileges.START_SERVER
+NameError: global name 'privileges' is not defined
+2012-04-13 16:57:25,653 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 16:57:25,653 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 16:57:25,654 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:57:25,654 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 16:57:25,654 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 16:58:12,066 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 16:58:12,066 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 16:58:12,092 - ServerThread - INFO - Reading Hosts
+2012-04-13 16:58:12,092 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 16:58:12,092 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 16:58:12,093 - ServerThread - INFO - Reading Users
+2012-04-13 16:58:12,094 - ServerThread - INFO - User "simon" with components [] loaded
+2012-04-13 16:58:12,094 - ServerThread - INFO - Reading reservations
+2012-04-13 16:58:12,095 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 16:58:12,095 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 16:58:12,095 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:58:12,095 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 16:58:12,096 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 16:58:12,097 - ServerThread - INFO - Starting ServerThread
+2012-04-13 16:58:12,097 - ServerThread - INFO - ServerThread is running
+2012-04-13 16:58:12,097 - WebServer - DEBUG - Starting WebServer
+2012-04-13 16:58:12,098 - WebServer - DEBUG - Serve forever
+2012-04-13 16:58:14,127 - ServerThread - DEBUG - Storing new User 'admin'
+2012-04-13 16:59:24,172 - ServerThread - INFO - Preparing the Server for new user: 
+2012-04-13 16:59:24,172 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 16:59:43,889 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 453, in do_GET
+    output = json.dumps(serverThread.storeHost(id, hostname, username, password, port))
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 633, in storeHost
+    id = self.getUniqueHostId()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 82, in getUniqueHostId
+    return max(self.hosts.keys())+1
+ValueError: max() arg is an empty sequence
+2012-04-13 17:00:41,089 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 17:00:41,089 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 17:00:41,090 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:00:41,090 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 17:00:41,090 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 17:00:56,606 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:00:56,607 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:00:56,632 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:00:56,632 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:00:56,633 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 17:00:56,633 - ServerThread - INFO - Reading Users
+2012-04-13 17:00:56,634 - ServerThread - INFO - User "simon" with components [] loaded
+2012-04-13 17:00:56,635 - ServerThread - INFO - User "admin" with components [] loaded
+2012-04-13 17:00:56,635 - ServerThread - INFO - Reading reservations
+2012-04-13 17:00:56,636 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 39, in __init__
+    self.readReservations()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 156, in readReservations
+    user = self.getUserCreateIfNotExistent(row[1])
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 183, in getUserCreateIfNotExistent
+    user = User(name)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/user.py", line 8, in __init__
+    self.name = name.lower()
+AttributeError: 'long' object has no attribute 'lower'
+2012-04-13 17:01:41,813 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:01:41,813 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:01:41,838 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:01:41,839 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:01:41,839 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 17:01:41,840 - ServerThread - INFO - Reading Users
+2012-04-13 17:01:41,840 - ServerThread - INFO - Reading reservations
+2012-04-13 17:01:41,841 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 39, in __init__
+    self.readReservations()
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 156, in readReservations
+    user = self.getUserCreateIfNotExistent(row[1])
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 183, in getUserCreateIfNotExistent
+    user = User(name)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/utils/user.py", line 8, in __init__
+    self.name = name.lower()
+AttributeError: 'long' object has no attribute 'lower'
+2012-04-13 17:03:18,645 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:03:18,647 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:03:18,673 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:03:18,674 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:03:18,674 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 17:03:18,674 - ServerThread - INFO - Reading Users
+2012-04-13 17:03:18,675 - ServerThread - INFO - Reading reservations
+2012-04-13 17:03:18,675 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 17:03:18,676 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 17:03:18,676 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:03:18,676 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 17:03:18,677 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 17:03:18,677 - ServerThread - INFO - Starting ServerThread
+2012-04-13 17:03:18,678 - ServerThread - INFO - ServerThread is running
+2012-04-13 17:03:18,678 - WebServer - DEBUG - Starting WebServer
+2012-04-13 17:03:18,679 - WebServer - DEBUG - Serve forever
+2012-04-13 17:03:23,088 - ServerThread - DEBUG - Storing new User 'admin'
+2012-04-13 17:03:48,707 - ServerThread - INFO - Preparing the Server for new user: 
+2012-04-13 17:03:48,708 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:04:59,898 - ServerThread - DEBUG - Starting Host [id=1, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:05:00,252 - ServerThread - INFO - Connected to Host [id=1, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:05:04,638 - ServerThread - DEBUG - Starting Host [id=2, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:05:04,989 - ServerThread - INFO - Connected to Host [id=2, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:05:38,228 - WebServer - ERROR - Decoding JSON: --- 
+{"id":-1,"hostId":1,"parentId":null,"actions":[{"id":-2,"name":"New Component","description":"","url":"","dependencies":[],"startCommands":[{"id":-3,"command":"ls 
+ --- failed
+2012-04-13 17:06:37,325 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 17:06:37,326 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 17:06:37,326 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:06:37,327 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 17:06:37,327 - ServerThread - DEBUG - Closing ControlChannel
+2012-04-13 17:06:37,402 - ServerThread - INFO - Disconnected from Host [id=1, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:06:37,402 - ServerThread - DEBUG - Stopping Host [id=1, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:06:37,403 - ServerThread - DEBUG - Closing ControlChannel
+2012-04-13 17:06:37,489 - ServerThread - INFO - Disconnected from Host [id=2, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:06:37,490 - ServerThread - DEBUG - Stopping Host [id=2, hostname=localhost, port=22, user=webportal]
+2012-04-13 17:06:38,137 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 17:06:42,593 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:06:42,594 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:06:42,619 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:06:42,619 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:06:42,620 - ServerThread - DEBUG - 0 rows fetched
+2012-04-13 17:06:42,620 - ServerThread - INFO - Reading Users
+2012-04-13 17:06:42,621 - ServerThread - INFO - Reading reservations
+2012-04-13 17:06:42,621 - ServerThread - DEBUG - 0 Reservations fetched
+2012-04-13 17:06:42,622 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 17:06:42,622 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:06:42,622 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 17:06:42,623 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 17:06:42,623 - ServerThread - INFO - Starting ServerThread
+2012-04-13 17:06:42,624 - ServerThread - INFO - ServerThread is running
+2012-04-13 17:06:42,624 - WebServer - DEBUG - Starting WebServer
+2012-04-13 17:06:42,625 - WebServer - DEBUG - Serve forever
+2012-04-13 17:06:49,345 - ServerThread - DEBUG - Storing new User 'admin'
+2012-04-13 17:07:15,655 - ServerThread - INFO - Preparing the Server for new user: 
+2012-04-13 17:07:15,656 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:07:34,643 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:07:34,903 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:07:54,077 - WebServer - ERROR - Decoding JSON: --- 
+{"id":-1,"hostId":1,"parentId":null,"actions":[{"id":-2,"name":"New Component","description":"","url":"","dependencies":[],"startCommands":[{"id":-3,"command":"ls 
+ --- failed
+2012-04-13 17:08:32,827 - WebServer - ERROR - Decoding JSON: --- 
+{"id":-1,"hostId":1,"parentId":null,"actions":[{"id":-2,"name":"New Component","description":"","url":"","dependencies":[],"startCommands":[{"id":-3,"command":"ls 
+ --- failed
+2012-04-13 17:09:16,105 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 432, in do_GET
+    idMap = serverThread.storeComponent(jsonObject, requestUser)
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 394, in storeComponent
+    if hostId.isdigit():
+AttributeError: 'int' object has no attribute 'isdigit'
+2012-04-13 17:10:49,121 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 17:10:49,121 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 17:10:49,122 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:10:49,122 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 17:10:49,122 - ServerThread - DEBUG - Closing ControlChannel
+2012-04-13 17:10:49,142 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:10:49,142 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:10:49,315 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 17:10:57,575 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:10:57,576 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:10:57,601 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:10:57,601 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:10:57,602 - ServerThread - DEBUG - 1 rows fetched
+2012-04-13 17:10:57,604 - ServerThread - INFO - Reading Users
+2012-04-13 17:10:57,605 - ServerThread - INFO - User "admin" with components [] loaded
+2012-04-13 17:10:57,606 - ServerThread - INFO - Reading reservations
+2012-04-13 17:10:57,606 - ServerThread - DEBUG - 1 Reservations fetched
+2012-04-13 17:10:57,607 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 17:10:57,607 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:10:57,855 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:10:57,856 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:10:57,857 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 17:10:57,857 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 17:10:57,858 - ServerThread - INFO - Starting ServerThread
+2012-04-13 17:10:57,859 - ServerThread - INFO - ServerThread is running
+2012-04-13 17:10:57,859 - WebServer - DEBUG - Starting WebServer
+2012-04-13 17:10:57,859 - ServerThread - INFO - Preparing the Server for new user: 
+2012-04-13 17:10:57,860 - WebServer - DEBUG - Serve forever
+2012-04-13 17:10:57,860 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:11:17,987 - ServerThread - DEBUG - Creating a new component with id "1"
+2012-04-13 17:11:17,988 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New Component, parent_id=None]
+2012-04-13 17:11:17,988 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:11:21,090 - ServerThread - INFO - Starting Action "New Component". "1" Commands / "0" dependencies found
+2012-04-13 17:11:21,097 - ServerThread - DEBUG - Starting screenReader for "New Component"
+2012-04-13 17:11:21,100 - ServerThread - DEBUG - Running start command "screen -S "New Component_1_1"\nls\nexit\n" by Action "New Component"
+2012-04-13 17:11:23,102 - ServerThread - DEBUG - ScreenReader received a new line for "New Component"
+2012-04-13 17:11:23,104 - ServerThread - DEBUG - ScreenReader received a new line for "New Component"
+2012-04-13 17:11:23,105 - ServerThread - DEBUG - ScreenReader "New Component" finished
+2012-04-13 17:11:41,712 - WebServer - ERROR - Decoding JSON: --- 
+{"id":1,"hostId":1,"parentId":null,"actions":[{"id":1,"name":"New Component","compId":1,"description":"","url":"","dependencies":[],"startCommands":[{"hideLog":false,"command":"ls 
+ --- failed
+2012-04-13 17:11:59,185 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New Component, parent_id=None]
+2012-04-13 17:11:59,185 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New Component, parent_id=None]
+2012-04-13 17:11:59,185 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:12:02,256 - ServerThread - INFO - Starting Action "New Component". "1" Commands / "0" dependencies found
+2012-04-13 17:12:02,262 - ServerThread - DEBUG - Starting screenReader for "New Component"
+2012-04-13 17:12:02,263 - ServerThread - DEBUG - Running start command "screen -S "New Component_1_1"\nls;\nsleep 10\nexit\n" by Action "New Component"
+2012-04-13 17:12:04,265 - ServerThread - DEBUG - ScreenReader received a new line for "New Component"
+2012-04-13 17:12:04,266 - ServerThread - DEBUG - ScreenReader received a new line for "New Component"
+2012-04-13 17:12:14,276 - ServerThread - DEBUG - ScreenReader received a new line for "New Component"
+2012-04-13 17:12:14,278 - ServerThread - DEBUG - ScreenReader "New Component" finished
+2012-04-13 17:14:01,123 - WebServer - ERROR - Decoding JSON: --- 
+{"id":1,"hostId":1,"parentId":null,"actions":[{"id":1,"name":"New Component","compId":1,"description":"","url":"","dependencies":[],"startCommands":[{"hideLog":false,"command":"ls 
+ --- failed
+2012-04-13 17:18:16,361 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New Component, parent_id=None]
+2012-04-13 17:18:16,362 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:18:16,362 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:19:52,276 - WebServer - ERROR - code 501, message Unsupported method ('POST')
+2012-04-13 17:24:00,696 - WebServer - ERROR - code 501, message Unsupported method ('POST')
+2012-04-13 17:24:30,068 - WebServer - ERROR - Decoding JSON: --- 
+%7B%22id%22%3A1%2C%22hostId%22%3A1%2C%22parentId%22%3Anull%2C%22actions%22%3A%5B%7B%22id%22%3A1%2C%22name%22%3A%22New%2BComponent%22%2C%22compId%22%3A1%2C%22description%22%3A%22%22%2C%22url%22%3A%22%22%2C%22dependencies%22%3A%5B%5D%2C%22startCommands%22%3A%5B%7B%22hideLog%22%3Afalse%2C%22command%22%3A%22ls%20%26%26%20sleep%2B10%22%2C%22id%22%3A1%2C%22blocking%22%3Afalse%7D%5D%2C%22stopCommands%22%3A%5B%5D%7D%5D%7D
+ --- failed
+2012-04-13 17:27:56,465 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 17:27:56,465 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 17:27:56,466 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:27:56,466 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:27:56,466 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:27:56,473 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:27:56,473 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:27:56,475 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 17:27:56,476 - ServerThread - DEBUG - Closing ControlChannel
+2012-04-13 17:27:56,486 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:27:56,487 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:27:57,076 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 17:28:13,786 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:28:13,787 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:28:13,808 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:28:13,809 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:28:13,809 - ServerThread - DEBUG - 1 rows fetched
+2012-04-13 17:28:13,812 - ServerThread - INFO - Reading Users
+2012-04-13 17:28:13,814 - ServerThread - INFO - User "admin" with components [1] loaded
+2012-04-13 17:28:13,814 - ServerThread - INFO - Reading reservations
+2012-04-13 17:28:13,815 - ServerThread - DEBUG - 1 Reservations fetched
+2012-04-13 17:28:13,815 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 17:28:13,815 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:28:14,070 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:28:14,071 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:28:14,072 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:28:14,072 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:28:14,179 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:28:14,180 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:28:14,181 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 17:28:14,182 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 17:28:14,183 - ServerThread - INFO - Starting ServerThread
+2012-04-13 17:28:14,183 - ServerThread - INFO - ServerThread is running
+2012-04-13 17:28:14,183 - WebServer - DEBUG - Starting WebServer
+2012-04-13 17:28:14,184 - ServerThread - INFO - Preparing the Server for new user: 
+2012-04-13 17:28:14,184 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:28:14,185 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:28:14,185 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:28:14,186 - WebServer - DEBUG - Serve forever
+2012-04-13 17:28:14,206 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:28:14,207 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:28:26,518 - WebServer - ERROR - Decoding JSON: --- 
+%7B%22id%22%3A1%2C%22hostId%22%3A1%2C%22parentId%22%3Anull%2C%22actions%22%3A%5B%7B%22id%22%3A1%2C%22name%22%3A%22New%2BComponent%22%2C%22compId%22%3A1%2C%22description%22%3A%22%22%2C%22url%22%3A%22%22%2C%22dependencies%22%3A%5B%5D%2C%22startCommands%22%3A%5B%7B%22hideLog%22%3Afalse%2C%22command%22%3A%22ls%20%26%26%20sleep%2B10%22%2C%22id%22%3A1%2C%22blocking%22%3Afalse%7D%5D%2C%22stopCommands%22%3A%5B%5D%7D%5D%7D
+ --- failed
+2012-04-13 17:37:16,253 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 17:37:16,253 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 17:37:16,254 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:37:16,254 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:37:16,254 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:37:16,261 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:37:16,262 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:37:16,264 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 17:37:16,264 - ServerThread - DEBUG - Closing ControlChannel
+2012-04-13 17:37:16,277 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:37:16,278 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:37:17,180 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 17:37:28,657 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:37:28,657 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:37:28,678 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:37:28,679 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:37:28,679 - ServerThread - DEBUG - 1 rows fetched
+2012-04-13 17:37:28,682 - ServerThread - INFO - Reading Users
+2012-04-13 17:37:28,684 - ServerThread - INFO - User "admin" with components [1] loaded
+2012-04-13 17:37:28,684 - ServerThread - INFO - Reading reservations
+2012-04-13 17:37:28,685 - ServerThread - DEBUG - 1 Reservations fetched
+2012-04-13 17:37:28,685 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 17:37:28,686 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:37:28,941 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:37:28,942 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:37:28,943 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:37:28,943 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:37:29,050 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:37:29,051 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:37:29,053 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 17:37:29,053 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 17:37:29,054 - ServerThread - INFO - Starting ServerThread
+2012-04-13 17:37:29,054 - ServerThread - INFO - ServerThread is running
+2012-04-13 17:37:29,055 - WebServer - DEBUG - Starting WebServer
+2012-04-13 17:37:29,055 - ServerThread - INFO - Preparing the Server for new user: 
+2012-04-13 17:37:29,056 - WebServer - DEBUG - Serve forever
+2012-04-13 17:37:29,056 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:37:29,057 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:37:29,057 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:37:29,077 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:37:29,078 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:37:48,105 - WebServer - ERROR - An error occured parsing the request
+Traceback (most recent call last):
+  File "/home/webportal/git/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/network/webServer.py", line 129, in do_GET
+    options[key] = urlib2.unquote( urllib2.unquote(value)) if value else None
+NameError: global name 'urlib2' is not defined
+2012-04-13 17:37:59,981 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 17:37:59,981 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 17:37:59,982 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:37:59,982 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:37:59,982 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:37:59,989 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:37:59,990 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:37:59,991 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 17:37:59,992 - ServerThread - DEBUG - Closing ControlChannel
+2012-04-13 17:38:00,006 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:38:00,006 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:38:00,010 - WebServer - DEBUG - Stopping WebServer
+2012-04-13 17:38:29,777 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-13 17:38:29,778 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-13 17:38:29,799 - ServerThread - INFO - Reading Hosts
+2012-04-13 17:38:29,799 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-13 17:38:29,800 - ServerThread - DEBUG - 1 rows fetched
+2012-04-13 17:38:29,803 - ServerThread - INFO - Reading Users
+2012-04-13 17:38:29,804 - ServerThread - INFO - User "admin" with components [1] loaded
+2012-04-13 17:38:29,805 - ServerThread - INFO - Reading reservations
+2012-04-13 17:38:29,805 - ServerThread - DEBUG - 1 Reservations fetched
+2012-04-13 17:38:29,805 - ServerThread - DEBUG - Start all Hosts
+2012-04-13 17:38:29,806 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:38:30,059 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:38:30,060 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:38:30,061 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:38:30,061 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:38:30,168 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:38:30,169 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:38:30,171 - robotcontrold - DEBUG - Creating WebServer
+2012-04-13 17:38:30,171 - WebServer - INFO - Creating WebServer on port 82
+2012-04-13 17:38:30,172 - ServerThread - INFO - Starting ServerThread
+2012-04-13 17:38:30,172 - ServerThread - INFO - ServerThread is running
+2012-04-13 17:38:30,172 - WebServer - DEBUG - Starting WebServer
+2012-04-13 17:38:30,173 - ServerThread - INFO - Preparing the Server for new user: 
+2012-04-13 17:38:30,174 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:38:30,174 - WebServer - DEBUG - Serve forever
+2012-04-13 17:38:30,174 - ServerThread - INFO - Cannot stop Action "New+Component" (force=True), no commands found
+2012-04-13 17:38:30,175 - ServerThread - INFO - Killing Action "New+Component" (force=True) "1" Commands found 
+2012-04-13 17:38:30,195 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:38:30,196 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:38:54,141 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:38:54,141 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:38:54,142 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:39:03,070 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:03,071 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:03,071 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:39:03,970 - ServerThread - INFO - Starting Action "New+Component". "1" Commands / "0" dependencies found
+2012-04-13 17:39:03,977 - ServerThread - DEBUG - Starting screenReader for "New+Component"
+2012-04-13 17:39:03,980 - ServerThread - DEBUG - Running start command "screen -S "New+Component_1_1"\nls && sleep+10\nexit\n" by Action "New+Component"
+2012-04-13 17:39:05,983 - ServerThread - DEBUG - ScreenReader received a new line for "New+Component"
+2012-04-13 17:39:05,984 - ServerThread - DEBUG - ScreenReader received a new line for "New+Component"
+2012-04-13 17:39:05,985 - ServerThread - DEBUG - ScreenReader "New+Component" finished
+2012-04-13 17:39:27,994 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:27,995 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:27,995 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:39:40,816 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:40,817 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:40,817 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:39:50,270 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:50,270 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:39:50,271 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:39:51,286 - ServerThread - INFO - Starting Action "New+Component". "1" Commands / "0" dependencies found
+2012-04-13 17:39:51,293 - ServerThread - DEBUG - Starting screenReader for "New+Component"
+2012-04-13 17:39:51,293 - ServerThread - DEBUG - Running start command "screen -S "New+Component_1_1"\nls && sleep 10\nexit\n" by Action "New+Component"
+2012-04-13 17:39:53,296 - ServerThread - DEBUG - ScreenReader received a new line for "New+Component"
+2012-04-13 17:39:53,296 - ServerThread - DEBUG - ScreenReader received a new line for "New+Component"
+2012-04-13 17:39:58,521 - ServerThread - INFO - Killing Action "New+Component" (force=False) "1" Commands found 
+2012-04-13 17:39:58,558 - ServerThread - DEBUG - Running kill command "screen -X -S "New+Component_1_1" kill" by Action "New+Component"
+2012-04-13 17:39:58,559 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:39:58,561 - ServerThread - DEBUG - Action "New+Component"::kill joined the screenReader Thread. Waiting for it to finish
+2012-04-13 17:39:59,303 - ServerThread - DEBUG - ScreenReader received a new line for "New+Component"
+2012-04-13 17:39:59,304 - ServerThread - DEBUG - ScreenReader "New+Component" finished
+2012-04-13 17:40:05,917 - ServerThread - DEBUG - Updating Component [id=1, host_id=1, name=New+Component, parent_id=None]
+2012-04-13 17:40:05,917 - ServerThread - DEBUG - Successfully updated: Component [id=1, host_id=1, name=New Component, parent_id=None]
+2012-04-13 17:40:05,918 - ServerThread - DEBUG - Saving the user with components [1]
+2012-04-13 17:40:25,081 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-04-13 17:40:25,081 - ServerThread - INFO - Stopping ServerThread
+2012-04-13 17:40:25,082 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-13 17:40:25,082 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2012-04-13 17:40:25,082 - ServerThread - INFO - Killing Action "New Component" (force=True) "1" Commands found 
+2012-04-13 17:40:25,089 - ServerThread - DEBUG - Running kill command "screen -X -S "New Component_1_1" kill" by Action "New Component"
+2012-04-13 17:40:25,090 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-13 17:40:25,092 - ServerThread - INFO - Disconnecting all Hosts
+2012-04-13 17:40:25,092 - ServerThread - DEBUG - Closing ControlChannel
+2012-04-13 17:40:25,111 - ServerThread - INFO - Disconnected from Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:40:25,112 - ServerThread - DEBUG - Stopping Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-13 17:40:25,311 - WebServer - DEBUG - Stopping WebServer
+2012-04-23 13:37:12,291 - robotcontrold - DEBUG - Creating ServerThread
+2012-04-23 13:37:12,291 - ServerThread - INFO - Establishing Mysql Connection
+2012-04-23 13:37:12,313 - ServerThread - INFO - Reading Hosts
+2012-04-23 13:37:12,313 - ServerThread - DEBUG - Loading Hosts from database
+2012-04-23 13:37:12,314 - ServerThread - DEBUG - 1 rows fetched
+2012-04-23 13:37:12,316 - ServerThread - INFO - Reading Users
+2012-04-23 13:37:12,318 - ServerThread - INFO - User "admin" with components [1] loaded
+2012-04-23 13:37:12,319 - ServerThread - INFO - Reading reservations
+2012-04-23 13:37:12,319 - ServerThread - DEBUG - 1 Reservations fetched
+2012-04-23 13:37:12,319 - ServerThread - DEBUG - Start all Hosts
+2012-04-23 13:37:12,320 - ServerThread - DEBUG - Starting Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-23 13:37:12,591 - ServerThread - INFO - Connected to Host [id=1, hostname=cob-sim2, port=22, user=webportal]
+2012-04-23 13:37:12,591 - ServerThread - INFO - Force Terminating all components of every users
+2012-04-23 13:37:12,592 - ServerThread - INFO - Cannot stop Action "New Component" (force=True), no commands found
+2012-04-23 13:37:12,593 - ServerThread - INFO - Killing Action "New Component" (force=True) "1" Commands found 
+2012-04-23 13:37:12,699 - ServerThread - DEBUG - Running kill command "screen -X -S "New Component_1_1" kill" by Action "New Component"
+2012-04-23 13:37:12,700 - ServerThread - DEBUG - Sending exit to close channel.
+2012-04-23 13:37:12,702 - robotcontrold - DEBUG - Creating WebServer
+2012-04-23 13:37:12,702 - WebServer - INFO - Creating WebServer on port 82
+2012-04-23 13:37:12,703 - ServerThread - INFO - Starting ServerThread
+2012-04-23 13:37:12,704 - ServerThread - INFO - ServerThread is running
+2012-04-23 13:37:12,704 - WebServer - DEBUG - Starting WebServer
+2012-04-23 13:37:12,705 - WebServer - DEBUG - Serve forever
+2012-04-23 13:37:14,190 - ServerThread - DEBUG - Storing new User 'simon'

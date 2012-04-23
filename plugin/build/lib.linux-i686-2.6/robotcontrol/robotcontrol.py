@@ -35,10 +35,13 @@ class RobotcontrolPlugin(Component):
         # grab the privileges from the background server
         # make a request to .bs/permissions and pass the Authorization header
         # of the original request made to this page 
-        hdl = urllib2.Request('%s/.bs/privileges/my' % req.base_url)
-        hdl.add_header('Authorization', req.get_header('Authorization'))
-        response = urllib2.urlopen(hdl)
-        return int(response.read())
+        try:
+            hdl = urllib2.Request('%s/.bs/privileges/my' % req.base_url)
+            hdl.add_header('Authorization', req.get_header('Authorization'))
+            response = urllib2.urlopen(hdl)
+            return int(response.read())
+        except urllib2.HTTPError,e:
+            raise Exception( 'No Background Server configured' )
 
     def hasPrivilege(self, privileges, bitmask):
         return (privileges & bitmask) == bitmask

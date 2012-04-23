@@ -882,9 +882,10 @@ var application = new (function() {
 	    this.menuView.renderMenuView(this.components);
 	    
 	    $.ajax({
-		url: this.urlPrefix + '/store/component?json=' + component.createJSONString(),
+		url: this.urlPrefix + '/store/component',
 		success: function(data) { application.reloadComponents() },
-		error:   function(data) { application.saveComponentError(data) }
+		error:   function(data) { application.saveComponentError(data) },
+		data:    {json: encodeURIComponent( component.createJSONString())}
 	    });
 	}
 	catch (err) {

@@ -1,4 +1,4 @@
-import threading, time, base64, datetime, urllib, json, urlparse
+import threading, time, base64, datetime, urllib, urllib2, json, urlparse
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from utils.eventHistory import EventHistory
 from utils import privileges
@@ -126,7 +126,7 @@ class MyHandler(BaseHTTPRequestHandler):
                 temp = optionsString.split('&')
                 for t in temp:
                     key, value = t.split('=',1) if t.find('=') > 0 else (t, '')
-                    options[key] = urllib.unquote(value) if value else None
+                    options[key] = urllib2.unquote( urllib2.unquote(value)) if value else None
                     
 
                 # action is the first argument
