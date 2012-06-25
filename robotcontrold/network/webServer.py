@@ -126,7 +126,9 @@ class MyHandler(BaseHTTPRequestHandler):
                 temp = optionsString.split('&')
                 for t in temp:
                     key, value = t.split('=',1) if t.find('=') > 0 else (t, '')
-                    options[key] = urllib2.unquote( urllib2.unquote(value)) if value else None
+                    if key:
+                        value = urllib2.unquote( urllib2.unquote(value)).replace( '+', ' ' ) if value else None
+                    options[key] = value
                     
 
                 # action is the first argument
@@ -297,12 +299,12 @@ class MyHandler(BaseHTTPRequestHandler):
                         # check privileges
                         if not requestUser.hasPrivilege(privileges.ACTION_RUN):
                             raise UnauthorizedRequestError('You have no privileges to run an action', self.path)
-                        result = action.start()
+                        result = action.start( requestUser.globalVars )
                     elif command == 'stop':
                         # check privileges
                         if not requestUser.hasPrivilege(privileges.ACTION_STOP):
                             raise UnauthorizedRequestError('You have no privileges to stop an action', self.path)
-                        result = action.stop()
+                        result = action.stop( requestUser.globalVars )
                         
                     elif command == 'kill':
                         # check privileges
@@ -463,8 +465,8 @@ class MyHandler(BaseHTTPRequestHandler):
                     if not 'host' in options:
                         raise ArgumentRequestError( 'No Host specified', self.path )
                     
-                    log = serverThread.installPackage( options['pkg'], options['host'] )
-                    output = json.dumps({"success": True, "log": log})
+                    log, startCommand, stopCommand = serverThread.installPackage( options['pkg'], options['host'] )
+                    output = json.dumps({"success": True, "log": log, 'startCommand': startCommand, 'stopCommand': stopCommand})
 
 
                 # delete a component
@@ -480,8 +482,19 @@ class MyHandler(BaseHTTPRequestHandler):
                     requestUser.deleteComponent(args[1])
                     serverThread.saveUser(requestUser)
                     output = '{"success": true}'
+
+
+
+                elif action == 'globals':
+                    if len( args ) != 2:
+                        raise ArgumentRequestError( 'No Action defined for global' )
                     
-                    
+                    if args[ 1 ] == 'save':
+                        requestUser.globalVars = options
+                        output = '{"success": true }'
+      
+                    elif args[ 1 ] == 'get':
+                        output = json.dumps( requestUser.globalVars )
 
                 else:
                     raise UnknownRequestError('Unknown request. Args: %s.' % str(args), self.path)

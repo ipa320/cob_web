@@ -8,6 +8,7 @@ class User():
         self.name = name.lower()
         self._components = {}
         self._privileges = 0
+        self.globalVars = {}
         
         
     def initializeUnpickableData(self, hosts, log):
@@ -19,7 +20,8 @@ class User():
         return {
             'name': self.name,
             '_components': self._components,
-            '_privileges': self._privileges
+            '_privileges': self._privileges,
+            'globalVars': self.globalVars
             }
         
     def __str__(self):

@@ -25,7 +25,7 @@
 		<script type="text/javascript">
 		/* <![CDATA[ */
 			$(document).ready(function() {
-				var username="Simon";
+				var username="${username}";
 //				screenManager.init();
 
 				try {
@@ -86,22 +86,26 @@
 			<div id="leftColumn">
 				<div id="menu"></div>
 				<div id="infoBox"></div>
-				<py:if test="COMP_ADMIN or HOST_ADMIN or PRIV_ADMIN">
 				    <div id="adminBox"><ul>
 				    
+		        <li><a href="javascript:application.globalsManager()">Edit Globals</a></li>
+
 				    <py:if test="COMP_ADMIN">
-                        <li><a href="javascript:application.createComponent()">Add Component</a></li>
-                        <li><a href="javascript:application.editComponent()">Edit Component</a></li>
-                        <li><a href="javascript:application.deleteComponent()">Delete Component</a></li>
+		        <li><a href="javascript:application.createComponent()">Add Component</a></li>
+		        <li><a href="javascript:application.editComponent()">Edit Component</a></li>
+		        <li><a href="javascript:application.deleteComponent()">Delete Component</a></li>
 				    </py:if>
 				    
 				    <py:if test="HOST_ADMIN">
-                       <li><a href="javascript:application.hostManager()">Host Manager</a></li>
-                    </py:if>
+		       <li><a href="javascript:application.hostManager()">Host Manager</a></li>
+			    </py:if>
+
+				    <py:if test="PRIV_ADMIN">
+		       <li><a href="javascript:application.userManager()">User Manager</a></li>
+		    </py:if>
+
 				    
 				    </ul></div>
-				</py:if>
-				<!--ADMIN-BOX-->
 			</div>
 			<div id="component"></div>
 

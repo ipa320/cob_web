@@ -75,6 +75,13 @@ class Action():
 	def addStartCommand(self, cmd):
 		self._startCommands[cmd.id] = cmd
 	
+	def deleteStartCommand( self, cId ):
+		del self._startCommands[ cId ]
+
+	def deleteStopCommand( self, cId ):
+		del self._stopCommands[ cId ]
+
+	
 	def addStopCommand(self, cmd):
 		self._stopCommands[cmd.id] = cmd
 
@@ -92,7 +99,7 @@ class Action():
 		self.screenReaders = {'show': [], 'hide': []}
 
 
-	def start(self):
+	def start(self, globalVars=None):
 		if not self.component or not self.component.host:
 			raise AttributeError('Host is not set for %s' % str(self))
 
@@ -112,7 +119,7 @@ class Action():
 
 			for cmd in self._startCommands.values():
 				channel = self.component.host.invokeShell()
-				command = self.createScreenCmd(cmd)
+				command = self.createScreenCmd( cmd, globalVars )
 				hideLog = cmd.hideLog
 				self.startChannels.append(channel)
 
@@ -140,7 +147,7 @@ class Action():
 			return False
 
 
-	def stop(self, force=False):
+	def stop(self, force=False, globalVars=None ):
 		if not self.component or not self.component.host:
 			raise AttributeError('Host is not set for %s' % str(self))
 
@@ -153,7 +160,7 @@ class Action():
 
 			for cmd in self._stopCommands.values():
 				channel = self.component.host.invokeShell()
-				command = self.createScreenCmd(cmd)
+				command = self.createScreenCmd( cmd, globalVars )
 				hideLog = cmd.hideLog
 				
 				self.log.debug('Running stop command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
@@ -244,8 +251,15 @@ class Action():
 		return text if len(text) else 'No data available'
 	
 
-	def createScreenCmd(self, cmd):
-		return 'screen -S "%s_%d_%d"\n%s\nexit\n' % (self.name, self.id, cmd.id, cmd.command)
+	def createScreenCmd(self, cmd, globalVars=None):
+		command = 'screen -S "%s_%d_%d"\n' % (self.name, self.id, cmd.id )
+		if globalVars:
+			self.log.debug( 'Setting global variables: %s' % globalVars.keys() )
+			for key, value in globalVars.items():
+				command += 'export %s="%s"\n' % ( key, value )
+
+		command += '%s\nexit\n' % cmd.command
+		return command
 
 
 	def createKillCmd(self, cmd):

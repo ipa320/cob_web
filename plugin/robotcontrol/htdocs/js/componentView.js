@@ -168,7 +168,7 @@ $.fn.updateComponentView = function(component, components, options) {
 
     // disable the group button if options['disabled'] is true, no action is running
     // or any of the child action cannot be stopped
-    this.find('.group-buttons .stop-group-button').button({'disabled': options['disabled'] || component.childActionCannotBeStopped() || !component.hasActiveChild() });
+    this.find('.group-buttons .stop-group-button').button({'disabled': options['disabled'] || !component.hasActiveChild() });
 
     
     renderDescription(table, descriptions);

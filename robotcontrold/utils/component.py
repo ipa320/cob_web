@@ -152,13 +152,6 @@ class Component():
 		self.forceStop()
 		self.forceKill()
 
-	
-	# lost connection to host. No need to try to shutdown any actions
-	def lostConnection(self):
-		for action in self.actions.values():
-			action.lostConnection()
-
-
 
 	# get an action by name. Returns None if not found
 	def getAction(self, actionId):

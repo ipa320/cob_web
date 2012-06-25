@@ -17,9 +17,6 @@ class Host(Thread):
 		# username
 		self.user = user
 		self.pw = pw
-
-		# ??
-		self._components = []
 		
 		self.initializeUnpickableData(log)
 		
@@ -59,9 +56,6 @@ class Host(Thread):
 
 	def isAlive(self):
 		return self.alive
-
-	def appendComp(self, comp):
-		self._components.append(comp)
 
 	#@Override
 	def start(self, blocking=False):		
@@ -155,9 +149,6 @@ class Host(Thread):
 		self.log.warning('Lost connection to %s' % str(self))
 		self.log.info ('Informing all components assigned to this host')
 		EventHistory.hostOffline(self)
-
-		for comp in self._components:
-			comp.lostConnection()
 
 		self.ctrlChannel = None
 		self.screenReader = None

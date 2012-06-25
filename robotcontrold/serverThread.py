@@ -185,8 +185,11 @@ class ServerThread(threading.Thread):
 
             if name == 'admin':
                 allPrivileges = privileges.ACTION_ALL | privileges.COMP_ADMIN | \
-			privileges.HOST_ADMIN | privileges.PRIV_ADMIN | privileges.START_SERVER
+                    privileges.HOST_ADMIN | privileges.PRIV_ADMIN | privileges.START_SERVER
                 user.setPrivileges( allPrivileges )
+            else:
+                normalPrivileges = privileges.ACTION_ALL | privileges.COMP_ADMIN
+                user.setPrivileges( normalPrivileges )
             
             # update the database
             self.log.debug("Storing new User '%s'" % name)
@@ -546,7 +549,10 @@ class ServerThread(threading.Thread):
                     # if the name is empty indicating that the user wants to delete the command), delete
                     # it permanently from the component
                     if not commandStr.strip():
-                        action.deleteCommand(cId)
+                        if isStartCommand:
+                            action.deleteStartCommand(cId)
+                        else:
+                            action.deleteStopCommand( cId )
 
                     # in case it has a valid name, update the action
                     else:
@@ -694,16 +700,36 @@ class ServerThread(threading.Thread):
             
         
         self.log.info('Installing package %s on host %s' %( package, host.hostname ))
-        channel = host.invokeShell()
         command = 'screen -S "install" sudo apt-get -y install "%s"\r\nexit\r\n' % package
 
+        channel = host.invokeShell()
         screenReader = ScreenReader(self.name, channel, self.log)
-        screenReader.start()
-        
+        screenReader.start()        
         channel.send( command )
         screenReader.join()
-        return screenReader.getBuffer()
+        log = screenReader.getBuffer()
 
+        self.log.info( 'Package %s installed' % package )
+
+        escapedPackageName = package.replace( "'", "\'" )
+        startScript = '/opt/webportal/%s/start.sh' % escapedPackageName
+        stopScript  = '/opt/webportal/%s/stop.sh'  % escapedPackageName
+        command = 'screen -S installer\r\n[ -e \'%s\' ]; echo "Start$?"\r\n \
+[ -e \'%s\' ]; echo "Stop$?"\r\nexit\r\nexit\r\n' % ( startScript, stopScript )
+        
+        channel = host.invokeShell()
+        screenReader = ScreenReader(self.name, channel, self.log)
+        screenReader.start()        
+        channel.send( command )
+        screenReader.join()
+        output = screenReader.getBuffer()
+        startCommand = startScript if output.find( 'Start0' ) >= 0 else ''
+        stopCommand  = stopScript  if output.find( 'Stop0'  ) >= 0 else ''
+        self.log.info( 'StartScript found: %s, StopScript found: %s' % ( startCommand, \
+            stopCommand ))
+        #self.log.info( output )
+
+        return log, startCommand, stopCommand
         
       
     def savePermissions(self, options):

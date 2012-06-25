@@ -4,7 +4,7 @@ from trac.web.chrome import INavigationContributor, ITemplateProvider, \
 from trac.web.main import IRequestHandler
 from trac.util import escape, Markup
 from genshi.builder import tag
-import re, sqlite3, json
+import re, sqlite3, json, base64
 
 
 
@@ -28,6 +28,16 @@ class RobotcontrolPlugin(Component):
         # problems occur when creating the forms
         return req.path_info.startswith( '/robotcontrol' ) and \
             req.path_info[-1] != '/'
+
+    
+    def getUsername( self, req ):
+        authorization = req.get_header('Authorization')
+        if not authorization.lower().startswith( 'basic ' ):
+            raise ValueError( 'Illegal Authorization Header' )
+        base64Data = authorization[ len('basic '): ]
+        data = base64.b64decode( base64Data )
+        assert ':' in data, 'Illegal Authorization Format'
+        return data[ :data.index( ':' ) ]
 
 
     def loadPrivileges(self, req):
@@ -57,6 +67,7 @@ class RobotcontrolPlugin(Component):
         add_javascript( req, 'htdocs/js/componentView.js')
         add_javascript( req, 'htdocs/js/componentEditView.js')
         add_javascript( req, 'htdocs/js/logView.js')
+        add_javascript( req, 'htdocs/js/globalsManagerView.js')
         add_javascript( req, 'htdocs/js/styleDataManager.js')
         add_javascript( req, 'htdocs/js/screenManager.js')
         add_javascript( req, 'htdocs/js/dialogView.js')
@@ -92,7 +103,9 @@ class RobotcontrolPlugin(Component):
         options = {
             'COMP_ADMIN': self.hasPrivilege(myPrivileges, privileges.COMP_ADMIN),
             'HOST_ADMIN': self.hasPrivilege(myPrivileges, privileges.HOST_ADMIN),
-            'PRIV_ADMIN': self.hasPrivilege(myPrivileges, privileges.PRIV_ADMIN)
+            'PRIV_ADMIN': self.hasPrivilege(myPrivileges, privileges.PRIV_ADMIN),
+            'PRIV_ADMIN': self.hasPrivilege(myPrivileges, privileges.PRIV_ADMIN),
+            'username':   self.getUsername( req )
         }
 
         

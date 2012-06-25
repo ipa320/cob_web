@@ -385,6 +385,7 @@ var application = new (function() {
 	    }
 	   else {
 		this.selectedComponent = null;
+        this.componentView.html('');
 	    }
 
 	    this.menuView.renderMenuView(this.components, {selected: this.selectedComponent});
@@ -1039,39 +1040,75 @@ var application = new (function() {
     }
     this.submitHostError = function(data)
     {
-	alert('Remote Host could not be updated [' + data.status + '; ' + data.responseText + ']');
+        alert('Remote Host could not be updated [' + data.status + '; ' + data.responseText + ']');
     }
     
+    // Globals Manager
+    this.globalsManager = function(){
+        if( screenManager.isLockedLocation())
+            return;
+
+        var view = this.componentView;
+        view.html( '' );
+        $.ajax({
+            url: this.urlPrefix + '/globals/get',
+            success: function(data) { view.renderGlobalsManagerView( data ) },
+            error:   function(data) { alert('User Globals could not be loaded [' + data.status + '; ' + data.responseText + ']'); }
+        });
+    }
+    
+    this.saveGlobals = function( globals ){
+        try {
+	        // if the location is locked, do not allow to change location
+	        if (screenManager.isLockedLocation())
+		    return;
+	        
+	        	    
+	        // send a request to the server
+	        var self = this;
+            $.ajax({
+                url: this.urlPrefix + '/globals/save',
+                success: function(data) { self.select( null ) },
+                error:   function(data) { alert('User Globals could not be saved [' + data.status + '; ' + data.responseText + ']'); },
+                data:    globals
+            });
+	    }
+	    catch (err) {
+	        alert("Error occured trying to save the globals:\n" + err);
+	    }
+    }
+
+
     // User management 
     this.userManager = function()
     {
-	try {
-	    // if the location is locked, do not allow to change location
-	    if (screenManager.isLockedLocation())
-		return;
-	    
-	    	    
-	    // send a request to the server
-	    var view = this.componentView;
-	    $.ajax({
-		url: this.urlPrefix + '/privileges/all',
-		success: function(data) { view.renderUserManagerView(data); },
-		error:   function(data) { alert('User Privileges could not be loaded [' + data.status + '; ' + data.responseText + ']'); }
-	    });
-	}
-	catch (err) {
-	    alert("Error occured trying to manage the users:\n" + err);
-	}
+	    try {
+	        // if the location is locked, do not allow to change location
+	        if (screenManager.isLockedLocation())
+		    return;
+	        
+	        	    
+	        // send a request to the server
+	        var view = this.componentView;
+            $.ajax({
+                url: this.urlPrefix + '/privileges/all',
+                success: function(data) { view.renderUserManagerView(data); },
+                error:   function(data) { alert('User Privileges could not be loaded [' + data.status + '; ' + data.responseText + ']'); }
+            });
+	    }
+	    catch (err) {
+	        alert("Error occured trying to manage the users:\n" + err);
+	    }
     }
     this.submitPrivileges = function(bitmasks)
     {
-	$.ajax({
-	    url: this.urlPrefix + '/privileges/submit',
-	    data: bitmasks,
-	    dataType: 'text',
-	    success: function(data) { application.submitPrivilegesSuccess(data); },
-	    error:   function(data) { application.submitPrivilegesError(data); }
-	});
+        $.ajax({
+            url: this.urlPrefix + '/privileges/submit',
+            data: bitmasks,
+            dataType: 'text',
+            success: function(data) { application.submitPrivilegesSuccess(data); },
+            error:   function(data) { application.submitPrivilegesError(data); }
+        });
     }
     this.submitPrivilegesSuccess = function(data)
     {
