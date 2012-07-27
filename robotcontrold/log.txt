@@ -21441,3 +21441,44 @@ EOFError
 2012-06-25 16:45:22,885 - ServerThread - DEBUG - Connection to Host [id=3, hostname=uhr-laptop, port=22, user=webportal] timed out
 2012-06-25 16:45:30,889 - ServerThread - DEBUG - Connection to Host [id=3, hostname=uhr-laptop, port=22, user=webportal] timed out
 2012-06-25 16:45:38,897 - ServerThread - DEBUG - Connection to Host [id=3, hostname=uhr-laptop, port=22, user=webportal] timed out
+2012-06-29 10:24:30,255 - robotcontrold - DEBUG - Creating ServerThread
+2012-06-29 10:24:30,256 - ServerThread - INFO - Establishing Mysql Connection
+2012-06-29 10:24:30,291 - robotcontrold - ERROR - An unexpected error occured while creating the server
+Traceback (most recent call last):
+  File "./robotcontrold", line 74, in __init__
+    self.server = ServerThread(serverLog, args)
+  File "/home/webportal/ipa320/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 30, in __init__
+    self.establishDatabaseConnection(args)
+  File "/home/webportal/ipa320/cob3_intern/cob_sandbox/cob_webportal_robotcontrol/common/src/robotcontrold/serverThread.py", line 104, in establishDatabaseConnection
+    self.conn = MySQLdb.connect (host=mysqlHost, user=mysqlUser, passwd=mysqlPasswd, db=mysqlDb)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/__init__.py", line 81, in Connect
+    return Connection(*args, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 187, in __init__
+    super(Connection, self).__init__(*args, **kwargs2)
+OperationalError: (1049, "Unknown database 'webportal'")
+2012-06-29 10:54:47,037 - robotcontrold - DEBUG - Creating ServerThread
+2012-06-29 10:54:47,038 - ServerThread - INFO - Establishing Mysql Connection
+2012-06-29 10:54:47,061 - ServerThread - INFO - Reading Hosts
+2012-06-29 10:54:47,062 - ServerThread - DEBUG - Loading Hosts from database
+2012-06-29 10:54:47,063 - ServerThread - DEBUG - 0 rows fetched
+2012-06-29 10:54:47,063 - ServerThread - INFO - Reading Users
+2012-06-29 10:54:47,064 - ServerThread - INFO - Reading reservations
+2012-06-29 10:54:47,065 - ServerThread - DEBUG - 0 Reservations fetched
+2012-06-29 10:54:47,065 - ServerThread - DEBUG - Start all Hosts
+2012-06-29 10:54:47,066 - ServerThread - INFO - Force Terminating all components of every users
+2012-06-29 10:54:47,066 - robotcontrold - DEBUG - Creating WebServer
+2012-06-29 10:54:47,067 - WebServer - INFO - Creating WebServer on port 81
+2012-06-29 10:54:47,067 - ServerThread - INFO - Starting ServerThread
+2012-06-29 10:54:47,068 - WebServer - DEBUG - Starting WebServer
+2012-06-29 10:54:47,069 - ServerThread - INFO - ServerThread is running
+2012-06-29 10:54:47,069 - WebServer - DEBUG - Serve forever
+2012-06-29 10:55:31,221 - WebServer - WARNING - Invalid Authorization Header: None
+2012-06-29 11:00:18,765 - ServerThread - DEBUG - Storing new User 'simon'
+2012-06-29 11:02:04,652 - ServerThread - DEBUG - Storing new User 'admin'
+2012-06-29 11:06:44,520 - ServerThread - INFO - Preparing the Server for new user: 
+2012-06-29 11:06:44,521 - ServerThread - INFO - Force Terminating all components of every users
+2012-06-29 11:12:32,914 - robotcontrold - INFO - SIGNAL received > Shutting down
+2012-06-29 11:12:32,914 - ServerThread - INFO - Stopping ServerThread
+2012-06-29 11:12:32,914 - ServerThread - INFO - Force Terminating all components of every users
+2012-06-29 11:12:32,914 - ServerThread - INFO - Disconnecting all Hosts
+2012-06-29 11:12:32,915 - WebServer - DEBUG - Stopping WebServer
