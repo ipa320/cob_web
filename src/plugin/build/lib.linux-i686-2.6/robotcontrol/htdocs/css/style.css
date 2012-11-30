@@ -1,0 +1,80 @@
+#robotcontrol_main * {
+    font-family: Arial;
+    font-size: 11px;
+}
+#robotcontrol_main {
+    margin-top: 20px;
+    margin-right: 10px;
+}
+
+#leftColumn {
+    float:left;
+    margin-top:20px;
+    margin-left: 10px;
+}
+#clearer {
+    clear: both;
+    height: 40px;
+}
+#dialog-loading {
+	display: none;
+}
+#dialog-loading ul {
+	list-style-type: none;
+	padding-left: 15px;
+}
+#dialog-loading li {
+	font-weight: bold;
+	margin: 10px 0;
+}
+#dialog-loading li.success {
+	color: green;
+}
+#dialog-loading li.failure {
+	color: red;
+}
+
+#dialog-loading span {
+	float: left;
+	padding-left: 5px;
+}
+
+
+.ui-icon-menu-component-on {
+	background-position: -80px -144px;
+	background-image: url(../images/ui-icons_green.png) !important;
+}
+
+.ui-icon-menu-component-partlyOn {
+	background-position: -96px -144px;
+	background-image: url(../images/ui-icons_yellow.png) !important;
+}
+.ui-icon-menu-component-off {
+	background-position: -112px -144px;
+/*	background-image: url(../images/ui-icons_red.png) !important;*/
+}
+
+.ui-icon-component-action-on {
+	background-position: -80px -144px;
+	background-image: url(../images/ui-icons_green.png) !important;
+}
+.ui-icon-component-action-off {
+	background-position: -112px -144px;
+/*	background-image: url(../images/ui-icons_red.png) !important;*/
+}
+
+
+.ui-icon-menu-component-chilren-on {
+	background-position: -80px -144px;
+	background-image: url(../images/ui-icons_green.png) !important;
+}
+
+.ui-icon-menu-component-children-partlyOn {
+	background-position: -96px -144px;
+	background-image: url(../images/ui-icons_yellow.png) !important;
+}
+.ui-icon-menu-component-children-off {
+	background-position: -112px -144px;
+/*	background-image: url(../images/ui-icons_red.png) !important;*/
+}
+

@@ -1,0 +1,40 @@
+[31mWARNING: disk usage in log directory [/home/webportal/.ros/log] is over 1GB.
+It's recommended that you use the 'rosclean' command.[0m
+... logging to /home/webportal/.ros/log/12124f1c-d26b-11e0-beef-643150261030/roslaunch-cob-sim2-25217.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+]2;/home/webportal/git/care-o-bot/cob_apps/cob_2dnav/ros/launch/2dnav.launch
+[1mstarted roslaunch server http://cob-sim2:44152/[0m
+
+[0m[ INFO] [1314641992.384222890, 82.605000000]: Odom sensor activated[0m
+[0m[ INFO] [1314641992.409225033, 82.625000000]: Kalman filter initialized with odom measurement[0m
+[0m[ INFO] [1314641992.366088922, 82.588000000]: Subscribed to Topics: laser_scan_sensor_front laser_scan_sensor_rear laser_scan_sensor_top[0m
+[0m[ INFO] [1314641992.412020577, 82.625000000]: Requesting the map...
+[0m
+[0m[ INFO] [1314641992.420852260, 82.625000000]: Still waiting on map...
+[0m
+[0m[ INFO] [1314641994.271334750, 83.627000000]: Still waiting on map...
+[0m
+[0m[ INFO] [1314641996.134942940, 84.630000000]: Received a 800 X 800 map at 0.050000 m/pix
+[0m
+[0m[ INFO] [1314641996.677637432, 84.915000000]: MAP SIZE: 800, 800[0m
+[0m[ INFO] [1314641996.687297113, 84.920000000]: Subscribed to Topics: laser_scan_sensor_front laser_scan_sensor_rear laser_scan_sensor_top[0m
+[0m[ INFO] [1314641996.707464711, 84.928000000]: Requesting the map...
+[0m
+[0m[ INFO] [1314641996.711751627, 84.928000000]: Still waiting on map...
+[0m
+[0m[ INFO] [1314641998.658077677, 85.932000000]: Received a 800 X 800 map at 0.050000 m/pix
+[0m
+[0m[ INFO] [1314641999.165340088, 86.204000000]: Sim period is set to 0.20[0m
+[33m[ WARN] [1314641999.286259155, 86.264000000]: The backup_vel parameter has been deprecated in favor of the escape_vel parameter. To switch, just change the parameter name in your configuration files.[0m
+
+[1mROS_MASTER_URI=http://localhost:11311[0m
+]2;/home/webportal/git/care-o-bot/cob_apps/cob_2dnav/ros/launch/2dnav.launch http://localhost:11311
+core service [/rosout] found
+[1mprocess[map_server-1]: started with pid [25235][0m
+[1mprocess[amcl-2]: started with pid [25236][0m
+[1mprocess[move_base-3]: started with pid [25238][0m
+[1mprocess[robot_pose_ekf-4]: started with pid [25240][0m
+[robot_pose_ekf-4] killing on exit
+... shutting down processing monitor complete
+[1mdone[0m

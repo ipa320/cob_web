@@ -1,0 +1,26 @@
+#infoBox {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    border: 1px solid #CCCCCC;
+    margin-top: 15px;
+    padding: 5px;
+    width: 140px;
+    color: #4F4F4F;
+}
+
+#infoBox tr th {
+    padding: 4px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+#infoBox tr td {
+    padding: 4px 0 0 0;
+}
+
+#infoBox tr a {
+    text-decoration: none;
+    color: #4F4F4F;
+}
+#infoBox tr a:hover {
+    color: #000000;
+}

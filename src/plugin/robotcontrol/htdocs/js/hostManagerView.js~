@@ -1,0 +1,7 @@
+$.fn.renderHostManagerView  = function(hosts) {
+    this.addClass('hostManagerView');
+    
+}
+
+function createHostSelectCode() {
+       
