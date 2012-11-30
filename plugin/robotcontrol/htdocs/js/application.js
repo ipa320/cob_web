@@ -1,3 +1,8 @@
+if( !console )
+    console = {}
+if( !console.log )
+    console.log = function(){}
+
 var application = new (function() {
     this.SERVER_AVAILABLE = 1;
     this.SERVER_IN_CHARGE = 2;
@@ -20,6 +25,7 @@ var application = new (function() {
     // available events
     this.ACTION_STATUS_EVENT=1;
     this.HOST_EVENT = 2;
+    this.ACTION_STATE_EVENT=3;
     
     this._nextTempId=-1;
     
@@ -141,14 +147,23 @@ var application = new (function() {
      * Helper Functions
      */
     this.getComponent = function(compId) {
-	if (!(parseInt(compId) > 0))
-	    throw new Error('Invalid component id "' + compId + '"');
-	
-	component = this.components[compId];
-	if (component === undefined)
-	    throw new Error('Invalid Component Id "' + compId + '" passed');
-	
-	return component;
+        if (!(parseInt(compId) > 0))
+            throw new Error('Invalid component id "' + compId + '"');
+        
+        component = this.components[compId];
+        if (component === undefined)
+            throw new Error('Invalid Component Id "' + compId + '" passed');
+        
+        return component;
+    }
+    this.getAction = function( compId, actionId ){
+        compId = parseInt( compId );
+        actionId = parseInt( actionId );
+        comp = application.getComponent( compId );
+
+        if( !comp.hasAction( actionId ))
+            throw new Error( 'Could not find action with id "' + actionId + '" for component with id "' + compId + '"' );
+        return comp.getAction( actionId );
     }
 
     /*
@@ -221,11 +236,11 @@ var application = new (function() {
 		    action = comp.actions[actionId];
 		    // check whether all required fields are set. description might be null
 		    if (!actionId || isNaN(actionId) || !action ||/* !action.name ||*/ !action.dependencies || !(action.dependencies instanceof Object) || !(action.startCmds instanceof Object) || !(action.stopCmds instanceof Object)) {
-			console.log(action);
-			throw new Error('Invalid Action-Object received')
+                console.log(action);
+                throw new Error('Invalid Action-Object received')
 		    }
 
-		    actions[actionId] = new Action(actionId, action.name, id, action.desc, action.url, action.dependencies, action.startCmds, action.stopCmds)
+		    actions[actionId] = new Action(actionId, action.name, id, action.desc, action.url, action.dependencies, action.startCmds, action.stopCmds, action.parameterFile, action.statusFile, action.state )
 		}
 
 		this.components[id] = new Component(id, comp.host, comp.name, comp.parentId, actions);
@@ -299,18 +314,18 @@ var application = new (function() {
 	});
     }
     this.eventHistoryDataSuccess = function(data, handler) {
-	try {
-	    this.processEventHistoryData(data);
-	    handler.success('Event History Data Received');
-	}
-	catch (err) {
-	    handler.error('An error occured processing History Data: ' + err);
-	    throw err;
-	}
+        try {
+            this.processEventHistoryData(data);
+            handler.success('Event History Data Received');
+        }
+        catch (err) {
+            handler.error('An error occured processing History Data: ' + err);
+            throw err;
+        }
     }
     this.eventHistoryDataError = function(data, handler) {
-	console.log(data);
-	handler.error('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
+        console.log(data);
+        handler.error('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
     }
     
     /*
@@ -403,50 +418,62 @@ var application = new (function() {
 	 *  Returns true if at least one action changed / host changed its status. I.e, item.events.length > 0
 	 */
     this.processEventHistoryData = function(data, options) {
-	actionsProcessed = {};
-	hostProcessed = {};
+        var actionsProcessed = {},
+            hostProcessed = {};
+        
+        if (!(parseInt(data.timestamp) > 0))
+            throw new Error('Invalid data object received. Timestamp: ' + data.timestamp)
+        this.lastUpdateTimestamp = parseInt(data.timestamp);
+        
+        if (!(data.events instanceof Object))
+            throw new Error('Invalid data object received. events is not an object')
 	
-	if (!(parseInt(data.timestamp) > 0))
-	    throw new Error('Invalid data object received. Timestamp: ' + data.timestamp)
-	this.lastUpdateTimestamp = parseInt(data.timestamp);
 	
-	if (!(data.events instanceof Object))
-	    throw new Error('Invalid data object received. events is not an object')
-	
-	
-	for (i in data.events) {
-	    item = data.events[i];
-	    type = parseInt(item.type);
-	    id = parseInt(item.id);
-	    status = parseInt(item.status);
+        for (i in data.events) {
+            var item = data.events[i],
+                type = parseInt(item.type),
+                id = parseInt(item.id);
 
-	    if (type != this.ACTION_STATUS_EVENT && type != this.HOST_EVENT)
-		throw new Error('Unknown event type "' + item.type + "'");
-	    
-	    if (type == this.ACTION_STATUS_EVENT) {
-		compId = parseInt(item.comp);
-		comp = this.components[compId];
-		if (!comp)
-		    throw new Error('Component with id "' + item.comp + '" not found');
+            if (type != this.ACTION_STATUS_EVENT && type != this.HOST_EVENT && type != this.ACTION_STATE_EVENT )
+                throw new Error('Unknown event type "' + item.type + "'");
+            
+            if (type == this.ACTION_STATUS_EVENT) {
+                var action = this.getAction( item.comp, id ),
+                    compId = parseInt( item.comp ),
+                    status = parseInt(item.status);
 
-		if (!comp.hasAction(id))
-		    throw new Error('Action does not belong to component (id: ' + item.id + ', comp: ' + compId + ')');
+                if ( !actionsProcessed[compId] )
+                    actionsProcessed[compId] = {};
+                if( !actionsProcessed[ compId ][ id ] )
+                    actionsProcessed[ compId ][ id ] = [];
+                if( ~actionsProcessed[ compId ][ id ].indexOf( 'status' ))
+                    continue;
 
-		if (status != 1 && status != 0)
-		    throw new Error('Invalid Status code received "' + item.status  + ' (' + status + ')"');
-		
-		if (!actionsProcessed[compId] || actionsProcessed[compId][id] != true) {
-		    comp.getAction(id).setActive(status == 1);
-		    if (!actionsProcessed[compId])
-			actionsProcessed[compId] = {};
-		    actionsProcessed[compId][id] = true;
-		}
-	    }
-	}
+                if (status != 1 && status != 0)
+                    throw new Error('Invalid Status code received "' + item.status  + ' (' + status + ')"');
+                
+                action.setActive(status == 1);
+                actionsProcessed[compId][id].push( 'status' )
+            }
+            else if( type == this.ACTION_STATE_EVENT ){
+                var compId = parseInt( item.comp );
+
+                if ( !actionsProcessed[compId] )
+                    actionsProcessed[compId] = {};
+                if( !actionsProcessed[ compId ][ id ] )
+                    actionsProcessed[ compId ][ id ] = [];
+                if( ~actionsProcessed[ compId ][ id ].indexOf( 'state' ))
+                    continue;
+
+                var action = this.getAction( item.comp, id );
+                action.state = item.state;
+                actionsProcessed[compId][id].push( 'state' )
+            }
+        }
 	
-	
- 	return data.events.length > 0;
+        return data.events.length > 0;
     }
+
     
     
     /*
@@ -465,9 +492,9 @@ var application = new (function() {
     this.updateEventHistorySuccess = function(data) {
 	try {	    
 	    changes = this.processEventHistoryData(data);
-	    if (changes && this.selectedComponent) {
-		this.componentView.updateComponentView(this.selectedComponent, this.components);
-		this.menuView.renderMenuView(this.components);
+	    if( changes && this.selectedComponent ){
+            this.componentView.updateComponentView(this.selectedComponent, this.components);
+            this.menuView.renderMenuView( this.components );
 	    }
 	    
 	    this.updateTimeoutId = setTimeout("application.updateEventHistory()", 2000);
@@ -539,69 +566,71 @@ var application = new (function() {
     /*
 	 * Start / Stop / Kill actions
 	 */
-    this.startAction = function(actionId, compId) {
-	try {
-	    component = this.getComponent(compId);
-	    action = component.getAction(actionId);
-	    
-	    screenManager.lockLocation();
-	    this.componentView.updateComponentView(this.selectedComponent, this.components);
-	    this.menuView.renderMenuView(this.components);
-	    
-	    $.ajax({
-		dataType: 'text',
-		url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/start',
-		success: function(data) {
-		    application.startActionSuccess(data);
-		},
-		error:   function(data) {
-		    application.startActionError(data);
-		}
-	    });
-	}
-	catch (err) {
-	    alert("Error occured trying to start an Action:\n" + err);
-	}
+    this.startAction = function( actionId, compId ) {
+        try {
+            component = this.getComponent(compId);
+            action = component.getAction(actionId);
+            
+            screenManager.lockLocation();
+            this.componentView.updateComponentView(this.selectedComponent, this.components);
+            this.menuView.renderMenuView(this.components);
+            
+            $.ajax({
+            dataType: 'text',
+            url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/start',
+            success: function(data) {
+                application.startActionSuccess(data);
+            },
+            error:   function(data) {
+                application.startActionError(data);
+            }
+            });
+        }
+        catch (err) {
+            alert("Error occured trying to start an Action:\n" + err);
+        }
     }
     this.startActionSuccess = function(data)
     {
-	screenManager.unlockLocation();
+        screenManager.unlockLocation();
     }
     this.startActionError = function(data)
     {
-	alert('Component could not be started [' + data.status + '; ' + data.responseText + ']');
+        alert('Component could not be started [' + data.status + '; ' + data.responseText + ']');
     }
 
     this.stopAction = function(actionId, compId)
     {
-	try {
-	    component = this.getComponent(compId);
-	    action = component.getAction(actionId);
-	    
-	    screenManager.lockLocation();
-	    this.componentView.updateComponentView(this.selectedComponent, this.components);
-	    this.menuView.renderMenuView(this.components);
-	    
-	    $.ajax({
-		dataType: 'text',
-		url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/stop',
-		success: function(data) {
-		    application.stopActionSuccess(data);
-		},
-		error:   function(data) {
-		    application.stopActionSuccess(data);
-		}
-	    });
-	}
-	catch (err) {
-	    alert("Error occured trying to stop an Action:\n" + err);
-	}
+        try {
+            component = this.getComponent(compId);
+            action = component.getAction(actionId);
+            
+            screenManager.lockLocation();
+            this.componentView.updateComponentView(this.selectedComponent, this.components);
+            this.menuView.renderMenuView(this.components);
+            
+            $.ajax({
+            dataType: 'text',
+            url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/stop',
+            success: function(data) {
+                application.stopActionSuccess(data);
+            },
+            error:   function(data) {
+                application.stopActionSuccess(data);
+            }
+            });
+        }
+        catch (err) {
+            alert("Error occured trying to stop an Action:\n" + err);
+        }
     }
 
     
     this.stopActionSuccess = function(data)
     {
-	screenManager.unlockLocation();
+        screenManager.unlockLocation();
+	    this.componentView.updateComponentView(this.selectedComponent, this.components);
+	    this.menuView.renderMenuView(this.components);
     }
     this.stopActionError = function(data)
     {
@@ -618,26 +647,26 @@ var application = new (function() {
 	    this.menuView.renderMenuView(this.components);
 	    
 	    $.ajax({
-		dataType: 'text',
-		url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/kill',
-		success: function(data) {
-		    application.killActionSuccess(data);
-		    
-		    // if func is a function, it's used for the success
-		    if (typeof(func) === 'function')
-			func(data);
-		    
-		    // if it's an object, check for a success function
-		    if(typeof(func) === 'object' && typeof(func.success) === 'function')
-			func.success(data);
-		},
-		error:   function(data) {
-		    application.killActionError(data);
-		    
-		    // check for an error function in the func object
-		    if(typeof(func) === 'object' && typeof(func.success) === 'function')
-			func.success(data);
-		}
+            dataType: 'text',
+            url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/kill',
+            success: function(data) {
+                application.killActionSuccess(data);
+                
+                // if func is a function, it's used for the success
+                if (typeof(func) === 'function')
+                    func(data);
+                
+                // if it's an object, check for a success function
+                if(typeof(func) === 'object' && typeof(func.success) === 'function')
+                    func.success(data);
+            },
+            error:   function(data) {
+                application.killActionError(data);
+                
+                // check for an error function in the func object
+                if(typeof(func) === 'object' && typeof(func.success) === 'function')
+                func.success(data);
+            }
 	    });
 	}
 	catch (err) {
@@ -646,7 +675,9 @@ var application = new (function() {
     }
     this.killActionSuccess = function(data)
     {
-	screenManager.unlockLocation();
+        screenManager.unlockLocation();
+	    this.componentView.updateComponentView(this.selectedComponent, this.components);
+	    this.menuView.renderMenuView(this.components);
     }
     this.killActionError = function(data)
     {
@@ -869,30 +900,31 @@ var application = new (function() {
 	}
     }
     
-    this.saveComponent = function(component)
-    {
-	try {
-	    // reset the last update timestamp
-	    this.lastUpdateTimestamp = 0;
-	    
-	    // lock the interface
-	    this.select(component.id > 0 ? component.id : null);
-	    screenManager.lockLocation();
-	    if (this.selectedComponent)
-		    this.componentView.updateComponentView(this.selectedComponent, this.components);
-	    this.menuView.renderMenuView(this.components);
-	    
-	    $.ajax({
-		url: this.urlPrefix + '/store/component',
-		success: function(data) { application.reloadComponents() },
-		error:   function(data) { application.saveComponentError(data) },
-		data:    {json: encodeURIComponent( component.createJSONString())}
-	    });
-	}
-	catch (err) {
-	    alert ("Error occured trying to save component: \n" + err);
-	    console.log(err);
-	}
+    this.saveComponent = function(component){
+        try {
+            // reset the last update timestamp
+            this.lastUpdateTimestamp = 0;
+            
+            // lock the interface
+            this.select(component.id > 0 ? component.id : null);
+            screenManager.lockLocation();
+            if (this.selectedComponent)
+                this.componentView.updateComponentView(this.selectedComponent, this.components);
+            this.menuView.renderMenuView(this.components);
+            
+            console.log( 'Component json:', component.createJSONString() );
+
+            $.ajax({
+                url: this.urlPrefix + '/store/component',
+                success: function(data) { application.reloadComponents() },
+                error:   function(data) { application.saveComponentError(data) },
+                data:    {json: encodeURIComponent( component.createJSONString())}
+            });
+        }
+        catch (err) {
+            alert ("Error occured trying to save component: \n" + err);
+            console.log(err);
+        }
     }
     
     this.reloadComponents = function(selectId)
@@ -1110,18 +1142,65 @@ var application = new (function() {
             error:   function(data) { application.submitPrivilegesError(data); }
         });
     }
-    this.submitPrivilegesSuccess = function(data)
-    {
-	try {
-	    this.select(null);
-	}
-	catch (err) {
-	    alert('Error occured to go home. Error:\n' + err);
-	}
+    this.submitPrivilegesSuccess = function(data){
+        try {
+            this.select(null);
+        }
+        catch (err) {
+            alert('Error occured to go home. Error:\n' + err);
+        }
     }
-    this.submitPrivilegesError = function(data)
-    {
-	alert('Remote Privileges could not be updated [' + data.status + '; ' + data.responseText + ']');
+    this.submitPrivilegesError = function(data){
+        alert('Remote Privileges could not be updated [' + data.status + '; ' + data.responseText + ']');
     }
 
+
+    this.loadParameters = function( action , loadingFinishedCallback, addFieldCallback ){
+        var successCallback = function( xml ){
+            application.loadParametersSuccess( xml, 
+                loadingFinishedCallback, addFieldCallback );
+        };
+        var compId = this.selectedComponent.id,
+            actionId = action.id;
+        $.ajax({ 
+            url: this.urlPrefix + '/parameters/load/' + compId + '/' + actionId,
+            dataType: 'xml',
+            success: successCallback,
+            error: $.proxy( application.loadParametersError, application )
+        });
+    };
+
+    this.loadParametersSuccess = function( xml, loadingFinishedCallback, addFieldCallback ){
+        loadingFinishedCallback();
+        var $xml = $( xml );
+        var traverser = function(){
+            var name = this.getAttribute( 'name' ),
+                value = this.getAttribute( 'value' );
+            addFieldCallback( name, value );
+        };
+        $xml.find( 'Param,param' ).each( traverser );
+    };
+    this.loadParametersError = function( data ){
+        alert('Could not load parameters [' + data.status + '; ' + data.responseText + ']');
+    };
+
+    this.saveParameters = function( actionId, data, options ){
+        var defaultOptions = {
+            success: null,
+            error: $.proxy( this.saveParametersError, this )
+        };
+        options = $.extend( {}, defaultOptions, options );
+        var compId = this.selectedComponent.id;
+
+        $.ajax({ 
+            url: this.urlPrefix + '/parameters/save/' + compId + '/' + actionId,
+            success: options.success,
+            error: options.error,
+            data: { json: encodeURIComponent( JSON.stringify( data ))}
+        });
+    };
+    this.saveParametersError = function( data ){
+        alert('Parameters could ould not be saved [' + data.status + '; ' + data.responseText + ']');
+    };
+    
 })();

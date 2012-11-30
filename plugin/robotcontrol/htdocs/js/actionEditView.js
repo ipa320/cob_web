@@ -6,7 +6,9 @@ var actionEditViewCode = '<h3 class="actionEditView-name"><a href="#" class="ph_
 							<tr class="even ph_action_edit-host"><th>Host:</th><td class="ph_action_edit-host"></td></tr>\
  						        <tr class="even ph_action_edit-parent"><th>Parent:</th><td class="ph_action_edit-parent"></td></tr>\
 							<tr class="even"><th>Description:</th><td><textarea class="ph_action_edit-desc"></textarea></div>\</td></tr>\
-							<tr class="even"><th>URL:</th><td><input class="ph_action_edit-url" /></div>\</td></tr>\
+							<tr class="even"><th>URL:</th><td><input type="text" class="ph_action_edit-url" /></div>\</td></tr>\
+                            <tr><th>Parameter file:</th><td><input type="text" class="ph_action_edit-parameter_file" /></td></tr>\
+                            <tr><th>Status file:</th><td><input type="text" class="ph_action_edit-status_file" /></td></tr>\
 							<tr class="even"><th>Dependencies:</th><td class="ph_action_edit-dep"></td></tr> \
 						</table></div>\
 						<div class="shellCommandsEditView">\
@@ -33,35 +35,32 @@ $.fn.renderActionEditView = function(action, component, components, isMain, opti
 
 	    // render the host selection if this is the main action
 	    if (isMain) {
-		var hostSelect = $(Host.createSelectHtmlCode(component.hostId, null));
-		this.find("td.ph_action_edit-host").append(hostSelect);
-		hostSelect.change(function() {
-		    var selected = $(this).find('option:selected')
-		    var hostId = parseInt(selected.attr("hostId"));
-		    component.hostId = hostId;
-		});
-		// call this function once, to set the default host id if
-		// we're createing a new component
-		hostSelect.change();
+            var hostSelect = $(Host.createSelectHtmlCode(component.hostId, null));
+            this.find("td.ph_action_edit-host").append(hostSelect);
+            hostSelect.change(function() {
+                var selected = $(this).find('option:selected')
+                var hostId = parseInt(selected.attr("hostId"));
+                component.hostId = hostId;
+            });
+            // call this function once, to set the default host id if
+            // we're createing a new component
+            hostSelect.change();
 
-		//TODO: put this into the component
-		var parentSelect = $(createComponentSelectCode(components, component.parentId));
-		this.find("td.ph_action_edit-parent").append(parentSelect);
-		parentSelect.change(function() {
-		    var selected = $(this).find('option:selected');
-		    var compId = parseInt(selected.attr('compId'));
-		    component.parentId = compId > 0 ? compId : null;
-		    component.parent = compId > 0 ? components[compId] : null;
-		});
-	    }
-	    // else hide the host / parent - row
-	    else { 
-		this.find("tr.ph_action_edit-host").hide();
-		this.find("tr.ph_action_edit-parent").hide();
-	    }
-	    
-	    
-	    
+            //TODO: put this into the component
+            var parentSelect = $(createComponentSelectCode(components, component.parentId));
+            this.find("td.ph_action_edit-parent").append(parentSelect);
+            parentSelect.change(function() {
+                var selected = $(this).find('option:selected');
+                var compId = parseInt(selected.attr('compId'));
+                component.parentId = compId > 0 ? compId : null;
+                component.parent = compId > 0 ? components[compId] : null;
+            });
+        }
+        // else hide the host / parent - row
+        else { 
+            this.find("tr.ph_action_edit-host").hide();
+            this.find("tr.ph_action_edit-parent").hide();
+        }
 	    
 	    // Set name and description. These values don't change
 	    this.find("a.ph_action_edit-name").text(action.name);
@@ -70,18 +69,18 @@ $.fn.renderActionEditView = function(action, component, components, isMain, opti
 	    var inputName = this.find("input.ph_action_edit-name");
 	    inputName.val(action.name);
 	    inputName.focusout(function() {
-		action.name = this.value;
+            action.name = this.value;
 
-		//TODO:
-		if (isMain) component.name = this.value;
+            //TODO:
+            if (isMain) component.name = this.value;
 	    });
 
 	    // update the action names on keydown
 	    var updateName = function() {
-		//TODO: ugly!
-		if (isMain)
-		    $("span.ph_edit_comp-name").text(this.value);
-		$("a.ph_action_edit-name").text(this.value);
+            //TODO: ugly!
+            if (isMain)
+                $("span.ph_edit_comp-name").text(this.value);
+            $("a.ph_action_edit-name").text(this.value);
 	    };
 	    inputName.keydown(updateName).keyup(updateName);
 
@@ -93,7 +92,21 @@ $.fn.renderActionEditView = function(action, component, components, isMain, opti
 	    
 	    var inputUrl = this.find("input.ph_action_edit-url");
 	    inputUrl.val(action.url);
-	    inputUrl.focusout(function() { action.url = this.value; });
+	    inputUrl.focusout(function(){ 
+            action.url = this.value; 
+        });
+
+        var inputParameterFile = this.find( 'input.ph_action_edit-parameter_file' );
+        inputParameterFile.val( action.parameterFile )
+        inputParameterFile.focusout( function(){
+            action.parameterFile = this.value;
+        });
+
+        var inputStatusFile = this.find( 'input.ph_action_edit-status_file' );
+        inputStatusFile.val( action.statusFile )
+        inputStatusFile.focusout( function(){
+            action.statusFile = this.value;
+        });
 	}
 
 

@@ -1,6 +1,7 @@
-import time
+import time, json
 from utils.eventHistory import EventHistory
 from network.screenReader import ScreenReader
+from utils.actions.shellCommand import ShellCommand
 
 
 class Action():
@@ -8,6 +9,8 @@ class Action():
 		self.id = int(rId)
 		self.name = name
 		self.url = url
+		self.parameterFile = ''
+		self.statusFile = ''
 		
 		# dicts with id as key
 		if not isinstance(startCommands, dict) or not isinstance(stopCommands, dict):
@@ -31,7 +34,10 @@ class Action():
 			self._initialized = True
 			self.screenReaders = {'show':[], 'hide':[]}
 			self.startChannels = []
+			self.stateChannel = None
+			self.stateCommand = None
 			self.log = log
+			self.state = None
 			
 	
 	# used for pickle in memcached. Exclude certain attributes such as log etc
@@ -40,6 +46,8 @@ class Action():
 			'id': self.id,
 			'name': self.name,
 			'url':	self.url,
+            'parameterFile': self.parameterFile,
+            'statusFile': self.statusFile,
 			'_startCommands': self._startCommands,
 			'_stopCommands': self._stopCommands,
 			'component': self.component,
@@ -130,10 +138,11 @@ class Action():
 				self.log.debug('Running start command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
 				channel.send(command)
 
+				self.constantlyCheckState( globalVars )
 				# if blocking is enabled for this command, wait for the screenreader to quit
 				if cmd.blocking and screenReader and screenReader.isAlive():
 					self.log.debug('Command requires blocking. Action "%s" joined the screenReader Thread. Waiting for it to finish' % self.name)
-					screenReader.join()
+					screenReader.join( 5.0 )
 
 
 			# notify EventHandler after all cmds run
@@ -152,6 +161,8 @@ class Action():
 			raise AttributeError('Host is not set for %s' % str(self))
 
 		if self.isAlive() or force:
+			self.killStateChannel() 
+
 			if not self.canStop():
 				self.log.info('Cannot stop Action "%s" (force=%s), no commands found' % (self.name, str(force)))
 				return
@@ -174,21 +185,61 @@ class Action():
 				# if blocking is enabled for this command, wait for the screenreader to quit
 				if cmd.blocking and screenReader and screenReader.isAlive():
 					self.log.debug('Command requires blocking. Action "%s" joined the screenReader Thread. Waiting for it to finish' % self.name)
-					screenReader.join()
-
+					screenReader.join( 5.0 )
 
 			# Wait for all readers (start and stop) to finish
 			for reader in self.screenReaders['hide']+self.screenReaders['show']:
 				if reader and reader.isAlive():
 					self.log.debug('Action "%s"::stop joined the screenReader Thread. Waiting for it to finish' % self.name)
-					reader.join()
+					reader.join( 5.0 )
+			print 'IM DONE HERE'
+
 
 			return True
 
 		else:
 			return False
 
+	def constantlyCheckState( self, globalVars=None ):
+		if not self.statusFile: 
+			return
+		loopCmd = 'while true; do %s; sleep 10; done' % self.statusFile
+		self.stateCommand = ShellCommand( -1, loopCmd, False, False )
+		self.stateChannel = self.component.host.invokeShell()
+		command = self.createScreenCmd( self.stateCommand, globalVars )
 
+		self.log.debug('Constantly checking file "%s" for Action "%s"' % (self.statusFile, self.name))
+
+		screenReader = ScreenReader( self.name, self.stateChannel, self.log, 
+			notifyNewline=self.notifyNewStatusLine )
+		self.screenReaders[ 'show' ].append( screenReader )
+		screenReader.start()
+	
+		self.stateChannel.send(command)
+
+	def notifyNewStatusLine( self, screen, line ):
+		configurationStart = line.rfind( '<configuration>' )
+		configurationEnd = line.rfind( '</configuration' )
+		if configurationStart < 0 or configurationEnd < 0:
+			return
+		configTxt = line[ configurationStart : configurationEnd ]
+
+		code = ''
+		codeStart = configTxt.find( '<code>' )
+		codeEnd = configTxt.find( '</code>' )
+		if codeStart >= 0 and codeEnd >= 0:
+			code = configTxt[ codeStart+len( '<code>' ) : codeEnd ]
+
+		message = ''
+		messageStart = configTxt.find( '<message>' )
+		messageEnd = configTxt.find( '</message>' )
+		if messageStart >= 0 and messageEnd >= 0:
+			message = configTxt[ messageStart+len( '<message>' ) : messageEnd ]
+
+		if not self.state or self.state[ 'code' ] != code or self.state[ 'message' ] != message:
+			print 'CODE: "%s", MESSGAGE: "%s"' % ( code, message )
+			self.state = { 'code': code, 'message': message }
+			EventHistory.newState( self, self.component, self.state )
 
 	def forceStop(self):
 		return self.stop(force=True)
@@ -199,11 +250,15 @@ class Action():
 			raise AttributeError('Host is not set for %s' % str(self))
 
 		if self.isAlive() or force:
+			self.killStateChannel() 
+
 			self.log.info('Killing Action "%s" (force=%s) "%d" Commands found ' % (self.name, str(force), len(self._startCommands)+len(self._stopCommands)))
 
 			# send a break (^C == chr(3)) to every channel
 			for channel in self.startChannels:
 				channel.send(chr(3))
+				channel.send( 'exit\n' )
+
 
 			# non blocking commands, so only one shell required
 			# kill both screens for start and stop command
@@ -222,12 +277,26 @@ class Action():
 			for reader in self.screenReaders['show'] + self.screenReaders['hide']:
 				if reader and reader.isAlive():
 					self.log.debug('Action "%s"::kill joined the screenReader Thread. Waiting for it to finish' % self.name)
-					reader.join()
+					reader.join( 5.0 )
 
 			return True
 		else:
 			return False
 
+	def killStateChannel( self ):
+		self.log.debug('Killing state channel for Action "%s"' % ( self.name ))
+		if self.stateChannel:
+			self.stateChannel.send(chr(3))
+			self.stateChannel.send( 'exit\n' )
+
+		if self.stateCommand:
+			# non blocking commands, so only one shell required
+			# kill both screens for start and stop command
+			channel = self.component.host.invokeShell()
+			cmd = self.createKillCmd( self.stateCommand )
+			channel.send(cmd)
+		self.state = None
+		EventHistory.newState( self, self.component, self.state )
 
 	def forceKill(self):
 		return self.kill(force=True)
@@ -252,7 +321,7 @@ class Action():
 	
 
 	def createScreenCmd(self, cmd, globalVars=None):
-		command = 'screen -S "%s_%d_%d"\n' % (self.name, self.id, cmd.id )
+		command = 'screen -T dumb -S "%s_%d_%d"\n' % (self.name, self.id, cmd.id )
 		if globalVars:
 			self.log.debug( 'Setting global variables: %s' % globalVars.keys() )
 			for key, value in globalVars.items():
@@ -322,7 +391,10 @@ class Action():
 			'name':				self.name,
 			'desc':				self.description,
 			'url':				self.url,
+            'parameterFile':    self.parameterFile,
+            'statusFile':       self.statusFile,
 			'dependencies':		list(action.id for action in self.dependencies),
 			'startCmds':		list(cmd.createJSONObj() for cmd in self.getStartCommands()),
-			'stopCmds':			list(cmd.createJSONObj() for cmd in self.getStopCommands())
+			'stopCmds':			list(cmd.createJSONObj() for cmd in self.getStopCommands()),
+			'state':			self.state
 		}

@@ -67,6 +67,7 @@ class RobotcontrolPlugin(Component):
         add_javascript( req, 'htdocs/js/componentView.js')
         add_javascript( req, 'htdocs/js/componentEditView.js')
         add_javascript( req, 'htdocs/js/logView.js')
+        add_javascript( req, 'htdocs/js/parametersView.js')
         add_javascript( req, 'htdocs/js/globalsManagerView.js')
         add_javascript( req, 'htdocs/js/styleDataManager.js')
         add_javascript( req, 'htdocs/js/screenManager.js')

@@ -32,6 +32,11 @@ function renderMenuElements(container, parentId, components)
             var btnClass = parentId !== null ? 'nav-button-indent' : '';
             var button = $('<div class="nav-button ' + btnClass + '"></div>');
 
+            if( component.selfOrChildStateHasErrors() ) 
+                button.addClass( 'state-error' );
+            else if( component.selfOrChildStateHasWarnings() )
+                button.addClass( 'state-warning' );
+
             // if it has children, add an arrow
             var expandIndicator = $('<span class="menu-icon-expandIndicator ui-icon"></span>');
             if (!$.isEmptyObject(component.children)) {

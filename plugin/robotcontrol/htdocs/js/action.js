@@ -1,12 +1,15 @@
-var Action = function(id, name, compId, description, url, dependencies, startCmds, stopCmds) {
+var Action = function(id, name, compId, description, url, dependencies, startCmds, stopCmds, parameterFile, statusFile, state ) {
 	this.id 		   = id;
 	this.name 		   = name;
 	this.compId 	   = compId;
-	this.description   = description  || "";
-	this.dependencies  = dependencies || [];
-	this.startCommands = startCmds    || [];
-	this.stopCommands  = stopCmds	  || [];
-	this.url		   = url 		  || "";
+	this.description   = description   || "";
+	this.dependencies  = dependencies  || [];
+	this.startCommands = startCmds     || [];
+	this.stopCommands  = stopCmds	   || [];
+	this.url		   = url 		   || "";
+    this.parameterFile = parameterFile || '';
+    this.statusFile    = statusFile    || '';
+    this.state         = state         || '';
 	
 	this._active = false;
 	this._lastChange = 0;
@@ -47,14 +50,16 @@ var Action = function(id, name, compId, description, url, dependencies, startCmd
 	
 	this.createJSONObject = function() {
 		return {
-			'id':			this.id,
-			'name':			this.name,
-			'compId':		this.compId,
-			'description':	this.description,
-			'url':			this.url,
-			'dependencies':	this.dependencies,
-			'startCommands':this.startCommands,
-			'stopCommands':	this.stopCommands
+			'id':			 this.id,
+			'name':			 this.name,
+			'compId':		 this.compId,
+			'description':	 this.description,
+			'url':			 this.url,
+			'dependencies':	 this.dependencies,
+			'startCommands': this.startCommands,
+			'stopCommands':	 this.stopCommands,
+            'parameterFile': this.parameterFile,
+            'statusFile':    this.statusFile
 		};
 	}
 	this.createJSONString = function()
@@ -65,6 +70,6 @@ var Action = function(id, name, compId, description, url, dependencies, startCmd
 	// clone
 	this.clone = function() {
 		// slice(0) creates a copy of the array
-		return new Action(this.id, this.name, this.compId, this.description, this.url, this.dependencies.slice(0), this.startCommands.slice(0), this.stopCommands.slice(0));
+		return new Action(this.id, this.name, this.compId, this.description, this.url, this.dependencies.slice(0), this.startCommands.slice(0), this.stopCommands.slice(0), this.parameterFile, this.statusFile, this.state );
 	}
 }

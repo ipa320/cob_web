@@ -30,54 +30,54 @@ var Component = function(id, hostId, name, parentId, actions) {
     
     
     this.getMainAction = function() {
-	return this._mainAction;
+        return this._mainAction;
     }
 
     this.getName = function() {
-	return this.getMainAction().name;
+        return this.getMainAction().name;
     }
 
     this.hasAction = function(actionId) {
-	return this.actions[actionId] != undefined;
+        return this.actions[actionId] != undefined;
     }
     this.getAction = function(actionId) {
-	if (!this.hasAction(actionId))
-	    throw new Error('Requested Action does not exist: ' + actionId)
-	return this.actions[actionId];
+        if (!this.hasAction(actionId))
+            throw new Error('Requested Action does not exist: ' + actionId)
+        return this.actions[actionId];
     }
     // returns true if all actions are running
     this.allActionsRunning = function() {
-	for (actionId in this.actions)
-	    if (!this.actions[actionId].isActive())
-		return false;
-	return true;
+        for (actionId in this.actions)
+            if (!this.actions[actionId].isActive())
+                return false;
+            return true;
     }
     // returns true if at least one action is running
     this.actionsRunning = function() {
-	for (actionId in this.actions)
-	    if (this.actions[actionId].isActive())
-		return true;
-	return false;
+        for (actionId in this.actions)
+            if (this.actions[actionId].isActive())
+            return true;
+        return false;
     }
     
     this.addAction = function(action) {
-	if (! (action instanceof Action))
-	    throw new Error("Action is of a wrong type");
-	this.actions[action.id] = action;
+        if (! (action instanceof Action))
+            throw new Error("Action is of a wrong type");
+        this.actions[action.id] = action;
     }
 
     // recursive function to check whether any child action of
     // this component is running.
     this.hasActiveChild = function()
     {
-	if (this.actionsRunning())
-	    return true;
+        if (this.actionsRunning())
+            return true;
 
-	for (var id in this.children)
-	    if(this.children[id].hasActiveChild())
-		return true;
-	
-	return false;
+        for (var id in this.children)
+            if(this.children[id].hasActiveChild())
+            return true;
+        
+        return false;
     };
 
     // recursive function to check whether all children can be stopped
@@ -106,6 +106,29 @@ var Component = function(id, hostId, name, parentId, actions) {
 		return true;
 	
 	return false;
+    };
+
+    this.selfOrChildStateHasWarnings = function(){
+        return this.searchSelfOrChildrenForActionsWithStateCode( 'warning' );
+    };
+    this.selfOrChildStateHasErrors = function(){
+        return this.searchSelfOrChildrenForActionsWithStateCode( 'error' );
+    };
+
+    this.searchSelfOrChildrenForActionsWithStateCode = function( code ){
+        for( var actionId in this.actions){
+            var action = this.actions[ actionId ]
+            if( !action.state || !action.state.code )
+                continue;
+            if( action.state.code == code )
+                return true;
+        }
+        for( var id in this.children ){
+            var child = this.children[ id ];
+            if ( child.searchSelfOrChildrenForActionsWithStateCode( code ))
+                return true;
+        }
+        return false;
     };
 
     this.createJSONObject = function()

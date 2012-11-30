@@ -15,8 +15,8 @@ class Main():
 	   'critical': logging.CRITICAL
 	}
 
-	REQUIRED_ARGUMENTS = ['timeout=', 'trac=', 'log=', 'webPort=', 'mysqlDb=']
-	OPTIONAL_ARGUMENTS = ['logLevel=', 'console', 'mysqlHost=', 'mysqlUser=', 'mysqlPw=']
+	REQUIRED_ARGUMENTS = [ 'timeout=', 'trac=', 'log=', 'webPort='  ]
+	OPTIONAL_ARGUMENTS = [ 'mysqlDb=', 'sqliteDb=', 'logLevel=', 'console', 'mysqlHost=', 'mysqlUser=', 'mysqlPw=' ]
 
 	def __init__(self, argv):
 		# default-timeout: 300
@@ -199,12 +199,6 @@ if __name__=='__main__':
 		sys.stderr.write ('ERROR: At least Python Version 2.6 required!\n')
 		sys.exit(1)
 	
-	try:
-		import MySQLdb
-	except :
-		sys.stderr.write ('ERROR: MySQLdb Driver not found. Try installing python-mysqldb\n')
-		#print ('ERROR: MySQLdb Driver not found. Try installing python-mysqldb')
-		sys.exit(1)
 
 	# import those two after checking for MySQLdb
 	from serverThread import ServerThread

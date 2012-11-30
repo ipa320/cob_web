@@ -52,6 +52,12 @@ div.nav-button span.menu-item-name {
     padding-top: 1px;
     max-width: 110px;
 }
+div.state-warning span.menu-item-name {
+    color: orange;
+}
+div.state-error span.menu-item-name{
+    color: red;
+}
 div.nav-button span.menu-item-name:hover {
     color: #000000;
 }

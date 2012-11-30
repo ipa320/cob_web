@@ -14,18 +14,21 @@ var componentViewCode = '\<h1>Component "<span class="ph_comp-name"></span>"</h1
 				<div class="log-buttons">\
 					<input type="checkbox" class="showLog-button" id="showLog" /><label for="showLog">ShowLog</label>\
 				</div>\
+				<div class="parameters-buttons">\
+				</div>\
 				<div class="actions-buttons"></div>\
 			</div>\
 			<div><table class="componentView-summary" cellspacing="0" cellpadding="0">\
 			</table></div>\
 		</div>\
 		<div class="logView"></div>\
+		<div class="parametersView"></div>\
 	</div>';
 //<a href="javascript:application.editComponent()" class="edit-button">Edit</a><h1>Component "<span class="ph_comp-name"></span>"</h1><div class="actionsView">
 
 $.fn.renderComponentView = function(component, components, options) {
     if (!(component instanceof Component))
-	throw new Error("Render: Argument must be an instance of Component");
+        throw new Error("Render: Argument must be an instance of Component");
 
     // Every component must have a main action
     var mainAction = component.getMainAction();
@@ -45,59 +48,83 @@ $.fn.renderComponentView = function(component, components, options) {
     // entire group
     var groupButtons = this.find('.group-buttons');
     if (!$.isEmptyObject(component.children)) {
-	var startGroup = groupButtons.find('.start-group-button');
-	var stopGroup  = groupButtons.find('.stop-group-button');
+        var startGroup = groupButtons.find('.start-group-button');
+        var stopGroup  = groupButtons.find('.stop-group-button');
+        
+        groupButtons.buttonset();
+        startGroup.button({'icons': { 'primary': 'ui-icon-play'} });
+        stopGroup.button({'icons':  { 'primary': 'ui-icon-stop'} });
 
-	
-	groupButtons.buttonset();
-	startGroup.button({'icons': { 'primary': 'ui-icon-play'} });
-	stopGroup.button({'icons':  { 'primary': 'ui-icon-stop'} });
-
-	startGroup.click(function() { application.startGroup(component.id); });
-	stopGroup.click(function()  { application.stopGroup(component.id); });
+        startGroup.click(function() { application.startGroup(component.id); });
+        stopGroup.click(function()  { application.stopGroup(component.id); });
     }
     else
-	groupButtons.hide();
+        groupButtons.hide();
     
     // append the start/stop buttons for the main action to the button container
-    groupButtons.after(createActionButtons(mainAction));
+    groupButtons.after(createActionButtons(mainAction, component));
     
-
     // Create log buttonset
     this.find(".log-buttons").buttonset();
     var showLogButton = this.find(".showLog-button");
     showLogButton.button({ 'icons': {primary: "ui-icon-document-b" } });
-    
-    // hide the logView at startup
-    this.find(".logView").hide()
+    var logView = this.find(".logView").hide();
+    var toggleLogView = createToggleLogView( logView, component );
+    showLogButton.click( toggleLogView );
+
+    $( '.parametersView' ).hide();
     
 
     // render the buttons
     var actionsButtons = this.find(".actions-buttons");
     for (i in component.actions) {
-	// main action was added already
-	if (component.actions[i] != mainAction)
-	    actionsButtons.append(createActionButtons(component.actions[i]));
+        // main action was added already
+        if (component.actions[i] != mainAction)
+
+            actionsButtons.append(createActionButtons(component.actions[i], component));
     }
     
-    // set the actions for the log Button
-    var logView = this.find(".logView");
-    showLogButton.click(function() { 
-	if (!logView.is(":visible")) {
-	    var setTextCallback = function(html) {
-		logView.setLogContent(html);
-	    };
-	    
-	    logView.show();
-	    logView.renderLogView(component, function(id) { application.loadLog(id, setTextCallback); });
-	}
-	else {
-	    logView.hide();
-	}
-    });
     
     this.updateComponentView(component, components, options);
 };
+
+function createToggleParametersView( action ){
+    return function(){
+        var parametersView = $( '.parametersView' );
+        console.log( 'do it for action: ', action, parametersView.is( ':visible' ) );
+        if( !parametersView.is( ':visible' )){
+            parametersView.show();
+            parametersView.renderParametersView( action.id );
+            var addFieldCallback = function( name, value ){
+                parametersView.addParameterField( name, value );
+            };
+            var finishedCallback = function(){
+                parametersView.parametersLoadedCallback();
+            };
+            application.loadParameters( action, finishedCallback, addFieldCallback );
+        }
+        else{
+            parametersView.hide();
+        }
+    };
+}
+function createToggleLogView( logView, component ){
+    return function(){
+        if (!logView.is(":visible")) {
+            var setTextCallback = function(html) {
+                logView.setLogContent(html);
+            };
+            
+            logView.show();
+            logView.renderLogView(component, function(id) { 
+                application.loadLog(id, setTextCallback); 
+            });
+        }
+        else {
+            logView.hide();
+        }
+    };
+}
 
 $.fn.updateComponentView = function(component, components, options) {
 
@@ -114,48 +141,59 @@ $.fn.updateComponentView = function(component, components, options) {
     
     
     // Render Description
-    var descriptions = {}
+    var descriptions = {},
+        dependencies = [],
+        states = {};
 
-    // Dependency-Array contains a list of object / target relations
-    var dependencies = []
     
     // update all the actions
     for (i in component.actions) {
-	var action = component.actions[i];
-	var id = action.id;
-	if (action.description)
-	    descriptions[action.name] = action.description;
-	
-	// update buttons
-	var startButtons = this.find("#action-buttons-" + id + " .start-buttons");
-	var stopButtons  = this.find("#action-buttons-" + id + " .stop-buttons");
-	if (action.isActive()) {
-	    // need to show start / hide stop buttons ?
-	    if (startButtons.is(':visible')) {
-		startButtons.hide();
-		stopButtons.show();
-		// the ui-state-hover is not removed properly on a mouseout sometimes
-		stopButtons.find('.stop-button', '.kill-button').removeClass('ui-state-hover');
-	    }
-	}
-	else {
-	    if (stopButtons.is(':visible')) {
-		startButtons.show();
-		startButtons.find('.start-button').removeClass('ui-state-hover');
-		stopButtons.hide()
-	    }
-	}
+        var action = component.actions[i];
+        var id = action.id;
+        if (action.description)
+            descriptions[action.name] = action.description;
+        if( action.state )
+            states[ action.name ] = action.state;
+        
+        // update buttons
+        var actionButtons = this.find( '#action-buttons-' + id );
+        var startButtons = actionButtons.find( '.start-buttons' );
+        var stopButtons  = actionButtons.find( '.stop-buttons' );
+        var parametersButton = actionButtons.find( '.parameters-button' );
+        if (action.isActive()) {
+            // need to show start / hide stop buttons ?
+            if (startButtons.is(':visible')) {
+                startButtons.hide();
+                stopButtons.show();
+                // the ui-state-hover is not removed properly on a mouseout sometimes
+                stopButtons.find('.stop-button', '.kill-button').removeClass('ui-state-hover');
+            }
+            parametersButton.button({ 'disabled': true });
+        }
+        else {
+            if (stopButtons.is(':visible')) {
+                startButtons.show();
+                startButtons.find('.start-button').removeClass('ui-state-hover');
+                stopButtons.hide()
+            }
+            parametersButton.button({ 'disabled': false });
+        }
 
-	// append all dependencies to the array
-	for (j in action.dependencies)
-	    dependencies.push({'object': action.id, 'target': action.dependencies[j]});
+        if( !action.parameterFile )
+            parametersButton.hide();
+        if (application.status != application.SERVER_IN_CHARGE) 
+            parametersButton.button({ 'disabled': true });
 
-	
-	// disable the start buton if either the option is set or the action cannot be started at all
-	startButtons.find("a").button({'disabled': !action.canStart() || options['disabled']});
-	
-	// only disable stop button if the action cannot be stopped
-	stopButtons.find(".stop-button").button({'disabled': !action.canStop() || options['disabled']});
+        // append all dependencies to the array
+        for (j in action.dependencies)
+            dependencies.push({'object': action.id, 'target': action.dependencies[j]});
+
+        
+        // disable the start buton if either the option is set or the action cannot be started at all
+        startButtons.find("a").button({'disabled': !action.canStart() || options['disabled']});
+        
+        // only disable stop button if the action cannot be stopped
+        stopButtons.find(".stop-button").button({'disabled': !action.canStop() || options['disabled']});
     }
 
     // those buttons do not depend on any action
@@ -171,6 +209,7 @@ $.fn.updateComponentView = function(component, components, options) {
     this.find('.group-buttons .stop-group-button').button({'disabled': options['disabled'] || !component.hasActiveChild() });
 
     
+    renderStates( table, states );
     renderDescription(table, descriptions);
     renderDependencies(table, dependencies, component);
     
@@ -179,31 +218,61 @@ $.fn.updateComponentView = function(component, components, options) {
     // update the logview if visible
     var logView = this.find(".logView");
     if (logView.is(':visible'))
-	logView.updateLogView(component);
+        logView.updateLogView(component);
 };
+
+function renderStates( container, states )
+{
+    var isFirst = true;
+    
+    for( name in states ){
+        var tr = $( '<tr />' ),
+            myClass = "";
+        
+        if (isFirst) {
+            tr.append("<th>State: </th>");
+            myClass = "ph_action-state";
+        }
+        else {
+            tr.append("<th></th>");
+            myClass = "ph_action-hl ph_action-state";
+        }
+        
+        var state = states[ name ],
+            stateString = '';
+        if( state.code )
+            stateString += '<b>' + states[ name ].code + '</b>';
+        if( state.message )
+            stateString += ': &nbsp;' + state.message;
+
+        tr.append('<td class="' + myClass + '"><span class="name">' + name + ' &raquo; </span>' + stateString + '</td>');
+        
+        isFirst = false;
+        container.append(tr);
+    }
+}
 
 function renderDescription(container, descriptions)
 {
     var isFirst = true;
-    var i = 0;
     
     for (name in descriptions) {
-	var tr = $(document.createElement("tr"));
-	var myClass = "";
-	
-	if (isFirst) {
-	    tr.append("<th>Description: </th>");
-	    myClass = "ph_action-desc";
-	}
-	else {
-	    tr.append("<th></th>");
-	    myClass = "ph_action-hl ph_action-desc";
-	}
-	
-	tr.append('<td class="' + myClass + '"><span class="name">' + name + ' &raquo; </span>' + descriptions[name] + '</td>');
-	
-	isFirst = false;
-	container.append(tr);
+        var tr = $(document.createElement("tr"));
+        var myClass = "";
+        
+        if (isFirst) {
+            tr.append("<th>Description: </th>");
+            myClass = "ph_action-desc";
+        }
+        else {
+            tr.append("<th></th>");
+            myClass = "ph_action-hl ph_action-desc";
+        }
+        
+        tr.append('<td class="' + myClass + '"><span class="name">' + name + ' &raquo; </span>' + descriptions[name] + '</td>');
+        
+        isFirst = false;
+        container.append(tr);
     }
 }
 
@@ -243,17 +312,12 @@ function renderDependencies(container, dependencies, component)
 
 }
 
-function createActionButtons(action, appendName)
+function createActionButtons( action, component )
 {
-    var startText = 'Run';
-    var stopText  = 'Stop';
-    var killText  = 'Kill';
-    
-    if (appendName !== false) {
-	startText += ' ' + action.name;
-	stopText  += ' ' + action.name;
-	killText  += ' ' + action.name;
-    }
+    var startText = 'Run ' + action.name,
+        stopText  = 'Stop ' + action.name,
+        killText  = 'Kill ' + action.name,
+        changeParametersText = 'Parameters for ' + action.name;
     
     // create divs based on the id, not the name because of special chars
     var div = $(document.createElement('div')).attr('id', 'action-buttons-' + action.id);
@@ -265,9 +329,12 @@ function createActionButtons(action, appendName)
     var startButton = $('<a href="#" class="start-button">' + startText + '</a>');
     var stopButton  = $('<a href="#" class="stop-button">'  + stopText  + '</a>');
     var killButton  = $('<a href="#" class="kill-button">'  + killText  + '</a>');
+    //var changeParametersButton = $( '<input type="checkbox" class="changeParameters-button" id="changeParameters-' + action.id + '" /><label for="changeParameters-' + action.id + '">' + changeParametersText + '</label>' );
+    var changeParametersButton = $( '<a href="javascript:void(0)" class="parameters-button">' + changeParametersText + '</a>' );
     startButtons.append(startButton);
     stopButtons.append(stopButton);
     stopButtons.append(killButton);
+    div.append( changeParametersButton );
 
     startButtons.buttonset();
     stopButtons.buttonset();
@@ -275,6 +342,7 @@ function createActionButtons(action, appendName)
     startButton.button({ icons: {primary: "ui-icon-play"} });
     stopButton.button({ icons: {primary: "ui-icon-stop" } });
     killButton.button({ icons: {primary: "ui-icon-notice"} });
+    changeParametersButton.button({ icons: { primary: 'ui-icon-gear' }});
     
     
     // set the buttons' actions
@@ -282,9 +350,11 @@ function createActionButtons(action, appendName)
     stopButton.click(function() { application.stopAction(action.id, action.compId); return false; });
     killButton.click(function() { application.killAction(action.id, action.compId); return false; });
     
+    changeParametersButton.click( createToggleParametersView( action ));
     
     return div;
 }
+
 
 function renderFrames(container, actions)
 {

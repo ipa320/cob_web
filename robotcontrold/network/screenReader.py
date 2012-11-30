@@ -3,12 +3,13 @@ from threading import Thread
 
 class ScreenReader(Thread):
 	
-	def __init__(self, name, channel, log, notifyStop=None, echo=False):
+	def __init__(self, name, channel, log, notifyStop=None, notifyNewline=None, echo=False):
 		Thread.__init__(self)
 		self.name = name
 		self.channel = channel
 		self.log = log
 		self.notifyStop = notifyStop
+		self.notifyNewline = notifyNewline
 
 		self._buffer = 'Idle.'
 
@@ -46,7 +47,6 @@ class ScreenReader(Thread):
 			while self._alive:
 				if self.channel.recv_ready():
 					self.log.debug('ScreenReader received a new line for "%s"' % self.name)
-
 					line = self.channel.recv(1024)
 					if not line: break
 
@@ -54,10 +54,16 @@ class ScreenReader(Thread):
 					if self.echo:
 						print line
 
-					if self._buffer.find('[screen is terminating]') > 0:
+					if self._buffer.find('[screen is terminating]') >= 0:
 						self._alive = False
 						self.channel.close()
 
+					# remove non ascii chars
+					line = "".join(i for i in line if ord(i)<128 )
+					# remove control characters
+					line = re.sub( '.(\r)?\n\x1b\[79C', '', line ) \
+						.replace( '\x1b[A', '' ) \
+						.replace( '\x00', '' )
 
 					self._buffer = re.sub(regex1, '<b>\\1</b>', self._buffer)
 					self._buffer = re.sub(regex2, '', self._buffer, re.DOTALL)
@@ -66,6 +72,8 @@ class ScreenReader(Thread):
 					self._buffer = re.sub(regex5, '', self._buffer)
 					self._buffer = re.sub(regex6, '', self._buffer)
 
+					if self.notifyNewline:
+						self.notifyNewline( self, line )
 
 				else:
 					time.sleep(2)

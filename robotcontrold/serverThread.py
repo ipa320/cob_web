@@ -1,4 +1,5 @@
-import threading, time, MySQLdb, datetime, pickle
+import threading, time, pickle
+from datetime import datetime
 from utils.host import Host
 from utils.actions.action import Action
 from utils.actions.shellCommand import ShellCommand
@@ -21,6 +22,8 @@ class ServerThread(threading.Thread):
         self.hosts = None
         self.conn = None
         self.cursor = None
+        self.cursorLock = threading.Lock()
+        self.sqlPlaceholder = ''
 
         self.users = {}
         self.activeUser = None
@@ -82,8 +85,32 @@ class ServerThread(threading.Thread):
         return max(self.hosts.keys())+1 if len( self.hosts ) else 1
 
 
+    def useMysql( self, args ):
+        return 'mysqlDb' in args
+
+    def useSQLite( self, args ):
+        return 'sqliteDb' in args
 
     def establishDatabaseConnection(self, args=[]):
+        if self.useMysql( args ) and self.useSQLite( args ):
+            raise TypeError( 'You can only use either mysql or sqlite' )
+
+        if self.useMysql( args ):
+            self.establishMysqlConnection( args )
+        elif self.useSQLite( args ):
+            self.establishSQLiteConnection( args )
+        else:
+            raise TypeError( 'Missing mysql/sqlite db parameter' )
+
+
+
+    def establishMysqlConnection( self, args ):
+        try:
+            import iasdfMySQLdb
+        except ImportError,e:
+            raise ImportError( 'Python mysql module "MySQLdb" not found. ' + 
+                'Try installing python-mysqldb' )
+
         if not 'mysqlDb' in args:
             raise TypeError('mysqlDb must be passed as argument')
 
@@ -100,10 +127,48 @@ class ServerThread(threading.Thread):
             mysqlPasswd = args['mysqlPw']
         mysqlDb = args['mysqlDb']
 
-
         self.conn = MySQLdb.connect (host=mysqlHost, user=mysqlUser, passwd=mysqlPasswd, db=mysqlDb)
         self.cursor = self.conn.cursor()
+        self.sqlPlaceholder = '%s'
+        self.ensureTablesInPlace( 'init.mysql' )
 
+
+    def establishSQLiteConnection( self, args ):
+        try:
+            sqliteDb = args[ 'sqliteDb' ]
+        except KeyError,e:
+            raise TypeError('mysqlDb must be passed as argument')
+
+        try:
+            import sqlite3
+        except ImportError,e:
+            raise ImportError( 'Python module "sqlite3" not found.' )
+
+        self.conn = sqlite3.connect( sqliteDb, check_same_thread = False, 
+            isolation_level = None )
+        self.cursor = self.conn.cursor()
+        self.sqlPlaceholder = '?'
+        self.ensureTablesInPlace( 'init.sqlite' )
+
+
+    def ensureTablesInPlace( self, initFile ):
+        statementLines = []
+        with file( initFile, 'r' ) as f:
+            while True:
+                line = f.readline()
+                if not line: break
+                statementLines.append( line )
+                if line.strip() == ')':
+                    statement = ''.join( statementLines )
+                    self.executeSql( statement )
+                    statementLines = []
+
+    def executeSql( self, statement, parameters=None ):
+        with self.cursorLock:
+            if parameters:
+                self.cursor.execute( statement, parameters )
+            else:
+                self.cursor.execute( statement )
 
     def readHosts(self):
         self.log.info('Reading Hosts')
@@ -112,34 +177,34 @@ class ServerThread(threading.Thread):
         self.hosts = {}
 
         sql = 'SELECT `id`, `pickledData` FROM `hosts`'
-        rows = self.cursor.execute(sql)
-        self.log.debug ('%d rows fetched' % rows)
-        while True:
-            row = self.cursor.fetchone()
-            if not row: break
+        with self.cursorLock:
+            self.cursor.execute( sql )
+            while True:
+                row = self.cursor.fetchone()
+                if not row: break
 
-            hostId = int(row[0])
-            host = pickle.loads(row[1])
-            host.initializeUnpickableData(self.log)
-            self.hosts[hostId] = host
-            
+                hostId = int(row[0])
+                host = pickle.loads(row[1])
+                host.initializeUnpickableData(self.log)
+                self.hosts[hostId] = host
+                
     
     def readUsers(self):
         self.log.info('Reading Users')
 
         self.users = {}
         
-        sql = 'SELECT `user_name`, `pickledData` FROM `users`'
-        self.cursor.execute(sql)
-        
-        while True:
-            row = self.cursor.fetchone()
-            if not row: break
+        with self.cursorLock:
+            sql = 'SELECT `user_name`, `pickledData` FROM `users`'
+            self.cursor.execute(sql)
+            while True:
+                row = self.cursor.fetchone()
+                if not row: break
 
-            user = pickle.loads(row[1])
-            user.initializeUnpickableData(self.hosts, self.log)
-            self.users[row[0]] = user
-            self.log.info('User "%s" with components %s loaded' % (user.name, user.getIDs()))
+                user = pickle.loads(row[1])
+                user.initializeUnpickableData(self.hosts, self.log)
+                self.users[row[0]] = user
+                self.log.info('User "%s" with components %s loaded' % (user.name, user.getIDs()))
 
         
     def readReservations(self):
@@ -149,12 +214,21 @@ class ServerThread(threading.Thread):
         
         # prepare the query
         query = 'SELECT `id`, `user`, `start`, `end` FROM  `reservations`'
-        self.cursor.execute(query)
-        results = self.cursor.fetchall()
+        fallbackDateFormat = '%Y-%m-%d %H:%M:%S'
+        with self.cursorLock: 
+            self.cursor.execute(query)
+            results = self.cursor.fetchall()
 
         for row in results:
             user = self.getUserCreateIfNotExistent(row[1])
-            self.reservations[row[0]] = {'user': user, 'start': row[2], 'end': row[3]}
+            start = row[ 2 ]
+            end   = row[ 3 ]
+            if not isinstance( start, datetime ):
+                start = datetime.strptime( start, fallbackDateFormat )
+            if not isinstance( end, datetime ):
+                end = datetime.strptime( end, fallbackDateFormat )
+
+            self.reservations[row[0]] = { 'user': user, 'start': start, 'end': end }
             
         self.log.debug('%d Reservations fetched' % len(self.reservations))
 
@@ -172,7 +246,7 @@ class ServerThread(threading.Thread):
         self.log.info('Disconnecting all Hosts')
         for host in self.hosts.values():
             host.stop()
-            host.join()
+            host.join( 5.0 )
 
 
     # get the user object that belongs to a name
@@ -193,8 +267,9 @@ class ServerThread(threading.Thread):
             
             # update the database
             self.log.debug("Storing new User '%s'" % name)
-            sql = "INSERT INTO `users` (`user_name`, `pickledData`) VALUES (%s,%s)"
-            self.cursor.execute(sql, [name, pickle.dumps(user)])
+            sql = "INSERT INTO `users` (`user_name`, `pickledData`) VALUES (%s,%s)" % ( \
+                ( self.sqlPlaceholder, ) * 2 )
+            self.executeSql(sql, [name, pickle.dumps(user)])
         else:
             user = self.users[name]
         return user
@@ -309,17 +384,17 @@ class ServerThread(threading.Thread):
 
 
     def addReservation(self, user, start_date, end_date):
-        if not isinstance(end_date, datetime.datetime):
+        if not isinstance(end_date, datetime):
             raise ValueError('End Parameter is not an instance of datetime')
-        if not isinstance(start_date, datetime.datetime):
+        if not isinstance(start_date, datetime):
             raise ValueError('Start Parameter is not an instance of datetime')
         
         id = (max(self.reservations.keys())+1) if self.reservations else 1
         self.reservations[id] = {'user': user, 'start': start_date, 'end':end_date}
 
         # update the database
-        query = "INSERT INTO `reservations` (`id`, `user`, `start`, `end`) VALUES(%s, %s, %s, %s)"
-        self.cursor.execute(query, [id, user.name, start_date, end_date])
+        query = "INSERT INTO `reservations` (`id`, `user`, `start`, `end`) VALUES(%s, %s, %s, %s)" % (( self.sqlPlaceholder, ) * 4 )
+        self.executeSql(query, [id, user.name, start_date, end_date])
         return id
         
 
@@ -332,12 +407,12 @@ class ServerThread(threading.Thread):
         del self.reservations[id]
 
         # update the database
-        query = "DELETE FROM `reservations` WHERE `id`=%s"
-        self.cursor.execute(query, [id])
+        query = "DELETE FROM `reservations` WHERE `id`=%s" % self.sqlPlaceholder
+        self.executeSql(query, [id])
 
         
     def extendReservation(self, id, end_date, user):
-        if not isinstance(end_date, datetime.datetime):
+        if not isinstance(end_date, datetime):
             raise ValueError('End Parameter is not an instance of datetime')
         if not id in self.reservations or not self.reservations[id]:
             raise ValueError('Invalid id passed "%s"' % str(id))
@@ -347,11 +422,12 @@ class ServerThread(threading.Thread):
         self.reservations[id]['end'] = end_date
 
         # update the database
-        query = "UPDATE `reservations` SET `end`=%s WHERE id=%s"
-        self.cursor.execute(query, [end_date, id])
+        query = "UPDATE `reservations` SET `end`=%s WHERE id=%s" % ( \
+            ( self.sqlPlaceholder, ) * 2 )
+        self.executeSql(query, [end_date, id])
         
     def getActiveReservation(self):
-        now = datetime.datetime.now()
+        now = datetime.now()
         for reservation in self.reservations.values():
             if reservation['start'] <= now and reservation['end'] > now:
                 return reservation
@@ -374,7 +450,7 @@ class ServerThread(threading.Thread):
                     
                 time.sleep(3)
             except Exception as e:
-                self.log.e (e)
+                self.log.exception( e )
 
         
         self.stop()
@@ -464,6 +540,8 @@ class ServerThread(threading.Thread):
             url           = actionData['url']
             startCommands = actionData['startCommands']
             stopCommands  = actionData['stopCommands']
+            parameterFile = actionData['parameterFile' ]
+            statusFile    = actionData[ 'statusFile' ]
             # compId field is ignored as the action must be part of this component
             
             
@@ -482,6 +560,8 @@ class ServerThread(threading.Thread):
                 autoId = component.getUniqueActionId()
                 
                 action = Action(autoId, aName, {}, {}, description, url, self.log)
+                action.parameterFile = parameterFile
+                action.statusFile = statusFile
                 action.setComponent(component)
                 
                 # remap 
@@ -502,9 +582,9 @@ class ServerThread(threading.Thread):
                 action.name = aName
                 action.description = description
                 action.url = url
+                action.parameterFile = parameterFile
+                action.statusFile = statusFile
 
-                
-                
 
             # Reset all dependencies, those will be set later
             action.resetDependencies()
@@ -626,8 +706,9 @@ class ServerThread(threading.Thread):
     def saveUser(self, user):
         self.log.debug('Saving the user with components %s' % user.getIDs())
         # Now that everything worked out, update the database
-        sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s"
-        return self.cursor.execute(sql, [pickle.dumps(user), user.name])
+        sql = "UPDATE `users` SET `pickledData`=%s WHERE `user_name`=%s" % ( \
+            ( self.sqlPlaceholder, ) * 2 )
+        return self.executeSql(sql, [pickle.dumps(user), user.name])
             
 
     def storeHost(self, id, hostname, username, password, port):
@@ -642,9 +723,9 @@ class ServerThread(threading.Thread):
             self.hosts[id] = host
 
             # update the database
-            sql = "INSERT INTO `hosts` (`id`, `pickledData`) VALUES (%s, %s)"
-            print self.cursor.execute(sql, [host.id, pickle.dumps(host)])
-
+            sql = "INSERT INTO `hosts` (`id`, `pickledData`) VALUES (%s, %s)" % ( \
+                ( self.sqlPlaceholder, ) * 2 )
+            print self.executeSql(sql, [host.id, pickle.dumps(host)])
 
             return host.createJSONObj();
         
@@ -673,8 +754,9 @@ class ServerThread(threading.Thread):
             host.disconnect()
 
             # Update the database
-            sql = "UPDATE `hosts` SET `pickledData`=%s WHERE `id`=%s"
-            self.cursor.execute(sql, [pickle.dumps(host), host.id])
+            sql = "UPDATE `hosts` SET `pickledData`=%s WHERE `id`=%s" % ( \
+                ( self.sqlPlaceholder, ) * 2 )
+            self.executeSql(sql, [pickle.dumps(host), host.id])
 
             
             return host.createJSONObj()
@@ -706,7 +788,7 @@ class ServerThread(threading.Thread):
         screenReader = ScreenReader(self.name, channel, self.log)
         screenReader.start()        
         channel.send( command )
-        screenReader.join()
+        screenReader.join( 60.0 )
         log = screenReader.getBuffer()
 
         self.log.info( 'Package %s installed' % package )
@@ -721,7 +803,7 @@ class ServerThread(threading.Thread):
         screenReader = ScreenReader(self.name, channel, self.log)
         screenReader.start()        
         channel.send( command )
-        screenReader.join()
+        screenReader.join( 30.0 )
         output = screenReader.getBuffer()
         startCommand = startScript if output.find( 'Start0' ) >= 0 else ''
         stopCommand  = stopScript  if output.find( 'Stop0'  ) >= 0 else ''
@@ -738,3 +820,45 @@ class ServerThread(threading.Thread):
             user = self.getUserCreateIfNotExistent(username)
             user.setPrivileges(int(options[username]))
             self.saveUser(user)
+
+    def loadParameters( self, component, action ):
+        host = component.host
+        channel = host.invokeShell()
+        channel.send( 'screen -S load_parameters\r\n' )
+        screenReader = ScreenReader( 'load_parameters', channel, self.log )
+        screenReader.start()
+
+        channel.send( action.parameterFile + ' load\r\n' )
+        channel.send( 'exit\r\n' )
+        screenReader.join( 15.0 )
+        rawData = screenReader.getBuffer()
+        try:
+            start = rawData.lower().index( '<configuration>' )
+            end = rawData.lower().index( '</configuration>' ) + len( '</configuration>' )
+            return rawData[ start:end ]
+        except ValueError,e:
+            raise ValueError( 'Invalid xml format' )
+
+
+    def saveParameters( self, component, action, data ):
+        host = component.host
+        channel = host.invokeShell()
+        channel.send( 'screen -S save_parameters\r\n' )
+        screenReader = ScreenReader( 'save_parameters', channel, self.log )
+        screenReader.start()
+
+        xml = '<configuration>'
+        nodes = []
+        for key,value in data.iteritems():
+            nodes.append( '<param name="%s" value="%s" />' % (
+                key.replace( '"', '\\"' ).replace( "'", "\\'" ),
+                value.replace( '"', '\\"' ).replace( "'", "\\'" )))
+        xml += ''.join( nodes )
+        xml += '</configuration>'
+
+        channel.send( action.parameterFile + " save '%s'\r\n" % xml  )
+        channel.send( 'exit\r\n' )
+        screenReader.join( 10.0 )
+        rawData = screenReader.getBuffer()
+
+        return True

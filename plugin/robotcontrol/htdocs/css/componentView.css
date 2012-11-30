@@ -177,7 +177,7 @@ td.ph_action-dep a.notRunning {
  * iframe
  */
 div.iframe {
-	height: 500px;
+	height: 1000px;;
 	margin-top: 30px;
 }
 div.iframe iframe {

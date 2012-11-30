@@ -255,19 +255,55 @@ class MyHandler(BaseHTTPRequestHandler):
                         timestamp = int(args[2])
                         data = EventHistory.getEventData(timestamp)
                         #TODO: use json dump
-                        output = '{"timestamp": "%d", "events": [' % int(time.time())
-                        for item in data:
-                            if item['type'] == EventHistory.ACTION_STATUS_EVENT:
-                                output += '\n\t{"type": %d, "id": %d, "comp": %d, "status": %d, "ts": %d},' % (item['type'], item['id'], item['comp'], item['status'], item['stamp'])
-                            if item['type'] == EventHistory.HOST_EVENT:
-                                output += '\n\t{"type": %d, "id": %d, "status": %d, "ts": %d},' % (item['type'], item['id'], item['status'], item['stamp'])
-                        output = output.strip(',') + '\n]}'
+                        outputObject = { "timestamp": time.time(), "events": data }
+                        output = json.dumps( outputObject )
                         
                         
                     else:
                         raise ArgumentRequestError('Invalid Argument for data "%s". ' % str(args[1]), self.path)
                 
+                
+                elif action == 'parameters':
+                    # you must be in charge
+                    if not auth['status'] == WebServer.SERVER_IN_CHARGE:
+                        raise UnauthorizedRequestError('You are not in charge.', self.path)
+                    try:
+                        command = args[ 1 ]
+                        compId = int( args[ 2 ])
+                        actionId = int( args[ 3 ]) 
+                    except ( ValueError, KeyError, IndexError ) as e:
+                        raise ArgumentRequestError( 'Wrong format for parameter', self.path )
+                    if command not in ( 'load', 'save' ):
+                        raise ArgumentRequestError( 'Wrong command type', self.path )
 
+
+                    comp = activeUser.get(compId)
+                    if not comp:
+                        raise ArgumentRequestError('Component with id "%d" not found' % compId, self.path)
+                    action = comp.getAction(actionId)
+                    if not action:
+                        raise ArgumentRequestError('Action "%d" for component "%d, %s" not found.' % (actionId, compId, comp.getName()), self.path)
+
+
+                    if command == 'load':
+                        parameters = serverThread.loadParameters( comp, action )
+                        output = parameters
+
+
+                    if command == 'save':
+                        try:
+                            data = json.loads( options['json'] )
+                        except KeyError, e:
+                            raise ArgumentRequestError( 'Data Field missing', self.path  )
+                        except ValueError, e:
+                            raise ArgumentRequestError('Could not decode json Object:\n%s' % options['json'], self.path)
+                        if serverThread.saveParameters( comp, action, data ):
+                            output = '{"success": true}'
+                        else:
+                            output = '{"success": false}'
+
+
+                
                 # Start/Stop/Kill/Request status of an action
                 elif action == 'exec':
                     # you must be in charge
