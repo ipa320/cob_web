@@ -1,0 +1,98 @@
+.actionEditView {
+	margin-bottom: 15px;
+}
+.actionEditView-content {
+	height: 600px;
+}
+
+#component .ui-accordion-header {
+	-moz-border-radius: 3px 3px 0px 0px;
+}
+/*
+ * end
+ */
+
+.actionEditView-text {
+/*	padding: 40px 0 0 0 ;*/
+	width: 100%;
+	padding: 5px 0 0;
+	margin-bottom: 50px;
+}
+.actionEditView table {
+	width: 100%
+}
+.actionEditView tr th, tr td {
+	vertical-align: top;
+}
+.actionEditView tr th {
+	padding: 4px 10px;
+	text-align: left;
+	width: 100px;
+}
+.actionEditView tr td {
+	padding: 4px 100px 4px 15px;
+}
+.actionEditView tr.odd td, tr.odd th {
+	background-color: #cccccc;
+}
+.actionEditView tr.even td, tr.even th {
+/*	background-color: #cdcdcd;*/
+}
+td.ph_action_edit-dep {
+	line-height: 1.7;
+}
+td.ph_action_edit-dep span.ui-icon {
+	float: left;
+	margin-right: 5px;
+}
+td.ph_action_edit-dep a {
+	font-weight: bold;
+	text-decoration: none;
+}
+td.ph_action_edit-dep a.running {
+/*	color: green;*/
+	color: #888;
+}
+td.ph_action_edit-dep a.notRunning {
+/*	color: red;*/
+	color: #888;
+}
+
+.actionEditView input {
+	width: 100%;
+}
+.actionEditView textarea {
+	width: 100%;
+}
+.actionEditView select {
+	width: 100%;
+}
+
+
+.shellCommandsEditView h4 {
+	background-color: #DDDDDD;
+	font-size: 14px;
+	padding: 10px;
+	-moz-border-radius: 6px;
+	margin-bottom: 10px;
+}
+.shellStartCommandsEditView {
+	margin-bottom: 80px;
+}
+.editShellCommand div.buttons {
+	float: left;
+	margin: 15px 15px 0 0;
+}
+.editShellCommand div.options {
+	float: right;
+	text-align: center;
+	font-weight: bold;
+	padding-top: 6px;
+}
+.editShellCommand {
+	margin-left: 10px;
+}
+.editShellCommand textarea {
+	width: 80%;
+	height: 60px;
+}

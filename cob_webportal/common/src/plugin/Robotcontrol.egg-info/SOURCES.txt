@@ -1,9 +1,0 @@
-setup.py
-Robotcontrol.egg-info/PKG-INFO
-Robotcontrol.egg-info/SOURCES.txt
-Robotcontrol.egg-info/dependency_links.txt
-Robotcontrol.egg-info/entry_points.txt
-Robotcontrol.egg-info/top_level.txt
-robotcontrol/index.py
-robotcontrol/privileges.py
-robotcontrol/robotcontrol.py
