@@ -90,9 +90,20 @@ class MyHandler(BaseHTTPRequestHandler):
             try:
                 auth = None
                 if self.headers.has_key('Authorization'):
+                    userPass = None
                     auth = {'token': str(self.headers['Authorization'])}
-                    # remove the leading "Basic " before splitting into user/pass
-                    userPass = base64.b64decode(auth['token'][6:]).split(':')
+                    if auth[ 'token' ].lower().startswith( 'basic' ):
+                        # remove the leading "Basic " before splitting into user/pass
+                        userPass = base64.b64decode(auth['token'][6:]).split(':')
+                    elif auth[ 'token' ].lower().startswith( 'localhost' ):
+                        host, port = self.client_address
+                        if  host != 'localhost' and host != '127.0.0.1':
+                            raise UnauthorizedRequestError( 'Only allowed by localhost', self.path )
+                        name = auth[ 'token' ][ 10: ]
+                        userPass = [ name, '' ]
+                    else:
+                        raise UnauthorizedRequestError( 'Illegal token: %s' % auth[ 'token' ], self.path) 
+
                     if len(userPass) != 2:
                         auth = None
                         self.server.log.warn('Invalid Authorization Header: %s', str(self.headers['Authorization']))
@@ -106,6 +117,7 @@ class MyHandler(BaseHTTPRequestHandler):
                             auth['status'] = WebServer.SERVER_IN_CHARGE
                         else:
                             auth['status'] = WebServer.SERVER_NOT_AVAILABLE
+                    
                 
                 # if no auth was sent, return an 401 Unauthorized
                 if not auth:
