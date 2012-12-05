@@ -929,105 +929,105 @@ var application = new (function() {
     
     this.reloadComponents = function(selectId)
     {
-	try {
-	    // if nothing was passed for selectId, use the current id
-	    if (selectId === undefined) {
-	    	if (this.selectedComponent)
-			selectId = this.selectedComponent.id;
-		else
-			selectId = null;
-	    }
-	    
-	    // reload all components
-	    var compDataSuccess = function(data) {
-		// when the comp data is successfully loaded and parsed,
-		// unlock the application and update the views
-		var handler = {
-		    'success': function() { application.reloadComponentsSuccess(selectId); },
-		    'error': function(msg) { alert(msg); }
-		};
-		application.compDataSuccess(data, handler);
-	    };
-	    this.loadCompData(compDataSuccess, application.saveComponentError);
-	}
-	catch (err) {
-	    alert("Error occured updating the component: \n" + err);
-	    console.log(err);
-	}
+        try {
+            // if nothing was passed for selectId, use the current id
+            if (selectId === undefined) {
+                if (this.selectedComponent)
+                    selectId = this.selectedComponent.id;
+                else
+                    selectId = null;
+            }
+
+            // reload all components
+            var compDataSuccess = function(data) {
+                // when the comp data is successfully loaded and parsed,
+                // unlock the application and update the views
+                var handler = {
+                    'success': function() { application.reloadComponentsSuccess(selectId); },
+                    'error': function(msg) { alert(msg); }
+                };
+                application.compDataSuccess(data, handler);
+            };
+            this.loadCompData(compDataSuccess, application.saveComponentError);
+        }
+        catch (err) {
+            alert("Error occured updating the component: \n" + err);
+            console.log(err);
+        }
     }
     this.saveComponentError = function(data) {
-		alert('Component could not be updated [' + data.status + '; ' + data.responseText + ']');
-    }
-    this.reloadComponentsSuccess = function(selectId) {
-	screenManager.unlockLocation();
-	// we must reselect, since the objects were recreated
-	this.select(selectId);
+        alert('Component could not be updated [' + data.status + '; ' + data.responseText + ']');
+        }
+        this.reloadComponentsSuccess = function(selectId) {
+        screenManager.unlockLocation();
+        // we must reselect, since the objects were recreated
+        this.select(selectId);
     };
 
     
     this.deleteComponent = function()
     {
-	try {
-	    // if the location is locked, do not allow to change location
-	    if (screenManager.isLockedLocation())
-		return;
-	    
-	    // if no component is selected, simply return
-	    if (!this.selectedComponent)
-		return;
+        try {
+            // if the location is locked, do not allow to change location
+            if (screenManager.isLockedLocation())
+            return;
+            
+            // if no component is selected, simply return
+            if (!this.selectedComponent)
+            return;
 
-    	    if (this.selectedComponent.actionsRunning()) {
-		alert('The current component is still running. Please stop it first');
-		return;
-	    }
+                if (this.selectedComponent.actionsRunning()) {
+            alert('The current component is still running. Please stop it first');
+            return;
+            }
 
-	    	    
-	    // send a request to the server
-	    var compId = this.selectedComponent.id;
-	    $.ajax({
-		url: this.urlPrefix + '/delete/' + compId,
-		dataType: 'text',
-		success: function(data) { application.reloadComponents(null) },
-		error:   function(data) { application.deleteComponentError(data) }
-	    });
-	}
-	catch (err) {
-	    alert("Error occured trying to delete the component:\n" + err);
-	}
+                    
+            // send a request to the server
+            var compId = this.selectedComponent.id;
+            $.ajax({
+            url: this.urlPrefix + '/delete/' + compId,
+            dataType: 'text',
+            success: function(data) { application.reloadComponents(null) },
+            error:   function(data) { application.deleteComponentError(data) }
+            });
+        }
+        catch (err) {
+            alert("Error occured trying to delete the component:\n" + err);
+        }
     }
 
     this.deleteComponentError = function(data) {
-	alert('Component could not be deleted [' + data.status + '; ' + data.responseText + ']');
+        alert('Component could not be deleted [' + data.status + '; ' + data.responseText + ']');
     }
 	
     // used to load the log file
     this.loadLog = function(actionId, callback) 
     {
-	try {
-	    // if the location is locked, do not allow to change location
-	    if (screenManager.isLockedLocation())
-		return;
-				
-	    // if no component is selected, simply return
-	    if (!this.selectedComponent)
-		return;
-				
-	    var compId = this.selectedComponent.id;
-	    // send a request to the server
-	    var compId = this.selectedComponent.id;
-	    $.ajax({
-		url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/status',
-		dataType: 'text',
-		success: function(data) { if(application.selectedComponent && compId == application.selectedComponent.id) callback(data); },
-		error:   function(data) { application.loadLogError(data); }
-	    });
-	}
-	catch (err) {
-	    alert("Error occured trying to load the component's logfiles:\n" + err);
-	}
+        try {
+            // if the location is locked, do not allow to change location
+            if (screenManager.isLockedLocation())
+                return;
+                    
+            // if no component is selected, simply return
+            if (!this.selectedComponent)
+                return;
+                    
+            var compId = this.selectedComponent.id;
+            // send a request to the server
+            var compId = this.selectedComponent.id;
+            $.ajax({
+                url: this.urlPrefix + '/exec/' + compId + '/' + actionId + '/status',
+                dataType: 'text',
+                success: function(data) { if(application.selectedComponent && compId == application.selectedComponent.id) callback(data); },
+                error:   function(data) { application.loadLogError(data); }
+            });
+        }
+        catch (err) {
+            alert("Error occured trying to load the component's logfiles:\n" + err);
+        }
     }
     this.loadLogError = function(data) {
-	alert('Component\'s logfiles could not be loaded [' + data.status + '; ' + data.responseText + ']');
+        alert('Component\'s logfiles could not be loaded [' + data.status + '; ' + data.responseText + ']');
     }
 
     this.hostManager = function()
@@ -1200,7 +1200,7 @@ var application = new (function() {
         });
     };
     this.saveParametersError = function( data ){
-        alert('Parameters could ould not be saved [' + data.status + '; ' + data.responseText + ']');
+        alert('Parameters could not be saved [' + data.status + '; ' + data.responseText + ']');
     };
     
 })();

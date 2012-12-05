@@ -304,7 +304,9 @@ class MyHandler(BaseHTTPRequestHandler):
 
                     if command == 'save':
                         try:
+                            print options[ 'json' ]
                             data = json.loads( options['json'] )
+                            print data
                         except KeyError, e:
                             raise ArgumentRequestError( 'Data Field missing', self.path  )
                         except ValueError, e:

@@ -45,7 +45,7 @@ class ServerThread(threading.Thread):
         self.startAllHosts()
         
         # quit all components that might be running
-        self.forceTerminateAllComponents()
+        #self.forceTerminateAllComponents()
     
     
 
@@ -72,7 +72,10 @@ class ServerThread(threading.Thread):
                 except Exception as e: pass
 
 
-            self.forceTerminateAllComponents()
+            # self.forceTerminateAllComponents could be used as well but takes 
+            # much longer
+            if self.activeUser:
+                self.terminateAllComponents( self.activeUser )
             self.stopAllHosts()
 
             self.alive = False
@@ -295,11 +298,11 @@ class ServerThread(threading.Thread):
 
         if self.activeUser:
             self.log.info('Logging current user out: %s' % self.activeUser.name)
+            self.terminateAllComponents( self.activeUser )
 
         if user:
             self.log.info('Preparing the Server for new user: %s' % username)
 
-        self.forceTerminateAllComponents()
         
         # Clear the eventHistory
         EventHistory.clear()
@@ -840,6 +843,19 @@ class ServerThread(threading.Thread):
             raise ValueError( 'Invalid xml format' )
 
 
+    def escapeXMLValue( self, value ):
+        escape_codes = { 
+            '"': '&quot;',
+            "'": '&apos;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '&': '&amp;'
+        };
+        escaped_value = value
+        for key, escaped_key in escape_codes.iteritems():
+            escaped_value = escaped_value.replace( key, escaped_key )
+        return escaped_value
+
     def saveParameters( self, component, action, data ):
         host = component.host
         channel = host.invokeShell()
@@ -850,13 +866,14 @@ class ServerThread(threading.Thread):
         xml = '<configuration>'
         nodes = []
         for key,value in data.iteritems():
-            nodes.append( '<param name="%s" value="%s" />' % (
-                key.replace( '"', '\\"' ).replace( "'", "\\'" ),
-                value.replace( '"', '\\"' ).replace( "'", "\\'" )))
+            nodes.append( '<param name=\\"%s\\" value=\\"%s\\" />' % (
+                self.escapeXMLValue( key ), self.escapeXMLValue( value )))
         xml += ''.join( nodes )
         xml += '</configuration>'
 
-        channel.send( action.parameterFile + " save '%s'\r\n" % xml  )
+        command = action.parameterFile + ' save "%s"\r\n' % xml
+        self.log.debug( 'Sending command %s' % command )
+        channel.send( command )
         channel.send( 'exit\r\n' )
         screenReader.join( 10.0 )
         rawData = screenReader.getBuffer()
