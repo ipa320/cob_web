@@ -38,21 +38,40 @@ $.fn.renderLogView = function(component, callbackOnClick)
     };
 
     for (var actionId in component.actions) {
-	var action = component.actions[actionId];
-	var actionClass = "log-tab-action-" + action.id;
-			
-	if (component.getMainAction().id == actionId)
-	    actionClass += " actionSelected";
-		
-	var li = $('<li class="' + actionClass + '"><span class="ui-icon"></span><span class="actionName">' + action.name + "</span></li>");
-	ul.append(li);
+        var action = component.actions[actionId];
+        var actionClass = "log-tab-action-" + action.id;
+                
+        if (component.getMainAction().id == actionId)
+            actionClass += " actionSelected";
+            
+        var li = $('<li class="' + actionClass + '"><span class="ui-icon"></span><span class="actionName">' + action.name + "</span></li>");
+        ul.append(li);
 
-	li.click(liClickAction(action.id, li));
+        li.click(liClickAction(action.id, li));
     }
 
 
     this.setLogContent = function(html) {
-	logContent.html(html);
+        logContent.text(html);
+        var escaped_html = logContent.html();
+
+        var replacements = {
+            '%br%':      '<br />',
+            '%bold%':    '<b>',
+            '%/bold%':   '</b>',
+            '%red%':     '<span style="color:red"><b>',
+            '%/red%':    '</b></span>',
+            '%yellow%':  '<span style="color:yellow"><b>',
+            '%/yellow%': '</b></span>'
+        };
+
+        for( var key in replacements ){
+           var regex = new RegExp( key, 'g' );
+           escaped_html = escaped_html.replace( regex, replacements[ key ]);
+       }
+
+        logContent.html( escaped_html );
+        logContent.scrollTop( logContent[ 0 ].scrollHeight );
     };
 
     this.updateLogView(component);

@@ -66,10 +66,10 @@ class ScreenReader(Thread):
 						.replace( '\x1b[A', '' ) \
 						.replace( '\x00', '' )
 
-					self._buffer = re.sub(regex1, '<b>\\1</b>', self._buffer)
+					self._buffer = re.sub(regex1, '%bold%\\1%/bold%', self._buffer)
 					self._buffer = re.sub(regex2, '', self._buffer, re.DOTALL)
-					self._buffer = re.sub(regex3, '<font color="red"><b>\\1</b></font>', self._buffer)
-					self._buffer = re.sub(regex4, '<font color="yellow"><b>\\1</b></font>', self._buffer);
+					self._buffer = re.sub(regex3, '%red%\\1%/red%', self._buffer)
+					self._buffer = re.sub(regex4, '%yellow%\\1%/yellow%', self._buffer);
 					self._buffer = re.sub(regex5, '', self._buffer)
 					self._buffer = re.sub(regex6, '', self._buffer)
 

@@ -318,7 +318,7 @@ class Action():
 		text = ''
 		for reader in self.screenReaders['show']:
 			#			text += 'Name: <b>%s</b><hr />' % reader.name
-			text += reader.getBuffer().replace('\r\n', '<br />').replace('\n', '<br />')
+			text += reader.getBuffer().replace('\r\n', '%br%').replace('\n', '%br%')
 			text += '<hr />'
 
 		text = text.strip('<hr />')
