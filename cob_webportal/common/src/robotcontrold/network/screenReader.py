@@ -12,6 +12,7 @@ class ScreenReader(Thread):
 		self.notifyNewline = notifyNewline
 
 		self._buffer = 'Idle.'
+		self.log.debug( 'New Screenreader "%s", notifyStop: %s %s ' % ( self.name, 'True' if self.notifyStop else 'False', self.notifyStop ) )
 
 		self._alive = False
 
@@ -82,5 +83,6 @@ class ScreenReader(Thread):
 		finally:
 			self.log.debug('ScreenReader "%s" finished' % self.name)
 			self._alive = False
+			self.log.debug( 'Notify parent of "%s": %s' % ( self.name, 'True' if self.notifyStop else 'False' ))
 			if self.notifyStop:
 				self.notifyStop(self)

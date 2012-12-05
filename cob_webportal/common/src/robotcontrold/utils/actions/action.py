@@ -94,6 +94,7 @@ class Action():
 		self._stopCommands[cmd.id] = cmd
 
 	def screenReaderStopped(self, reader):
+		self.log.debug( 'Screenreader stopped %s' % reader.name )
 		if not self.component:
 			raise AttributeError('Component is not set')
 		
@@ -131,7 +132,8 @@ class Action():
 				hideLog = cmd.hideLog
 				self.startChannels.append(channel)
 
-				screenReader = ScreenReader(self.name, channel, self.log, notifyStop=self.screenReaderStopped)
+				screen_name = self.name + '_run'
+				screenReader = ScreenReader( screen_name, channel, self.log, notifyStop=self.screenReaderStopped)
 				self.screenReaders['hide' if hideLog else 'show'].append(screenReader)
 				screenReader.start()
 
@@ -176,7 +178,8 @@ class Action():
 				
 				self.log.debug('Running stop command "%s" by Action "%s"' % (command.replace('\n','\\n'), self.name))
 
-				screenReader = ScreenReader(self.name, channel, self.log, notifyStop=self.screenReaderStopped)
+				screen_name = self.name + '_stop'
+				screenReader = ScreenReader( screen_name, channel, self.log, notifyStop=self.screenReaderStopped)
 				self.screenReaders['hide' if hideLog else 'show'].append(screenReader)
 				screenReader.start()
 			
@@ -210,8 +213,9 @@ class Action():
 
 		self.log.debug('Constantly checking file "%s" for Action "%s"' % (self.statusFile, self.name))
 
-		screenReader = ScreenReader( self.name, self.stateChannel, self.log, 
-			notifyNewline=self.notifyNewStatusLine )
+		screen_name = self.name + '_watchdog'
+		screenReader = ScreenReader( screen_name, self.stateChannel, self.log, 
+			notifyNewline=self.notifyNewStatusLine, notifyStop=self.screenReaderStopped )
 		self.screenReaders[ 'show' ].append( screenReader )
 		screenReader.start()
 	
@@ -278,6 +282,7 @@ class Action():
 				if reader and reader.isAlive():
 					self.log.debug('Action "%s"::kill joined the screenReader Thread. Waiting for it to finish' % self.name)
 					reader.join( 5.0 )
+				print reader._buffer.find( 'screen is terminating' )
 
 			return True
 		else:
