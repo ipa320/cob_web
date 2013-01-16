@@ -82,7 +82,7 @@ class ServerThread(threading.Thread):
 
     def kill( self ):
         path = os.path.abspath( os.path.dirname( __file__ ))
-        cmd = path + '/stopServer.bash'
+        cmd = path + '/killServer.bash'
         print cmd
         return subprocess.call( cmd ) == 0
 
