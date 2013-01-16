@@ -4,6 +4,7 @@ if( !console.log )
     console.log = function(){}
 
 var application = new (function() {
+    this.serverShutdown = false;
     this.SERVER_AVAILABLE = 1;
     this.SERVER_IN_CHARGE = 2;
     this.SERVER_NOT_AVAILABLE = -1;
@@ -30,7 +31,7 @@ var application = new (function() {
     this._nextTempId=-1;
     
     this.getUniqueTemporaryId = function() {
-	return this._nextTempId--;
+        return this._nextTempId--;
     }
     
     
@@ -119,12 +120,12 @@ var application = new (function() {
 	var onReservationSuccess = function(data) {
 	    application.reservationDataSuccess(data, handler);
 
-    	    if (application.status == application.SERVER_IN_CHARGE) {
-		application.loadEventHistoryData(onEventHistorySuccess, onEventHistoryError);
-	    }
-	    else {
-		handler.success('Skipping History Data');
-		application.finalApplicationInitialization(handler);
+        if (application.status == application.SERVER_IN_CHARGE) {
+            application.loadEventHistoryData(onEventHistorySuccess, onEventHistoryError);
+        }
+        else {
+            handler.success('Skipping History Data');
+            application.finalApplicationInitialization(handler);
 	    }
 	};
 	var onReservationError = function(data) {
@@ -135,6 +136,8 @@ var application = new (function() {
 	    application.finalApplicationInitialization(handler);
 	};
 	var onEventHistoryError = function(data) {
+        if( application.serverShutdown )
+            return;
 	    application.eventHistoryDataError(data, handler);
 	};
 	    
@@ -307,13 +310,17 @@ var application = new (function() {
 	 * only load data if we're in charge. Otherwise skip this step
 	 */
     this.loadEventHistoryData = function(callbackSuccess, callbackError) {
-	$.ajax({
-	    url: this.urlPrefix + '/data/eventHistory/0',
-	    success: callbackSuccess,
-	    error:   callbackError || function() {}
-	});
+        if( application.serverShutdown )
+            return;
+        $.ajax({
+            url: this.urlPrefix + '/data/eventHistory/0',
+            success: callbackSuccess,
+            error:   callbackError || function() {}
+        });
     }
     this.eventHistoryDataSuccess = function(data, handler) {
+        if( application.serverShutdown )
+            return;
         try {
             this.processEventHistoryData(data);
             handler.success('Event History Data Received');
@@ -510,22 +517,28 @@ var application = new (function() {
     this.updateEventHistoryError = function(data) {
 	// check status for 401
 	if (data.status == 401) {
+        if( application.serverShutdown )
+            return;
+
 	    // lock the screen
 	    screenManager.lockDisplay(new WaitDialogView())
 	    
 	    // request the status data and check whether owner changed
 	    $.ajax({
-		url: this.urlPrefix + '/status',
-		success: function(statusData) { 
-		    if (statusData.status != this.SERVER_IN_CHARGE) {
-			screenManager.unlock();
-			screenManager.lockDisplay(new OwnerChangedDialogView())
-		    }
-		    else
-			alert('Event History Data could not be loaded: 401 Unauthorized. Yet still in charge of the server [' + data.responseText + ']');
-		},
-		error:  function(data) { alert('Event History Data could not be loaded: 401 Unauthorized. Server Status could not be requested either [' + data.status + '; ' + data.responseText + ']'); }
-	    });
+            url: this.urlPrefix + '/status',
+            success: function(statusData) { 
+                if (statusData.status != this.SERVER_IN_CHARGE) {
+                    screenManager.unlock();
+                    screenManager.lockDisplay(new OwnerChangedDialogView())
+                }
+                else
+                    alert('Event History Data could not be loaded: 401 Unauthorized. Yet still in charge of the server [' + data.responseText + ']');
+            },
+            error:  function(data) { 
+                if( application.serverShutdown )
+                    return;
+                alert('Event History Data could not be loaded: 401 Unauthorized. Server Status could not be requested either [' + data.status + '; ' + data.responseText + ']'); }
+            });
 	}
 	else
 	    alert('Event History Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
@@ -559,7 +572,9 @@ var application = new (function() {
 	}
     }
     this.checkServerStatusChangedError = function(data) {
-	alert('Server Status Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
+        if( application.serverShutdown )
+            return;
+        alert('Server Status Data could not be loaded [' + data.status + '; ' + data.responseText + ']');
     }
     
     
@@ -1202,5 +1217,25 @@ var application = new (function() {
     this.saveParametersError = function( data ){
         alert('Parameters could not be saved [' + data.status + '; ' + data.responseText + ']');
     };
+
+    this.killServer = function(){
+        application.serverShutdown = true;
+        $.ajax({ 
+            url: this.urlPrefix + '/kill',
+            success: this.killServerSuccess,
+            error: this.killServerError,
+            dataType: 'json'
+        });
+    };
+
+    this.killServerSuccess = function( ){
+        alert( 'Could not shut down the server for an unknown reason. Please refresh this webpage. If the problem persists please kill the robotcontrold screen' );
+    }
+    this.killServerError = function( data ){
+        if( data.status == 503 )
+            alert( 'Server successfully shut down' );
+        else
+            alert( 'Server returned unexpected error status: ' + data.status );
+    }
     
 })();

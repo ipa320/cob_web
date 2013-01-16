@@ -1,4 +1,4 @@
-import threading, time, pickle, os, sys
+import threading, time, pickle, os, sys, subprocess
 from datetime import datetime
 from utils.host import Host
 from utils.actions.action import Action
@@ -79,6 +79,12 @@ class ServerThread(threading.Thread):
             self.stopAllHosts()
 
             self.alive = False
+
+    def kill( self ):
+        path = os.path.abspath( os.path.dirname( __file__ ))
+        cmd = path + '/stopServer.bash'
+        print cmd
+        return subprocess.call( cmd ) == 0
 
     def isAlive(self):
         return self.alive

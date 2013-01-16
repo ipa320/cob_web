@@ -136,7 +136,6 @@ class RobotcontrolPlugin(Component):
             'COMP_ADMIN': self.hasPrivilege(myPrivileges, privileges.COMP_ADMIN),
             'HOST_ADMIN': self.hasPrivilege(myPrivileges, privileges.HOST_ADMIN),
             'PRIV_ADMIN': self.hasPrivilege(myPrivileges, privileges.PRIV_ADMIN),
-            'PRIV_ADMIN': self.hasPrivilege(myPrivileges, privileges.PRIV_ADMIN),
             'username':   self.getUsername( req )
         }
 

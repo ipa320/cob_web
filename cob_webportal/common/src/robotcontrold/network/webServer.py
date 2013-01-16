@@ -546,6 +546,12 @@ class MyHandler(BaseHTTPRequestHandler):
                     elif args[ 1 ] == 'get':
                         output = json.dumps( requestUser.globalVars )
 
+                elif action == 'kill':
+                    if not requestUser.hasPrivilege( privileges.PRIV_ADMIN ):
+                        raise UnauthorizedRequestError( 'You have no privileges to stop the server' )
+                    success = serverThread.kill()
+                    output = json.dumps({ 'success': success })
+
                 else:
                     raise UnknownRequestError('Unknown request. Args: %s.' % str(args), self.path)
                 
