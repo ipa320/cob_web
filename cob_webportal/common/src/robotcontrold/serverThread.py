@@ -1,4 +1,4 @@
-import threading, time, pickle
+import threading, time, pickle, os, sys
 from datetime import datetime
 from utils.host import Host
 from utils.actions.action import Action
@@ -151,7 +151,8 @@ class ServerThread(threading.Thread):
             isolation_level = None )
         self.cursor = self.conn.cursor()
         self.sqlPlaceholder = '?'
-        self.ensureTablesInPlace( 'init.sqlite' )
+        path = os.path.dirname( __file__ )
+        self.ensureTablesInPlace( path + '/init.sqlite' )
 
 
     def ensureTablesInPlace( self, initFile ):
