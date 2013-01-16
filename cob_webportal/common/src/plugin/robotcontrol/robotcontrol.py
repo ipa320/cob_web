@@ -5,7 +5,7 @@ from trac.web.main import IRequestHandler
 from trac.util import escape, Markup
 from genshi.builder import tag
 import re, sqlite3, json, base64
-
+import subprocess
 
 
 
@@ -68,8 +68,18 @@ class RobotcontrolPlugin(Component):
             return int( response.read()) 
 
         except urllib2.HTTPError,e:    
-            raise Exception( 'No Background Server running at %s. Using auth_string: %s / auth_name: %s. Error Code: %s' % ( bs_url, auth_string, auth_name, e.code ))
+            if e.code == 503:
+                result = self.tryStartingServer()
+                import getpass
+                raise StartingServerException( 'Server booting up %s: %s ' % ( getpass.getuser(), result ))
 
+            else:
+                raise Exception( 'No Background Server running at %s. Using auth_string: %s / auth_name: %s. Error Code: %s' % ( bs_url, auth_string, auth_name, e.code ))
+
+    def tryStartingServer( self ):
+        cmd = '/home/webportal/trac/cob_web/cob_webportal/common/src/robotcontrold/startServer.bash'
+        return subprocess.call( cmd )
+        
     def hasPrivilege(self, privileges, bitmask):
         return (privileges & bitmask) == bitmask
 
@@ -117,7 +127,11 @@ class RobotcontrolPlugin(Component):
         add_stylesheet( req, 'htdocs/fullcalendar/fullcalendar.css')
 
         import privileges
-        myPrivileges = self.loadPrivileges(req)
+        try:
+            myPrivileges = self.loadPrivileges(req)
+        except StartingServerException, e:
+            return 'startingServer.html', {}, None
+
         options = {
             'COMP_ADMIN': self.hasPrivilege(myPrivileges, privileges.COMP_ADMIN),
             'HOST_ADMIN': self.hasPrivilege(myPrivileges, privileges.HOST_ADMIN),
@@ -151,3 +165,7 @@ class RobotcontrolPlugin(Component):
         """
         from pkg_resources import resource_filename
         return [( 'htdocs', resource_filename( __name__, 'htdocs' ))]
+
+
+class StartingServerException( Exception ):
+    pass
