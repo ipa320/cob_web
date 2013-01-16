@@ -204,9 +204,10 @@ class ServerThread(threading.Thread):
                 row = self.cursor.fetchone()
                 if not row: break
 
+                name = row[ 0 ]
                 user = pickle.loads(row[1])
-                user.initializeUnpickableData(self.hosts, self.log)
-                self.users[row[0]] = user
+                user.initializeUnpickableData(name, self.hosts, self.log)
+                self.users[ name ] = user
                 self.log.info('User "%s" with components %s loaded' % (user.name, user.getIDs()))
 
         

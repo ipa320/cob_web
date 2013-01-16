@@ -5,20 +5,21 @@ class User():
     _users = {}
     def __init__(self, name):
         # important: always process the name in lowercase
-        self.name = name.lower()
+        self.name = name.lower();
         self._components = {}
         self._privileges = 0
         self.globalVars = {}
         
         
-    def initializeUnpickableData(self, hosts, log):
+    def initializeUnpickableData(self, name, hosts, log):
+        self.name = name.lower()
         for component in self._components.values():
             component.initializeUnpickableData(hosts, log)
     
 
     def __getstate__(self):
         return {
-            'name': self.name,
+            # don't pickle name but set it to the name from the db
             '_components': self._components,
             '_privileges': self._privileges,
             'globalVars': self.globalVars

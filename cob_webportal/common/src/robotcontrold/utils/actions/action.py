@@ -195,7 +195,6 @@ class Action():
 				if reader and reader.isAlive():
 					self.log.debug('Action "%s"::stop joined the screenReader Thread. Waiting for it to finish' % self.name)
 					reader.join( 5.0 )
-			print 'IM DONE HERE'
 
 
 			return True
