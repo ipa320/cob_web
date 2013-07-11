@@ -34,11 +34,12 @@ class RobotcontrolPlugin(Component):
         authorization = req.get_header('Authorization')
         auth_name = req.authname
         if authorization:
-            if not authorization.lower().startswith( 'basic ' ) or \
-               not ':' in authorization:
-                raise ValueError( 'Illegal Authorization Header' )
+            if not authorization.lower().startswith( 'basic ' ):
+                raise ValueError( 'Illegal Authorization Header: No Basic' )
             base64Data = authorization[ len('basic '): ]
             data = base64.b64decode( base64Data )
+            if not ':' in data:
+                raise ValueError( 'Illegal Authorization Header: No User: %s' % authorization )
             return data[ :data.index( ':' ) ]
 
         elif auth_name:
