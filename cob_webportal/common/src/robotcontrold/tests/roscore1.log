@@ -1,0 +1,29 @@
+... logging to /home/uhr-es/.ros/log/2dd6e9fa-6769-11e0-8bc4-001279a379a6/roslaunch-jsf-p-desktop-4485.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;roscore
+[1mstarted roslaunch server http://jsf-p-desktop:55168/[0m
+ros_comm version 1.4.5
+
+SUMMARY
+========
+
+PARAMETERS
+ * /rosversion
+ * /rosdistro
+
+NODES
+
+auto-starting new master
+[1mprocess[master]: started with pid [4499][0m
+[1mROS_MASTER_URI=http://jsf-p-desktop:11311/[0m
+]2;roscore http://jsf-p-desktop:11311/
+[1msetting /run_id to 2dd6e9fa-6769-11e0-8bc4-001279a379a6[0m
+[1mprocess[rosout-1]: started with pid [4512][0m
+started core service [/rosout]
+[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m
