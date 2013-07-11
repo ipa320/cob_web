@@ -1,0 +1,20 @@
+/* every statement must be terminated by a single closing round bracket ) in a new line */
+
+CREATE TABLE IF NOT EXISTS `hosts` (
+  `id` INTEGER PRIMARY KEY,
+  `pickledData` text NOT NULL
+) 
+
+CREATE TABLE IF NOT EXISTS `reservations` (
+  `id` INTEGER PRIMARY KEY,
+  `user` varchar(128) NOT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL
+) 
+
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INTEGER PRIMARY KEY,
+  `user_name` varchar(128) NOT NULL,
+  `pickledData` blob NOT NULL
+) 
